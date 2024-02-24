@@ -1,2 +1,2 @@
 # Valkyrie-V1
- 2024 Competition code version 1, second generation
+ 2024 Competition code second generation
