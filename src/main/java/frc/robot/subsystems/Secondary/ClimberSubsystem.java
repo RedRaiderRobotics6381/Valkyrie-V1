@@ -67,18 +67,18 @@ public class ClimberSubsystem extends SubsystemBase{
         // m_climberPIDController = m_climberMotorRight.getPIDController();
         // m_climberPIDController.setFeedbackDevice(ClimberEncoder);
         
-        m_climberMotorR.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
+        // m_climberMotorR.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
         m_climberMotorR.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
-        m_climberMotorR.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, (float) 0.25);
-        m_climberMotorR.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 13);
+        // m_climberMotorR.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, (float) 0.25);
+        m_climberMotorR.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 12);
         m_climberMotorR.enableVoltageCompensation(12.0);
         m_climberMotorR.setSmartCurrentLimit(40);
         m_climberMotorR.setIdleMode(IdleMode.kBrake);
 
-        m_climberMotorL.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
+        // m_climberMotorL.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
         m_climberMotorL.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
-        m_climberMotorL.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, (float) 0.25);
-        m_climberMotorL.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 13);
+        // m_climberMotorL.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, (float) 0.25);
+        m_climberMotorL.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 12);
         m_climberMotorL.enableVoltageCompensation(12.0);
         m_climberMotorL.setSmartCurrentLimit(40);
         m_climberMotorL.setIdleMode(IdleMode.kBrake);

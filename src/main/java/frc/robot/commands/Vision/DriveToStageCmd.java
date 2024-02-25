@@ -18,12 +18,12 @@ public class DriveToStageCmd extends Command
   private final PIDController   omegaController;
   
   private double xTol = 0.1; //meters
-  private double yTol = 0.1; //meters
-  private double omegaTol = 3.0; //degrees
+  private double yTol = 0.05; //meters
+  private double omegaTol = 0.75; //degrees (from 1.5)
   
   private static double xOffset = 1.15; //meters
   private static double yOffset = 0.0; //meters
-  private static double omegaOffset = Math.toRadians(0.0); //degrees
+  private static double omegaOffset = 0.00; //degrees
   
   private double TX;
   private double TY;
@@ -41,16 +41,18 @@ public class DriveToStageCmd extends Command
     this.swerveSubsystem = swerveSubsystem;
     
     //xController = new PIDController(0.055, 0.00, 0.0);
-    xController = new PIDController(0.0625, 0.00375, 0.2);
-    yController = new PIDController(0.0625, 0.00375, 0.0001);
-    omegaController = new PIDController(0.025,0.0, 0.000);
+    xController = new PIDController(2.25, 0.0, 0.0);
+    yController = new PIDController(1.0, 0.0, 0);
+    // xController = new PIDController(0.0625, 0.00375, 0.2);
+    // yController = new PIDController(0.0625, 0.00375, 0.0001);
+    omegaController = new PIDController(0.0625,0.00025, 0.01);
     xController.setTolerance(xTol); //meters
     yController.setTolerance(yTol); //meters
     omegaController.setTolerance(omegaTol); //degrees
     xController.setSetpoint(xOffset); //meters
     yController.setSetpoint(yOffset); //meters
     omegaController.setSetpoint(omegaOffset); //degrees
-    omegaController.enableContinuousInput(-Math.PI, Math.PI);
+   // omegaController.enableContinuousInput(-Math.PI, Math.PI);
     
     addRequirements(swerveSubsystem);  
   }
@@ -98,8 +100,8 @@ public class DriveToStageCmd extends Command
         // This is new target data, so recalculate the goal
         lastTarget = target;
 
-        TX = target.getBestCameraToTarget().getZ();
-        TY = target.getBestCameraToTarget().getX();
+        TX = target.getBestCameraToTarget().getX();
+        TY = target.getBestCameraToTarget().getY();
         TZ = target.getYaw();
       }
     }
@@ -112,9 +114,9 @@ public class DriveToStageCmd extends Command
       double translationValx = MathUtil.clamp(xController.calculate(TX, xOffset), -1 , 1);
       double translationValy = MathUtil.clamp(yController.calculate(TY, yOffset), -1 , 1);
       double translationValz = MathUtil.clamp(omegaController.calculate(TZ, omegaOffset), -1 , 1);
-      
-      if (xController.atSetpoint() != true && yController.atSetpoint() != true){
-        swerveSubsystem.drive(new Translation2d(-translationValx, -translationValy),
+      //|| omegaController.atSetpoint() != true
+      if (xController.atSetpoint() != true || yController.atSetpoint() != true){
+        swerveSubsystem.drive(new Translation2d(translationValx, translationValy),
         translationValz,
         false);
       } else{
