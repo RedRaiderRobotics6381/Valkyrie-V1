@@ -37,8 +37,8 @@ public class IntakeCmd extends Command {
     if(Robot.sensorOuttake.get() == true){
       hasNote = true;
     } else {
-      launcherRotateSubsystem.rotatePosCommand(LauncherConstants.posOuttake);
-      intakeSubsystem.indexerMotor.set(IntakeConstants.indexerSpeed);
+      launcherRotateSubsystem.rotatePosCommand(LauncherConstants.posIntake);
+      intakeSubsystem.indexerMotor.set(IntakeConstants.indexerIntakeSpeed);
       intakeSubsystem.intakeMotor.set(IntakeConstants.intakeSpeed);
       intakeSubsystem.launcherIndexerMotor.set(IntakeConstants.launcherIndexerSpeed);
       //System.out.println(Robot.sensorIntake.get());

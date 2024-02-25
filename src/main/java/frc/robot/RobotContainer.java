@@ -148,17 +148,22 @@ public class RobotContainer
     //Axis 4 is right joystick x side to side
     //Axis 5 is right joystick y forward and back
 
+    // Buttons used in other parts of code! ====================================
+    // Driver control button 2 is used in the pick up note command PickUpNoteCmd
 
-    new JoystickButton(driverXbox, 8).onTrue((new InstantCommand(drivebase::zeroGyro)));
+    //==========================================================================
+
+
+    new JoystickButton(driverXbox, 8).onTrue((new InstantCommand(drivebase::zeroGyro)));  //Button "Start"
     
-    new JoystickButton(driverXbox, 2).whileTrue(new PickUpNoteCmd(drivebase, intakeSubsystem, launcherRotateSubsystem));
+    new JoystickButton(driverXbox, 2).whileTrue(new PickUpNoteCmd(drivebase, intakeSubsystem, launcherRotateSubsystem));  //Button "B"
     //new JoystickButton(driverXbox, 2).whileTrue(new DriveToObjectCmd(drivebase));
-    new JoystickButton(driverXbox, 3).whileTrue(new DriveToSpeakerCmd(drivebase));
+    new JoystickButton(driverXbox, 3).whileTrue(new DriveToSpeakerCmd(drivebase)); //Button "X"
     // new JoystickButton(driverXbox, 3).whileTrue(new DriveToSpeakerCmd_B(drivebase));
     // new JoystickButton(driverXbox, 1).whileTrue(new DriveToAmpCmd(drivebase));
-    new JoystickButton(driverXbox, 4).whileTrue(new DriveToStageCmd(drivebase));
+    new JoystickButton(driverXbox, 4).whileTrue(new DriveToStageCmd(drivebase)); //Button "Y"
 
-    new JoystickButton(engineerXbox, 1).whileTrue(new LauncherAimCMD(launcherRotateSubsystem, launcherSubsystem, intakeSubsystem));
+    new JoystickButton(engineerXbox, 1).whileTrue(new LauncherAimCMD(launcherRotateSubsystem)); //Button "A"
     // new JoystickButton(engineerXbox, 1).onTrue(launcherRotateSubsystem.rotatePosCommand(LauncherConstants.posOuttake));
     // new JoystickButton(engineerXbox, 3).onTrue(launcherRotateSubsystem.rotatePosCommand(LauncherConstants.posDefault)); //190.0 // DO NOT RUN AT 190. LAUNCHER WILL BREAK!!
     // new JoystickButton(engineerXbox, 2).onTrue(new ScoreAmpCmd(intakeSubsystem, launcherSubsystem));

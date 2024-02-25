@@ -6,13 +6,10 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-//import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.commands.Secondary.IntakeCmd;
-//import frc.robot.commands.Secondary.IntakeCmd;
 import frc.robot.subsystems.Secondary.IntakeSubsystem;
 import frc.robot.subsystems.Secondary.LauncherRotateSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
@@ -27,10 +24,9 @@ public class PickUpNoteCmd extends Command
   private final PIDController   yController;
   private final PIDController   zController;
   private boolean hasTargets;
-  private boolean hasNote;
   private boolean droveToNote;
+  boolean hasNote;
 
-  //public PickUpNoteCmd(SwerveSubsystem swerveSubsystem, IntakeSubsystem intakeSubsystem, LauncherRotateSubsystem launcherRotateSubsystem)
   public PickUpNoteCmd(SwerveSubsystem swerveSubsystem, IntakeSubsystem intakeSubsystem, LauncherRotateSubsystem launcherRotateSubsystem)
   {
     this.swerveSubsystem = swerveSubsystem;
@@ -69,7 +65,7 @@ public class PickUpNoteCmd extends Command
     hasTargets = result.hasTargets(); // Check if the latest result has any targets.
     PhotonTrackedTarget target = result.getBestTarget();
     
-    if (hasTargets == true && RobotContainer.driverXbox.getRawButton(2) == true) {
+    if (hasTargets == true) { // && RobotContainer.driverXbox.getRawButton(2) == true
       double TZ = target.getYaw();
       double TX = target.getPitch();
 

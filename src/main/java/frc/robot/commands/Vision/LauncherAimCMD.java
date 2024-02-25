@@ -6,28 +6,22 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import frc.robot.Constants.AprilTagConstants;
 import frc.robot.Constants.LauncherConstants;
-//import frc.robot.commands.Secondary.Speaker;
-import frc.robot.subsystems.Secondary.IntakeSubsystem;
 import frc.robot.subsystems.Secondary.LauncherRotateSubsystem;
-import frc.robot.subsystems.Secondary.LauncherSubsystem;
 import edu.wpi.first.math.util.Units;
 
 public class LauncherAimCMD extends Command
 {
   public static double Launcher_Pitch;
   private final LauncherRotateSubsystem launcherRotateSubsystem;
-  private final LauncherSubsystem launcherSubsystem;
-  private final IntakeSubsystem intakeSubsystem;
+
   private PhotonTrackedTarget lastTarget;
 
-  public LauncherAimCMD(LauncherRotateSubsystem launcherRotateSubsystem, LauncherSubsystem launcherSubsystem , IntakeSubsystem intakeSubsystem)
+  public LauncherAimCMD(LauncherRotateSubsystem launcherRotateSubsystem)
   {
 
     // each subsystem used by the command must be passed into the
     // addRequirements() method (which takes a vararg of Subsystem)
     this.launcherRotateSubsystem = launcherRotateSubsystem;
-    this.launcherSubsystem = launcherSubsystem;
-    this.intakeSubsystem = intakeSubsystem;
   }
 
   /**
