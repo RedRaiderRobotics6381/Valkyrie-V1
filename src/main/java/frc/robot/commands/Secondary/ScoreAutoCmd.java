@@ -4,26 +4,27 @@
 
 package frc.robot.commands.Secondary;
 
-import com.revrobotics.CANSparkMax;
+//import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.LauncherConstants;
+import frc.robot.commands.Vision.LauncherAimCMD;
 import frc.robot.subsystems.Secondary.IntakeSubsystem;
-import frc.robot.subsystems.Secondary.LauncherRotateSubsystem;
+//import frc.robot.subsystems.Secondary.LauncherRotateSubsystem;
 import frc.robot.subsystems.Secondary.LauncherSubsystem;
 
-public class ScoreSpeakerCmd extends Command {
+public class ScoreAutoCmd extends Command {
   /** Creates a new Outtake. */
   
-    
     private final LauncherSubsystem launcherSubsystem;
     private boolean hasNote = true;
   
   
-    public ScoreSpeakerCmd(LauncherSubsystem launcherSubsystem) {
+    public ScoreAutoCmd(LauncherSubsystem launcherSubsystem) {
       this.launcherSubsystem = launcherSubsystem;
+      
       
       // Use addRequirements() here to declare subsystem dependencies.
     }
@@ -39,11 +40,11 @@ public class ScoreSpeakerCmd extends Command {
     public void execute() {
       if(Robot.sensorOuttake.get() == true || Robot.sensorIntake.get() == true){
         //launcherRotateSubsystem.rotatePosCommand(LauncherConstants.posSpeaker);
-        LauncherRotateSubsystem.m_LauncherRotatePIDController.setReference(LauncherConstants.posSpeaker,CANSparkMax.ControlType.kSmartMotion);
+        //LauncherRotateSubsystem.m_LauncherRotatePIDController.setReference(LauncherConstants.posSpeaker,CANSparkMax.ControlType.kSmartMotion);
 
         launcherSubsystem.m_launcherMotorTop.set(LauncherConstants.launcherMotorTopSpeed);
         System.out.println(launcherSubsystem.m_launcherMotorTop.getEncoder().getVelocity());
-        if(((launcherSubsystem.m_launcherMotorTop.getEncoder().getVelocity()) >= 2000)) {
+        if(((launcherSubsystem.m_launcherMotorTop.getEncoder().getVelocity()) >= LauncherAimCMD.LauncherSpeedMult)) {
           IntakeSubsystem.launcherIndexerMotor.set(IntakeConstants.launcherIndexerOuttakeSpeed);
           IntakeSubsystem.indexerMotor.set(IntakeConstants.indexerOuttakeSpeed);
         }

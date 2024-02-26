@@ -4,15 +4,14 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class IntakeSubsystem extends SubsystemBase {
 
-    public CANSparkMax intakeMotor;
-    public CANSparkMax indexerMotor;
-    public CANSparkFlex launcherIndexerMotor;
+    public static CANSparkMax intakeMotor;
+    public static CANSparkMax indexerMotor;
+    public static CANSparkFlex launcherIndexerMotor;
     public static SparkPIDController intakePIDController;
     //LauncherRotateSubsystem launcherRotateSubsystem = new LauncherRotateSubsystem();
 
@@ -73,37 +72,38 @@ public class IntakeSubsystem extends SubsystemBase {
 
 }
     
-    public Command InitialIntakeCmd() {
-        // implicitly require `this`
-        return this.runOnce(() -> {
-            //intakePIDController.setReference(2500, CANSparkMax.ControlType.kSmartVelocity);
-            //LauncherRotateSubsystem.rotateIntakeCommand();
-            intakeMotor.set(-1);
-            indexerMotor.set(-.1);
-            //launcherIndexerMotor.set(-.1);
-            // if (Robot.sensorIntake.get() == true){
-            //     //intakePIDController.setReference(0, CANSparkMax.ControlType.kSmartVelocity);
-            //     intakeMotor.set(.0);
-            //     LEDs.setLED(.65);
-            // }
-        });
-    }
+    // public Command InitialIntakeCmd() {
+    //     // implicitly require `this`
+    //     return this.run(() -> {
+    //         //intakePIDController.setReference(2500, CANSparkMax.ControlType.kSmartVelocity);
+    //         //LauncherRotateSubsystem.rotateIntakeCommand();
+    //         intakeMotor.set(-1);
+    //         indexerMotor.set(-.1);
+    //         launcherIndexerMotor.set(-.1);
+    //         if (Robot.sensorIntake.get() == true){
+    //             //intakePIDController.setReference(0, CANSparkMax.ControlType.kSmartVelocity);
+    //             intakeMotor.set(.0);
+                
+    //             //LEDs.setLED(.65);
+    //         }
+    //     });
+    // }
 
-    public Command LaunchIntakeCmd() {
-        // implicitly require `this`
-        return this.runOnce(() -> {
-            //intakePIDController.setReference(2500, CANSparkMax.ControlType.kSmartVelocity);
-            //LauncherRotateSubsystem.rotateIntakeCommand();
-            //intakeMotor.set(-1);
-            //indexerMotor.set(-.1);
-            launcherIndexerMotor.set(-1);
-            // if (Robot.sensorIntake.get() == true){
-            //     //intakePIDController.setReference(0, CANSparkMax.ControlType.kSmartVelocity);
-            //     intakeMotor.set(.0);
-            //     LEDs.setLED(.65);
-            // }
-        });
-    }
+    // public Command LaunchIntakeCmd() {
+    //     // implicitly require `this`
+    //     return this.runOnce(() -> {
+    //         //intakePIDController.setReference(2500, CANSparkMax.ControlType.kSmartVelocity);
+    //         //LauncherRotateSubsystem.rotateIntakeCommand();
+    //         //intakeMotor.set(-1);
+    //         //indexerMotor.set(-.1);
+    //         launcherIndexerMotor.set(-1);
+    //         // if (Robot.sensorIntake.get() == true){
+    //         //     //intakePIDController.setReference(0, CANSparkMax.ControlType.kSmartVelocity);
+    //         //     intakeMotor.set(.0);
+    //         //     LEDs.setLED(.65);
+    //         // }
+    //     });
+    // }
 
     //     public Command LaunchCmd(double speed) {
     //         // implicitly require `this`

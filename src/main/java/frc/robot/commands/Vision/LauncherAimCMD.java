@@ -1,27 +1,30 @@
 package frc.robot.commands.Vision;
 
 import org.photonvision.targeting.PhotonTrackedTarget;
+
+import com.revrobotics.CANSparkMax;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import frc.robot.Constants.AprilTagConstants;
-import frc.robot.Constants.LauncherConstants;
+import frc.robot.subsystems.Secondary.LEDsSubSystem;
 import frc.robot.subsystems.Secondary.LauncherRotateSubsystem;
-import edu.wpi.first.math.util.Units;
+import edu.wpi.first.math.MathUtil;
 
 public class LauncherAimCMD extends Command
 {
   public static double Launcher_Pitch;
-  private final LauncherRotateSubsystem launcherRotateSubsystem;
-
+  public static double LauncherSpeedMult;
+  
   private PhotonTrackedTarget lastTarget;
 
-  public LauncherAimCMD(LauncherRotateSubsystem launcherRotateSubsystem)
+  public LauncherAimCMD()
   {
 
     // each subsystem used by the command must be passed into the
     // addRequirements() method (which takes a vararg of Subsystem)
-    this.launcherRotateSubsystem = launcherRotateSubsystem;
+    
   }
 
   /**
@@ -53,16 +56,19 @@ public class LauncherAimCMD extends Command
             var target = targetOpt.get();
             // This is new target data, so recalculate the goal
             lastTarget = target;
-            Double LAUNCHER_TO_TOWER = target.getBestCameraToTarget().getZ();
-            Double ID_HEIGHT = Units.inchesToMeters(57.13) - LauncherConstants.HEIGHT_TO_ROTATE_MOTOR;
-            Launcher_Pitch = Math.asin(ID_HEIGHT / (Math.sqrt(Math.pow(ID_HEIGHT,2) + Math.pow(LAUNCHER_TO_TOWER,2))));
-            launcherRotateSubsystem.rotatePosCommand(Launcher_Pitch);
+            Double LAUNCHER_TO_TOWER = target.getBestCameraToTarget().getX();
+            LauncherSpeedMult = MathUtil.clamp(LAUNCHER_TO_TOWER * 700, 1500, 4000);
+            Double ID_HEIGHT = 2.75;//Meters
+            Launcher_Pitch = ((Math.toDegrees(Math.atan(ID_HEIGHT / LAUNCHER_TO_TOWER))) + 90);
+            LauncherRotateSubsystem.m_LauncherRotatePIDController.setReference(Launcher_Pitch,CANSparkMax.ControlType.kSmartMotion);
             SmartDashboard.putNumber("Angle to Target", Launcher_Pitch);
-            // if (LAUNCHER_TO_TOWER <= 6){ 
-            //   if (target.getYaw() >= -2  || target.getYaw() <=2){
-            //     new Speaker(intakeSubsystem, launcherSubsystem);
-            //   }
-            // }
+            SmartDashboard.putNumber("Dist to Target", LAUNCHER_TO_TOWER);
+
+            if (LAUNCHER_TO_TOWER <= 5){ 
+              if (target.getYaw() >= -2  || target.getYaw() <=2){
+                LEDsSubSystem.setLEDwBlink(.73,.125);
+              }
+            }
           }
         } 
       } 

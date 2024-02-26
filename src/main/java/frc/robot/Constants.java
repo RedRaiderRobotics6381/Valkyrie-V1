@@ -56,7 +56,7 @@ public final class Constants {
     public static final int kLauncherT = 18;
     public static final int kLauncherB = 19;
     public static final int kLauncherRotate = 16;
-    public static final double launcherMotorTopSpeed = 0.5;
+    public static final double launcherMotorTopSpeed = 0.8;
     public static final double launcherIndexerMotorSpeed = 1;
     public static final double intakeSpeedOut = 1.00;  //used?
     public static final double intakeSpeedIn = 0.50; //used?
@@ -65,6 +65,7 @@ public final class Constants {
     public static final double posOuttake = 124.5; //need to change
     public static final double posIntake = 124.5;
     public static final double posDefault = 153.5; //need to change
+    public static final double posSpeaker = 153.5; //need to change
     public static final double posMax = 60; //need to change
     public static final double posMin = 12.5; //need to change
     public static final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(22);

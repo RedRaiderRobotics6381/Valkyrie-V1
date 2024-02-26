@@ -12,11 +12,13 @@ public class LauncherSubsystem extends SubsystemBase {
     public CANSparkFlex m_launcherMotorTop;
     public CANSparkFlex m_launcherMotorBot;
     public static SparkPIDController launcherPIDController;
+    public double currentLauncherSpeed;
     
     public LauncherSubsystem() {
 
         m_launcherMotorTop =  new CANSparkFlex(Constants.LauncherConstants.kLauncherT, MotorType.kBrushless);
         m_launcherMotorBot =  new CANSparkFlex(Constants.LauncherConstants.kLauncherB, MotorType.kBrushless);
+        //m_encoderTop = m_launcherMotorTop.getAbsoluteEncoder();
 
         m_launcherMotorBot.follow(m_launcherMotorTop, true);
         // m_launcherMotorTop.restoreFactoryDefaults();  //Remove this when we remove the burnFlash() call below
@@ -39,7 +41,7 @@ public class LauncherSubsystem extends SubsystemBase {
     
     @Override
     public void periodic() {
-
+        currentLauncherSpeed = (m_launcherMotorTop.getAbsoluteEncoder().getVelocity()) * 60;
     }
     
     public Command LauncherCmd(double speed) {

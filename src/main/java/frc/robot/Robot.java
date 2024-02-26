@@ -20,7 +20,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.AprilTagConstants;
-import frc.robot.commands.Vision.LauncherAimCMD;
 import frc.robot.subsystems.Secondary.LEDsSubSystem;
 import swervelib.parser.SwerveParser;
 
@@ -135,6 +134,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     m_robotContainer.spencerButtons();
     watchForNote();
+    //System.out.println(sensorOuttake.get());
   }
 
   @Override
@@ -189,8 +189,8 @@ public class Robot extends TimedRobot {
       hasTargets = result.hasTargets(); // Check if the latest result has any targets.
       if (hasTargets == true){
         //System.out.println("Note Found - Press and hold B to retrieve the note!");
-        //LEDsSubSystem.setLEDwBlink(.65, .125);
-        LEDsSubSystem.setLED(.23);
+        LEDsSubSystem.setLEDwBlink(.65, .125);
+        //LEDsSubSystem.setLED(.23);
         //RobotContainer.pulseRumble();
       } else{
         //RobotContainer.driverXbox.setRumble(RumbleType.kBothRumble, 0);

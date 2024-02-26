@@ -20,7 +20,11 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.AprilTagConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Secondary.ClimbCmd;
+import frc.robot.commands.Secondary.IntakeCmd;
 import frc.robot.commands.Secondary.LowerCmd;
+import frc.robot.commands.Secondary.ScoreAmpCmd;
+import frc.robot.commands.Secondary.ScoreAutoCmd;
+//import frc.robot.commands.Secondary.ScoreSpeakerCmd;
 //import frc.robot.commands.Vision.DriveToObjectCmd;
 import frc.robot.commands.Vision.DriveToSpeakerCmd;
 //import frc.robot.commands.Secondary.IntakeCmd;
@@ -42,6 +46,7 @@ import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
 import com.pathplanner.lib.auto.AutoBuilder;
 //import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.auto.NamedCommands;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
@@ -77,8 +82,8 @@ public class RobotContainer
 
     // Register Named Commands
 
-    // NamedCommands.registerCommand("Intake", new IntakeCmd(intakeSubsystem, launcherRotateSubsystem));
-    // NamedCommands.registerCommand("Shoot", new ScoreSpeakerCmd(intakeSubsystem, launcherSubsystem));
+    //NamedCommands.registerCommand(null, null);
+    //NamedCommands.registerCommand("Shoot", new ScoreSpeakerCmd(intakeSubsystem, launcherSubsystem));
     // Build an auto chooser. This will use Commands.none() as the default option.
     autoChooser = AutoBuilder.buildAutoChooser();
     
@@ -156,22 +161,23 @@ public class RobotContainer
 
     new JoystickButton(driverXbox, 8).onTrue((new InstantCommand(drivebase::zeroGyro)));  //Button "Start"
     
-    new JoystickButton(driverXbox, 2).whileTrue(new PickUpNoteCmd(drivebase, intakeSubsystem, launcherRotateSubsystem));  //Button "B"
+    new JoystickButton(driverXbox, 2).whileTrue(new PickUpNoteCmd(drivebase));  //Button "B"
     //new JoystickButton(driverXbox, 2).whileTrue(new DriveToObjectCmd(drivebase));
     new JoystickButton(driverXbox, 3).whileTrue(new DriveToSpeakerCmd(drivebase)); //Button "X"
     // new JoystickButton(driverXbox, 3).whileTrue(new DriveToSpeakerCmd_B(drivebase));
     // new JoystickButton(driverXbox, 1).whileTrue(new DriveToAmpCmd(drivebase));
     new JoystickButton(driverXbox, 4).whileTrue(new DriveToStageCmd(drivebase)); //Button "Y"
 
-    new JoystickButton(engineerXbox, 1).whileTrue(new LauncherAimCMD(launcherRotateSubsystem)); //Button "A"
+    new JoystickButton(engineerXbox, 1).whileTrue(new LauncherAimCMD()); //Button "A"
     // new JoystickButton(engineerXbox, 1).onTrue(launcherRotateSubsystem.rotatePosCommand(LauncherConstants.posOuttake));
     // new JoystickButton(engineerXbox, 3).onTrue(launcherRotateSubsystem.rotatePosCommand(LauncherConstants.posDefault)); //190.0 // DO NOT RUN AT 190. LAUNCHER WILL BREAK!!
-    // new JoystickButton(engineerXbox, 2).onTrue(new ScoreAmpCmd(intakeSubsystem, launcherSubsystem));
-    // new JoystickButton(engineerXbox, 4).onTrue(new ScoreSpeakerCmd(intakeSubsystem, launcherSubsystem));
+    new JoystickButton(engineerXbox, 2).onTrue(new ScoreAmpCmd(intakeSubsystem, launcherSubsystem));
+    new JoystickButton(engineerXbox, 6).onTrue(new ScoreAutoCmd(intakeSubsystem, launcherSubsystem));
     // //new JoystickButton(engineerXbox, 4).onTrue(new  IntakeCmd(intakeSubsystem, launcherRotateSubsystem));
     
     
-    // new JoystickButton(engineerXbox, 5).onTrue(new IntakeCmd(intakeSubsystem, launcherRotateSubsystem));
+    new JoystickButton(engineerXbox, 5).onTrue(new IntakeCmd(intakeSubsystem, launcherRotateSubsystem));
+    
     
     new POVButton(engineerXbox, 0).onTrue(new ClimbCmd(climberSubsystem));
     new POVButton(engineerXbox, 180).onTrue(new LowerCmd(climberSubsystem));
@@ -254,7 +260,7 @@ public class RobotContainer
       double yawToSpeakerValue = 0.0;
       PIDController zController = null;
       try {
-        zController = new PIDController(0.025,0.0, 0.000);
+        zController = new PIDController(0.07,0.0, 0.000);
         zController.setTolerance(.5);
 
         if (driverXbox.getRawButton(10) == false){  
