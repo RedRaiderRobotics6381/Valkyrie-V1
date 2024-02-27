@@ -24,6 +24,7 @@ import frc.robot.commands.Secondary.IntakeCmd;
 import frc.robot.commands.Secondary.LowerCmd;
 import frc.robot.commands.Secondary.ScoreAmpCmd;
 import frc.robot.commands.Secondary.ScoreAutoCmd;
+import frc.robot.commands.Secondary.ScoreTrapCmd;
 //import frc.robot.commands.Secondary.ScoreSpeakerCmd;
 //import frc.robot.commands.Vision.DriveToObjectCmd;
 import frc.robot.commands.Vision.DriveToSpeakerCmd;
@@ -171,12 +172,13 @@ public class RobotContainer
     new JoystickButton(engineerXbox, 1).whileTrue(new LauncherAimCMD()); //Button "A"
     // new JoystickButton(engineerXbox, 1).onTrue(launcherRotateSubsystem.rotatePosCommand(LauncherConstants.posOuttake));
     // new JoystickButton(engineerXbox, 3).onTrue(launcherRotateSubsystem.rotatePosCommand(LauncherConstants.posDefault)); //190.0 // DO NOT RUN AT 190. LAUNCHER WILL BREAK!!
-    new JoystickButton(engineerXbox, 2).onTrue(new ScoreAmpCmd(intakeSubsystem, launcherSubsystem));
+    new JoystickButton(engineerXbox, 4).onTrue(new ScoreTrapCmd(launcherSubsystem));
+    new JoystickButton(engineerXbox, 2).onTrue(new ScoreAmpCmd(launcherSubsystem));
     new JoystickButton(engineerXbox, 6).onTrue(new ScoreAutoCmd(launcherSubsystem));
     // //new JoystickButton(engineerXbox, 4).onTrue(new  IntakeCmd(intakeSubsystem, launcherRotateSubsystem));
     
     
-    new JoystickButton(engineerXbox, 5).onTrue(new IntakeCmd(intakeSubsystem, launcherRotateSubsystem));
+    new JoystickButton(engineerXbox, 5).onTrue(new IntakeCmd(intakeSubsystem));
     
     
     new POVButton(engineerXbox, 0).onTrue(new ClimbCmd(climberSubsystem));

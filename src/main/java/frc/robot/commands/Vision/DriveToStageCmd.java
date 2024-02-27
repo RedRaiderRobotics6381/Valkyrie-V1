@@ -21,7 +21,7 @@ public class DriveToStageCmd extends Command
   private double yTol = 0.05; //meters
   private double omegaTol = 0.75; //degrees (from 1.5)
   
-  private static double xOffset = 1.15; //meters
+  private static double xOffset = 1.3; //meters
   private static double yOffset = 0.0; //meters
   private static double omegaOffset = 0.00; //degrees
   
@@ -45,10 +45,10 @@ public class DriveToStageCmd extends Command
     yController = new PIDController(1.0, 0.0, 0);
     // xController = new PIDController(0.0625, 0.00375, 0.2);
     // yController = new PIDController(0.0625, 0.00375, 0.0001);
-    omegaController = new PIDController(0.0625,0.00025, 0.01);
+    omegaController = new PIDController(0.125,0.000, 0.0); //p from 0.0625
     xController.setTolerance(xTol); //meters
     yController.setTolerance(yTol); //meters
-    omegaController.setTolerance(omegaTol); //degrees
+    omegaController.setTolerance(1); //degrees
     xController.setSetpoint(xOffset); //meters
     yController.setSetpoint(yOffset); //meters
     omegaController.setSetpoint(omegaOffset); //degrees
@@ -113,9 +113,9 @@ public class DriveToStageCmd extends Command
       // Drive to the target
       double translationValx = MathUtil.clamp(xController.calculate(TX, xOffset), -1 , 1);
       double translationValy = MathUtil.clamp(yController.calculate(TY, yOffset), -1 , 1);
-      double translationValz = MathUtil.clamp(omegaController.calculate(TZ, omegaOffset), -1 , 1);
+      double translationValz = MathUtil.clamp(omegaController.calculate(TZ, omegaOffset), -2 , 2);
       //|| omegaController.atSetpoint() != true
-      if (xController.atSetpoint() != true || yController.atSetpoint() != true){
+      if (xController.atSetpoint() != true || yController.atSetpoint() != true || omegaController.atSetpoint() != true){
         swerveSubsystem.drive(new Translation2d(translationValx, translationValy),
         translationValz,
         false);

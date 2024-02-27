@@ -55,7 +55,7 @@ public class PickUpNoteCmd extends Command
   @Override
   public void execute()
   {
-    hasNote = Robot.sensorIntake.get(); //Check if the note is in the intake
+    hasNote = Robot.sensorOuttake.get(); //Check if the note is in the intake
     var result = Robot.camObj.getLatestResult();  // Get the latest result from PhotonVision
     hasTargets = result.hasTargets(); // Check if the latest result has any targets.
     PhotonTrackedTarget target = result.getBestTarget();
@@ -72,26 +72,33 @@ public class PickUpNoteCmd extends Command
           //new IntakeSubsystem().IntakeCmd();
           
         } else{
+          
           //swerveSubsystem.getPose();
-          if (droveToNote == false){ 
+          
             if (!hasNote){ //If the note is not in the intake, run the intake command
               LauncherRotateSubsystem.m_LauncherRotatePIDController.setReference(LauncherConstants.posIntake,CANSparkMax.ControlType.kSmartMotion);
               
               IntakeSubsystem.intakeMotor.set(IntakeConstants.intakeSpeed);
               IntakeSubsystem.indexerMotor.set(IntakeConstants.indexerIntakeSpeed);
               IntakeSubsystem.launcherIndexerMotor.set(IntakeConstants.launcherIndexerIntakeSpeed);
-              
-              swerveSubsystem.drive(new Translation2d(0.5, 0.0), 0.0, false);
-              droveToNote = true;
             }
-            } else{ //If the note is in the intake, stop the intake command
-                swerveSubsystem.drive(new Translation2d(0.0, 0.0), 0.0, false);
-                
-                IntakeSubsystem.indexerMotor.set(IntakeConstants.zeroSpeed);
-                IntakeSubsystem.intakeMotor.set(IntakeConstants.zeroSpeed);
-                IntakeSubsystem.launcherIndexerMotor.set(IntakeConstants.zeroSpeed);
-                droveToNote = true;
-            }   
+            if (droveToNote == false){     
+              // swerveSubsystem.drive(new Translation2d(0.5, 0.0), 0.0, false);
+              if(!Robot.sensorIntake.get()){  
+                swerveSubsystem.drive(new Translation2d(0.5, 0.0), 0.0, false);
+                } else {
+                  swerveSubsystem.drive(new Translation2d(0.0, 0.0), 0.0, false);
+                  droveToNote = true;
+                }
+              
+              }
+            //} else{ //If the note is in the intake, stop the intake command
+              
+            //     // IntakeSubsystem.indexerMotor.set(IntakeConstants.zeroSpeed);
+            //     // IntakeSubsystem.intakeMotor.set(IntakeConstants.zeroSpeed);
+            //     // IntakeSubsystem.launcherIndexerMotor.set(IntakeConstants.zeroSpeed);
+            //     //droveToNote = true;
+            // }   
           } 
     }
   }
@@ -126,5 +133,8 @@ public class PickUpNoteCmd extends Command
   public void end(boolean interrupted)
   {
     LEDsSubSystem.setLED(.71);
+    IntakeSubsystem.indexerMotor.set(IntakeConstants.zeroSpeed);
+    IntakeSubsystem.intakeMotor.set(IntakeConstants.zeroSpeed);
+    IntakeSubsystem.launcherIndexerMotor.set(IntakeConstants.zeroSpeed);
   }
 }

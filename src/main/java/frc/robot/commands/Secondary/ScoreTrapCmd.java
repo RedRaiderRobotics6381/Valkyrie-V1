@@ -7,22 +7,22 @@ package frc.robot.commands.Secondary;
 import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Robot;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.LauncherConstants;
-import frc.robot.Robot;
 import frc.robot.subsystems.Secondary.IntakeSubsystem;
 import frc.robot.subsystems.Secondary.LauncherRotateSubsystem;
 import frc.robot.subsystems.Secondary.LauncherSubsystem;
 
-public class ScoreAmpCmd extends Command {
+public class ScoreTrapCmd extends Command {
   /** Creates a new Outtake. */
   
-
+    
     private final LauncherSubsystem launcherSubsystem;
     private boolean hasNote = true;
   
   
-    public ScoreAmpCmd(LauncherSubsystem launcherSubsystem) {
+    public ScoreTrapCmd(LauncherSubsystem launcherSubsystem) {
       this.launcherSubsystem = launcherSubsystem;
       
       // Use addRequirements() here to declare subsystem dependencies.
@@ -38,11 +38,14 @@ public class ScoreAmpCmd extends Command {
     @Override
     public void execute() {
       if(Robot.sensorOuttake.get() == true || Robot.sensorIntake.get() == true){
-        LauncherRotateSubsystem.m_LauncherRotatePIDController.setReference(LauncherConstants.posSpeaker,CANSparkMax.ControlType.kSmartMotion);
-        if(LauncherRotateSubsystem.m_LauncherRotateEncoder.getPosition() >= 151){
+        //launcherRotateSubsystem.rotatePosCommand(LauncherConstants.posSpeaker);
+        LauncherRotateSubsystem.m_LauncherRotatePIDController.setReference(LauncherConstants.posTrap,CANSparkMax.ControlType.kSmartMotion);
+        
+         if(LauncherRotateSubsystem.m_LauncherRotateEncoder.getPosition() >= 148.5){
         launcherSubsystem.m_launcherMotorTop.set(LauncherConstants.launcherMotorTopSpeed);
        }
-        if(launcherSubsystem.m_launcherMotorTop.getEncoder().getVelocity() >= 800) {
+        System.out.println(launcherSubsystem.m_launcherMotorTop.getEncoder().getVelocity());
+        if(((launcherSubsystem.m_launcherMotorTop.getEncoder().getVelocity()) >= 712.5)) {
           IntakeSubsystem.launcherIndexerMotor.set(IntakeConstants.launcherIndexerOuttakeSpeed);
           IntakeSubsystem.indexerMotor.set(IntakeConstants.indexerOuttakeSpeed);
         }

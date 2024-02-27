@@ -4,6 +4,8 @@
 
 package frc.robot.commands.Secondary;
 
+import com.revrobotics.CANSparkMax;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import frc.robot.Constants.IntakeConstants;
@@ -15,12 +17,11 @@ import frc.robot.subsystems.Secondary.LauncherRotateSubsystem;
 public class IntakeCmd extends Command {
 
   private final IntakeSubsystem intakeSubsystem;
-  private final LauncherRotateSubsystem launcherRotateSubsystem;
   private boolean hasNote = false;
 
-  public IntakeCmd(IntakeSubsystem intakeSubsystem , LauncherRotateSubsystem launcherRotateSubsystem) {
+  public IntakeCmd(IntakeSubsystem intakeSubsystem) {
     this.intakeSubsystem = intakeSubsystem;
-    this.launcherRotateSubsystem = launcherRotateSubsystem;
+  
     
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -37,7 +38,7 @@ public class IntakeCmd extends Command {
     if(Robot.sensorOuttake.get() == true){
       hasNote = true;
     } else {
-      launcherRotateSubsystem.rotatePosCommand(LauncherConstants.posIntake);
+      LauncherRotateSubsystem.m_LauncherRotatePIDController.setReference(LauncherConstants.posIntake,CANSparkMax.ControlType.kSmartMotion);
       intakeSubsystem.indexerMotor.set(IntakeConstants.indexerIntakeSpeed);
       intakeSubsystem.intakeMotor.set(IntakeConstants.intakeSpeed);
       intakeSubsystem.launcherIndexerMotor.set(IntakeConstants.launcherIndexerSpeed);

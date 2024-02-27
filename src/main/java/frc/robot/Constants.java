@@ -66,6 +66,7 @@ public final class Constants {
     public static final double posIntake = 124.5;
     public static final double posDefault = 153.5; //need to change
     public static final double posSpeaker = 153.5; //need to change
+    public static final double posTrap = 150.5; //need to change
     public static final double posMax = 60; //need to change
     public static final double posMin = 12.5; //need to change
     public static final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(22);

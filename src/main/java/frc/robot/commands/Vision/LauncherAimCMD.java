@@ -57,8 +57,8 @@ public class LauncherAimCMD extends Command
             // This is new target data, so recalculate the goal
             lastTarget = target;
             Double LAUNCHER_TO_TOWER = target.getBestCameraToTarget().getX();
-            LauncherSpeedMult = MathUtil.clamp(LAUNCHER_TO_TOWER * 700, 1500, 4000);
-            Double ID_HEIGHT = 2.75;//Meters
+            LauncherSpeedMult = MathUtil.clamp(LAUNCHER_TO_TOWER * 525, 1650, 4000);
+            Double ID_HEIGHT = 2.80;//Meters
             Launcher_Pitch = ((Math.toDegrees(Math.atan(ID_HEIGHT / LAUNCHER_TO_TOWER))) + 90);
             LauncherRotateSubsystem.m_LauncherRotatePIDController.setReference(Launcher_Pitch,CANSparkMax.ControlType.kSmartMotion);
             SmartDashboard.putNumber("Angle to Target", Launcher_Pitch);
