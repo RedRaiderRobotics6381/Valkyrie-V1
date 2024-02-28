@@ -9,11 +9,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class LauncherSubsystemV extends SubsystemBase {
+public class vLauncherSubsystem extends SubsystemBase {
 
     public CANSparkFlex m_launcherMotorTop;
     public CANSparkFlex m_launcherMotorBot;
-    public static SparkPIDController launcherPIDControllerTop;
+    public SparkPIDController launcherPIDControllerTop;
     public static SparkPIDController launcherPIDControllerBot;
     public static RelativeEncoder encoderTop;
     public static RelativeEncoder m_encoderBot;
@@ -25,7 +25,7 @@ public class LauncherSubsystemV extends SubsystemBase {
   
     public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxRPM, maxVel, minVel, maxAcc;
 
-    public LauncherSubsystemV() {
+    public vLauncherSubsystem() {
 
         m_launcherMotorTop =  new CANSparkFlex(Constants.LauncherConstants.kLauncherT, MotorType.kBrushless);
         m_launcherMotorBot =  new CANSparkFlex(Constants.LauncherConstants.kLauncherB, MotorType.kBrushless);
