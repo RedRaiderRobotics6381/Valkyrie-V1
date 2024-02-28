@@ -45,7 +45,7 @@ public class ScoreTrapCmd extends Command {
         launcherSubsystem.m_launcherMotorTop.set(LauncherConstants.launcherMotorTopSpeed);
        }
         System.out.println(launcherSubsystem.m_launcherMotorTop.getEncoder().getVelocity());
-        if(((launcherSubsystem.m_launcherMotorTop.getEncoder().getVelocity()) >= 712.5)) {
+        if(((launcherSubsystem.m_launcherMotorTop.getEncoder().getVelocity()) >= 1000)) { //712.5
           IntakeSubsystem.launcherIndexerMotor.set(IntakeConstants.launcherIndexerOuttakeSpeed);
           IntakeSubsystem.indexerMotor.set(IntakeConstants.indexerOuttakeSpeed);
         }

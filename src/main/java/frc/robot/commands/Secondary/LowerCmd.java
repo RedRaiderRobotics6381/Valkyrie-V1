@@ -44,14 +44,14 @@ public class LowerCmd extends Command {
   //   lowered = true;
   // }
 
-  if (climberSubsystem.m_climberEncoderR.getPosition() >= -0.01 && climberSubsystem.m_climberEncoderR.getPosition() <= 11){
+  if (climberSubsystem.m_climberEncoderR.getPosition() >= -0.01 && climberSubsystem.m_climberEncoderR.getPosition() <= 12.75){
     climberSubsystem.m_climberMotorR.set(-.25);
 }
 if (climberSubsystem.m_climberEncoderR.getPosition() <= 0.5) {
     climberSubsystem.m_climberMotorR.set(0);
 }
 
-if (climberSubsystem.m_climberEncoderL.getPosition() >= -0.01 && climberSubsystem.m_climberEncoderL.getPosition() <= 11){
+if (climberSubsystem.m_climberEncoderL.getPosition() >= -0.01 && climberSubsystem.m_climberEncoderL.getPosition() <= 12.75){
     climberSubsystem.m_climberMotorL.set(-.25);
   } 
 if (climberSubsystem.m_climberEncoderL.getPosition() <= 0.5) {

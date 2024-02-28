@@ -29,20 +29,20 @@ public class ClimbCmd extends Command {
   @Override
   public void execute() {
     
-    if (climberSubsystem.m_climberEncoderR.getPosition() >= -0.01 && climberSubsystem.m_climberEncoderR.getPosition() <= 10){
+    if (climberSubsystem.m_climberEncoderR.getPosition() >= -0.01 && climberSubsystem.m_climberEncoderR.getPosition() <= 12.5){
         climberSubsystem.m_climberMotorR.set(.25);
     }
-    if (climberSubsystem.m_climberEncoderR.getPosition() >= 10.0) {
+    if (climberSubsystem.m_climberEncoderR.getPosition() >= 12.5) {
         climberSubsystem.m_climberMotorR.set(0);
     }
 
-    if (climberSubsystem.m_climberEncoderL.getPosition() >= -0.01 && climberSubsystem.m_climberEncoderL.getPosition() <= 10){
+    if (climberSubsystem.m_climberEncoderL.getPosition() >= -0.01 && climberSubsystem.m_climberEncoderL.getPosition() <= 12.5){
         climberSubsystem.m_climberMotorL.set(.25);
       } 
-    if (climberSubsystem.m_climberEncoderL.getPosition() >= 10.0) {
+    if (climberSubsystem.m_climberEncoderL.getPosition() >= 12.5) {
         climberSubsystem.m_climberMotorL.set(0);
     }
-    if (climberSubsystem.m_climberEncoderR.getPosition() >= 10 && climberSubsystem.m_climberEncoderL.getPosition() >= 10){
+    if (climberSubsystem.m_climberEncoderR.getPosition() >= 12.5 && climberSubsystem.m_climberEncoderL.getPosition() >= 12.5){
       climbed = true;
     }
     

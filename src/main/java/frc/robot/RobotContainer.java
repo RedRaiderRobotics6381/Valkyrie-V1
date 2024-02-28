@@ -24,7 +24,9 @@ import frc.robot.commands.Secondary.IntakeCmd;
 import frc.robot.commands.Secondary.LowerCmd;
 import frc.robot.commands.Secondary.ScoreAmpCmd;
 import frc.robot.commands.Secondary.ScoreAutoCmd;
+import frc.robot.commands.Secondary.ScoreSpeakerCmd;
 import frc.robot.commands.Secondary.ScoreTrapCmd;
+import frc.robot.commands.Vision.DriveToAmpCmd;
 //import frc.robot.commands.Secondary.ScoreSpeakerCmd;
 //import frc.robot.commands.Vision.DriveToObjectCmd;
 import frc.robot.commands.Vision.DriveToSpeakerCmd;
@@ -84,7 +86,9 @@ public class RobotContainer
     // Register Named Commands
 
     //NamedCommands.registerCommand(null, null);
-    //NamedCommands.registerCommand("Shoot", new ScoreSpeakerCmd(intakeSubsystem, launcherSubsystem));
+    NamedCommands.registerCommand("Shoot", new ScoreAutoCmd(launcherSubsystem));
+    NamedCommands.registerCommand("Aim", new LauncherAimCMD());
+    NamedCommands.registerCommand("Intake", new IntakeCmd());
     // Build an auto chooser. This will use Commands.none() as the default option.
     autoChooser = AutoBuilder.buildAutoChooser();
     
@@ -161,7 +165,7 @@ public class RobotContainer
 
 
     new JoystickButton(driverXbox, 8).onTrue((new InstantCommand(drivebase::zeroGyro)));  //Button "Start"
-    
+    new JoystickButton(driverXbox, 1).whileTrue(new DriveToAmpCmd(drivebase)); 
     new JoystickButton(driverXbox, 2).whileTrue(new PickUpNoteCmd(drivebase));  //Button "B"
     //new JoystickButton(driverXbox, 2).whileTrue(new DriveToObjectCmd(drivebase));
     new JoystickButton(driverXbox, 3).whileTrue(new DriveToSpeakerCmd(drivebase)); //Button "X"
@@ -178,7 +182,7 @@ public class RobotContainer
     // //new JoystickButton(engineerXbox, 4).onTrue(new  IntakeCmd(intakeSubsystem, launcherRotateSubsystem));
     
     
-    new JoystickButton(engineerXbox, 5).onTrue(new IntakeCmd(intakeSubsystem));
+    new JoystickButton(engineerXbox, 5).onTrue(new IntakeCmd());
     
     
     new POVButton(engineerXbox, 0).onTrue(new ClimbCmd(climberSubsystem));

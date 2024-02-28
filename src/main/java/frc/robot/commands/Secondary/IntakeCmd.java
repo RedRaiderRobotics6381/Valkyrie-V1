@@ -16,11 +16,11 @@ import frc.robot.subsystems.Secondary.LauncherRotateSubsystem;
 
 public class IntakeCmd extends Command {
 
-  private final IntakeSubsystem intakeSubsystem;
+  
   private boolean hasNote = false;
 
-  public IntakeCmd(IntakeSubsystem intakeSubsystem) {
-    this.intakeSubsystem = intakeSubsystem;
+  public IntakeCmd() {
+    
   
     
     // Use addRequirements() here to declare subsystem dependencies.
@@ -39,9 +39,9 @@ public class IntakeCmd extends Command {
       hasNote = true;
     } else {
       LauncherRotateSubsystem.m_LauncherRotatePIDController.setReference(LauncherConstants.posIntake,CANSparkMax.ControlType.kSmartMotion);
-      intakeSubsystem.indexerMotor.set(IntakeConstants.indexerIntakeSpeed);
-      intakeSubsystem.intakeMotor.set(IntakeConstants.intakeSpeed);
-      intakeSubsystem.launcherIndexerMotor.set(IntakeConstants.launcherIndexerSpeed);
+      IntakeSubsystem.indexerMotor.set(IntakeConstants.indexerIntakeSpeed);
+      IntakeSubsystem.intakeMotor.set(IntakeConstants.intakeSpeed);
+      IntakeSubsystem.launcherIndexerMotor.set(IntakeConstants.launcherIndexerSpeed);
       //System.out.println(Robot.sensorIntake.get());
 
     }
@@ -51,9 +51,9 @@ public class IntakeCmd extends Command {
   @Override
   public void end(boolean interrupted) {
     LEDsSubSystem.setLED(.71);
-    intakeSubsystem.indexerMotor.set(IntakeConstants.zeroSpeed);
-    intakeSubsystem.intakeMotor.set(IntakeConstants.zeroSpeed);
-    intakeSubsystem.launcherIndexerMotor.set(IntakeConstants.zeroSpeed);
+    IntakeSubsystem.indexerMotor.set(IntakeConstants.zeroSpeed);
+    IntakeSubsystem.intakeMotor.set(IntakeConstants.zeroSpeed);
+    IntakeSubsystem.launcherIndexerMotor.set(IntakeConstants.zeroSpeed);
   }
 
   // Returns true when the command should end.
