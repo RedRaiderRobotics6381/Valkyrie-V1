@@ -25,7 +25,7 @@ public final class Constants {
 
   public static final class AutonConstants
   {
-    public static final PIDConstants TRANSLATION_PID = new PIDConstants(0.7, 0, 0);
+    public static final PIDConstants TRANSLATION_PID = new PIDConstants(0.1, 0, 0.1);
     public static final PIDConstants ANGLE_PID   = new PIDConstants(0.4, 0, 0.01);
   }
 
@@ -66,6 +66,14 @@ public final class Constants {
     public static final double posIntake = 124.5;
     public static final double posDefault = 153.5; //need to change
     public static final double posSpeaker = 153.5; //need to change
+    public static final double posTrap = 150.5; //need to change
+    public static final double TrapScoreAngle = 148.5;
+    public static final double TrapScoreSpeed = 712.5;
+    public static final double SpeakerScoreAngle = 153.5;
+    public static final double SpeakerScoreSpeed = 2000;
+    public static final double AmpScoreAngle = 153.5;
+    public static final double AmpScoreSpeed = 800;
+
     public static final double posMax = 60; //need to change
     public static final double posMin = 12.5; //need to change
     public static final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(22);

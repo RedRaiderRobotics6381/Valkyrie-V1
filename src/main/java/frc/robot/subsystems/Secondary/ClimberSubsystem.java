@@ -78,7 +78,7 @@ public class ClimberSubsystem extends SubsystemBase{
         // m_climberMotorL.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
         m_climberMotorL.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
         // m_climberMotorL.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, (float) 0.25);
-        m_climberMotorL.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 12);
+        m_climberMotorL.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 13);
         m_climberMotorL.enableVoltageCompensation(12.0);
         m_climberMotorL.setSmartCurrentLimit(40);
         m_climberMotorL.setIdleMode(IdleMode.kBrake);
