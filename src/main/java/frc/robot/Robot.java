@@ -189,8 +189,8 @@ public class Robot extends TimedRobot {
       hasTargets = result.hasTargets(); // Check if the latest result has any targets.
       if (hasTargets == true){
         //System.out.println("Note Found - Press and hold B to retrieve the note!");
-        LEDsSubSystem.setLEDwBlink(.65, .125);
-        //LEDsSubSystem.setLED(.23);
+       // LEDsSubSystem.setLEDwBlink(.65, .125); Matt thinks this is annoying (Blinking = Annoying)
+        LEDsSubSystem.setLED(.25); //From .23
         //RobotContainer.pulseRumble();
       } else{
         //RobotContainer.driverXbox.setRumble(RumbleType.kBothRumble, 0);
