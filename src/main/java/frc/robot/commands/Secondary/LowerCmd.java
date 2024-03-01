@@ -12,7 +12,7 @@ public class LowerCmd extends Command {
 
   private final ClimberSubsystem climberSubsystem;
   private boolean lowered = false;
-  private double lowerDist = 11.0;
+  private double lowerDist = 13.0;
   private double lowerStopDist = 0.5;
 
   public LowerCmd(ClimberSubsystem climberSubsystem) {

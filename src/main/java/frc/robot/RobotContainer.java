@@ -26,6 +26,9 @@ import frc.robot.commands.Secondary.ScoreAmpCmd;
 import frc.robot.commands.Secondary.ScoreAutoCmd;
 import frc.robot.commands.Secondary.ScoreSpeakerCmd;
 import frc.robot.commands.Secondary.ScoreTrapCmd;
+import frc.robot.commands.Secondary.vScoreAmpCmd;
+import frc.robot.commands.Secondary.vScoreAutoCmd;
+import frc.robot.commands.Secondary.vScoreTrapCmd;
 import frc.robot.commands.Vision.DriveToAmpCmd;
 //import frc.robot.commands.Secondary.ScoreSpeakerCmd;
 //import frc.robot.commands.Vision.DriveToObjectCmd;
@@ -44,7 +47,8 @@ import frc.robot.subsystems.Secondary.IntakeSubsystem;
 import frc.robot.subsystems.Secondary.LauncherRotateSubsystem;
 // import frc.robot.subsystems.Secondary.IntakeSubsystem;
 // import frc.robot.subsystems.Secondary.LauncherRotateSubsystem;
-import frc.robot.subsystems.Secondary.LauncherSubsystem;
+//import frc.robot.subsystems.Secondary.LauncherSubsystem;
+import frc.robot.subsystems.Secondary.vLauncherSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -70,7 +74,8 @@ public class RobotContainer
   private final SendableChooser<Command> autoChooser;
   static double lastTime = -1;
 
-  LauncherSubsystem launcherSubsystem = new LauncherSubsystem();
+  //LauncherSubsystem launcherSubsystem = new LauncherSubsystem();
+  vLauncherSubsystem vlauncherSubsystem = new vLauncherSubsystem();
   LauncherRotateSubsystem launcherRotateSubsystem = new LauncherRotateSubsystem();
   IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
   ClimberSubsystem climberSubsystem = new ClimberSubsystem();
@@ -86,7 +91,8 @@ public class RobotContainer
     // Register Named Commands
 
     //NamedCommands.registerCommand(null, null);
-    NamedCommands.registerCommand("Shoot", new ScoreAutoCmd(launcherSubsystem));
+    // NamedCommands.registerCommand("Shoot", new ScoreAutoCmd(launcherSubsystem));
+    NamedCommands.registerCommand("Shoot", new vScoreAutoCmd(vlauncherSubsystem));
     NamedCommands.registerCommand("Aim", new LauncherAimCMD());
     NamedCommands.registerCommand("Intake", new IntakeCmd());
     // Build an auto chooser. This will use Commands.none() as the default option.
@@ -176,10 +182,13 @@ public class RobotContainer
     new JoystickButton(engineerXbox, 1).whileTrue(new LauncherAimCMD()); //Button "A"
     // new JoystickButton(engineerXbox, 1).onTrue(launcherRotateSubsystem.rotatePosCommand(LauncherConstants.posOuttake));
     // new JoystickButton(engineerXbox, 3).onTrue(launcherRotateSubsystem.rotatePosCommand(LauncherConstants.posDefault)); //190.0 // DO NOT RUN AT 190. LAUNCHER WILL BREAK!!
-    new JoystickButton(engineerXbox, 4).onTrue(new ScoreTrapCmd(launcherSubsystem));
-    new JoystickButton(engineerXbox, 2).onTrue(new ScoreAmpCmd(launcherSubsystem));
-    new JoystickButton(engineerXbox, 6).onTrue(new ScoreAutoCmd(launcherSubsystem));
-    // //new JoystickButton(engineerXbox, 4).onTrue(new  IntakeCmd(intakeSubsystem, launcherRotateSubsystem));
+    new JoystickButton(engineerXbox, 4).onTrue(new vScoreTrapCmd(vlauncherSubsystem));
+    new JoystickButton(engineerXbox, 2).onTrue(new vScoreAmpCmd(vlauncherSubsystem));
+    new JoystickButton(engineerXbox, 6).onTrue(new vScoreAutoCmd(vlauncherSubsystem));
+    // new JoystickButton(engineerXbox, 4).onTrue(new ScoreTrapCmd(launcherSubsystem));
+    // new JoystickButton(engineerXbox, 2).onTrue(new ScoreAmpCmd(launcherSubsystem));
+    // new JoystickButton(engineerXbox, 6).onTrue(new ScoreAutoCmd(launcherSubsystem));
+   // new JoystickButton(engineerXbox, 4).onTrue(new  IntakeCmd(intakeSubsystem, launcherRotateSubsystem));
     
     
     new JoystickButton(engineerXbox, 5).onTrue(new IntakeCmd());

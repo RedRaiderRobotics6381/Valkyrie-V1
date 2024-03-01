@@ -12,7 +12,7 @@ public class ClimbCmd extends Command {
 
   private final ClimberSubsystem climberSubsystem;
   private boolean climbed = false;
-  private double climbDist = 10.0;
+  private double climbDist = 12.0;
 
   public ClimbCmd(ClimberSubsystem climberSubsystem) {
     this.climberSubsystem = climberSubsystem;
@@ -54,13 +54,13 @@ public class ClimbCmd extends Command {
         climberSubsystem.m_climberMotorR.set(0);
     }
 
-    if (climberSubsystem.m_climberEncoderL.getPosition() >= -0.1 && climberSubsystem.m_climberEncoderL.getPosition() <= climbDist){
+    if (climberSubsystem.m_climberEncoderL.getPosition() >= -0.1 && climberSubsystem.m_climberEncoderL.getPosition() <= climbDist - 1.0){
         climberSubsystem.m_climberMotorL.set(.25);
       } 
-    if (climberSubsystem.m_climberEncoderL.getPosition() >= climbDist) {
+    if (climberSubsystem.m_climberEncoderL.getPosition() >= climbDist - 1.0) {
         climberSubsystem.m_climberMotorL.set(0);
     }
-    if (climberSubsystem.m_climberEncoderR.getPosition() >= climbDist && climberSubsystem.m_climberEncoderL.getPosition() >= climbDist){
+    if (climberSubsystem.m_climberEncoderR.getPosition() >= climbDist && climberSubsystem.m_climberEncoderL.getPosition() >= climbDist - 1.0){
       climbed = true;
     }
   }

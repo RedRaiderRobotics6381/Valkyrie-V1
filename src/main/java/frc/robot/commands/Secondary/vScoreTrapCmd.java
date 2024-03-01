@@ -35,41 +35,24 @@ public class vScoreTrapCmd extends Command {
     public void initialize() {
       hasNote = true;
     }
-  
-    // Called every time the scheduler runs while the command is scheduled.
+    
+    // // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
       if(Robot.sensorOuttake.get() == true || Robot.sensorIntake.get() == true){
         LauncherRotateSubsystem.m_LauncherRotatePIDController.setReference(LauncherConstants.TrapScoreAngle,CANSparkMax.ControlType.kSmartMotion);
-        vlauncherSubsystem.launcherPIDControllerTop.setReference(LauncherConstants.TrapScoreSpeed, CANSparkFlex.ControlType.kSmartVelocity);
-        Commands.waitUntil(() -> vlauncherSubsystem.m_launcherMotorTop.getEncoder().getVelocity() >= LauncherConstants.TrapScoreSpeed - 25);
-        Commands.waitUntil(() -> LauncherRotateSubsystem.m_LauncherRotateEncoder.getPosition() >= LauncherConstants.TrapScoreAngle - 1);
-        IntakeSubsystem.launcherIndexerMotor.set(IntakeConstants.launcherIndexerOuttakeSpeed);
-        IntakeSubsystem.indexerMotor.set(IntakeConstants.indexerOuttakeSpeed);
+        vlauncherSubsystem.launcherPIDControllerTop.setReference(LauncherConstants.TrapScoreSpeed, CANSparkFlex.ControlType.kVelocity);
+        if (LauncherRotateSubsystem.m_LauncherRotateEncoder.getPosition() >= LauncherConstants.TrapScoreAngle - 10){
+            if(((vlauncherSubsystem.m_launcherMotorTop.getEncoder().getVelocity()) >= LauncherConstants.TrapScoreSpeed - 50) &&
+                (vlauncherSubsystem.m_launcherMotorTop.getEncoder().getVelocity()) <= LauncherConstants.TrapScoreSpeed + 50) {
+              IntakeSubsystem.launcherIndexerMotor.set(IntakeConstants.launcherIndexerOuttakeSpeed);
+              IntakeSubsystem.indexerMotor.set(IntakeConstants.indexerOuttakeSpeed);
+            }
+        } 
       } else {
         hasNote = false;
       }
     }
-
-    // // Called every time the scheduler runs while the command is scheduled.
-    // @Override
-    // public void execute() {
-      // if(Robot.sensorOuttake.get() == true || Robot.sensorIntake.get() == true){
-      //   LauncherRotateSubsystem.m_LauncherRotatePIDController.setReference(LauncherConstants.TrapScoreAngle,CANSparkMax.ControlType.kSmartMotion);
-      //   LauncherSubsystem.launcherPIDControllerTop.setReference(LauncherConstants.TrapScoreSpeed, CANSparkFlex.ControlType.kSmartVelocity);
-      //   if (LauncherRotateSubsystem.m_LauncherRotateEncoder.getPosition() >= LauncherConstants.TrapScoreAngle - 10){
-      //     if(Math.abs(LauncherRotateSubsystem.m_LauncherRotateEncoder.getVelocity()) == 0){
-      //       if(((launcherSubsystem.m_launcherMotorTop.getEncoder().getVelocity()) >= LauncherConstants.TrapScoreSpeed - 25) ||
-      //           (launcherSubsystem.m_launcherMotorTop.getEncoder().getVelocity()) <= LauncherConstants.TrapScoreSpeed + 25) {
-      //         IntakeSubsystem.launcherIndexerMotor.set(IntakeConstants.launcherIndexerOuttakeSpeed);
-      //         IntakeSubsystem.indexerMotor.set(IntakeConstants.indexerOuttakeSpeed);
-      //       }
-      //     }
-      //   } 
-      // } else {
-      //   hasNote = false;
-      // }
-    // }
   
     // Called once the command ends or is interrupted.
     @Override

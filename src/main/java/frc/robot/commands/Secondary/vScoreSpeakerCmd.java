@@ -37,39 +37,23 @@ public class vScoreSpeakerCmd extends Command {
     }
   
     // Called every time the scheduler runs while the command is scheduled.
-    @Override
-    public void execute() {
-      if(Robot.sensorOuttake.get() == true || Robot.sensorIntake.get() == true){
-        LauncherRotateSubsystem.m_LauncherRotatePIDController.setReference(LauncherConstants.SpeakerScoreAngle,CANSparkMax.ControlType.kSmartMotion);
-        vlauncherSubsystem.launcherPIDControllerTop.setReference(LauncherConstants.SpeakerScoreSpeed, CANSparkFlex.ControlType.kSmartVelocity);
-        Commands.waitUntil(() -> vlauncherSubsystem.m_launcherMotorTop.getEncoder().getVelocity() >= LauncherConstants.SpeakerScoreSpeed - 25);
-        Commands.waitUntil(() -> LauncherRotateSubsystem.m_LauncherRotateEncoder.getPosition() >= LauncherConstants.SpeakerScoreAngle - 1);
-        IntakeSubsystem.launcherIndexerMotor.set(IntakeConstants.launcherIndexerOuttakeSpeed);
-        IntakeSubsystem.indexerMotor.set(IntakeConstants.indexerOuttakeSpeed);
-      } else {
-        hasNote = false;
-      }
-    }
-
-    // // Called every time the scheduler runs while the command is scheduled.
-    // @Override
-    // public void execute() {
-      // if(Robot.sensorOuttake.get() == true || Robot.sensorIntake.get() == true){
-      //   LauncherRotateSubsystem.m_LauncherRotatePIDController.setReference(LauncherConstants.SpeakerScoreAngle,CANSparkMax.ControlType.kSmartMotion);
-      //   LauncherSubsystem.launcherPIDControllerTop.setReference(LauncherConstants.SpeakerScoreSpeed, CANSparkFlex.ControlType.kSmartVelocity);
-      //   if (LauncherRotateSubsystem.m_LauncherRotateEncoder.getPosition() >= LauncherConstants.SpeakerScoreAngle - 10){
-      //     if(Math.abs(LauncherRotateSubsystem.m_LauncherRotateEncoder.getVelocity()) == 0){
-      //       if(((launcherSubsystem.m_launcherMotorTop.getEncoder().getVelocity()) >= LauncherConstants.SpeakerScoreSpeed - 25) ||
-      //           (launcherSubsystem.m_launcherMotorTop.getEncoder().getVelocity()) <= LauncherConstants.SpeakerScoreSpeed + 25) {
-      //         IntakeSubsystem.launcherIndexerMotor.set(IntakeConstants.launcherIndexerOuttakeSpeed);
-      //         IntakeSubsystem.indexerMotor.set(IntakeConstants.indexerOuttakeSpeed);
-      //       }
-      //     }
-      //   } 
-      // } else {
-      //   hasNote = false;
-      // }
-    // }
+        // // Called every time the scheduler runs while the command is scheduled.
+        @Override
+        public void execute() {
+          if(Robot.sensorOuttake.get() == true || Robot.sensorIntake.get() == true){
+            LauncherRotateSubsystem.m_LauncherRotatePIDController.setReference(LauncherConstants.SpeakerScoreAngle,CANSparkMax.ControlType.kSmartMotion);
+            vlauncherSubsystem.launcherPIDControllerTop.setReference(LauncherConstants.SpeakerScoreSpeed, CANSparkFlex.ControlType.kVelocity);
+            if (LauncherRotateSubsystem.m_LauncherRotateEncoder.getPosition() >= LauncherConstants.SpeakerScoreAngle - 10){
+                if(((vlauncherSubsystem.m_launcherMotorTop.getEncoder().getVelocity()) >= LauncherConstants.SpeakerScoreSpeed - 25) &&
+                    (vlauncherSubsystem.m_launcherMotorTop.getEncoder().getVelocity()) <= LauncherConstants.SpeakerScoreSpeed + 25) {
+                  IntakeSubsystem.launcherIndexerMotor.set(IntakeConstants.launcherIndexerOuttakeSpeed);
+                  IntakeSubsystem.indexerMotor.set(IntakeConstants.indexerOuttakeSpeed);
+                }
+            } 
+          } else {
+            hasNote = false;
+          }
+        }
   
     // Called once the command ends or is interrupted.
     @Override

@@ -67,12 +67,12 @@ public final class Constants {
     public static final double posDefault = 153.5; //need to change
     public static final double posSpeaker = 153.5; //need to change
     public static final double posTrap = 150.5; //need to change
-    public static final double TrapScoreAngle = 148.5;
-    public static final double TrapScoreSpeed = 712.5;
+    public static final double TrapScoreAngle = 147.5; //from 148.5
+    public static final double TrapScoreSpeed = 1750; //from 712.5
     public static final double SpeakerScoreAngle = 153.5;
-    public static final double SpeakerScoreSpeed = 2000;
+    public static final double SpeakerScoreSpeed = 2200; //from 2000
     public static final double AmpScoreAngle = 153.5;
-    public static final double AmpScoreSpeed = 800;
+    public static final double AmpScoreSpeed = 1000; //from 800
 
     public static final double posMax = 60; //need to change
     public static final double posMin = 12.5; //need to change

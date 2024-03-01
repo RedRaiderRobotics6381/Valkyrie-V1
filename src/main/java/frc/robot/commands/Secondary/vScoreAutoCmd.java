@@ -12,6 +12,7 @@ import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Robot;
+import frc.robot.commands.Vision.LauncherAimCMD;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.LauncherConstants;
 import frc.robot.subsystems.Secondary.IntakeSubsystem;
@@ -26,8 +27,8 @@ public class vScoreAutoCmd extends Command {
     private boolean hasNote = true;
   
   
-    public vScoreAutoCmd(vLauncherSubsystem launcherSubsystem) {
-      this.vlauncherSubsystem = launcherSubsystem;
+    public vScoreAutoCmd(vLauncherSubsystem vlauncherSubsystem) {
+      this.vlauncherSubsystem = vlauncherSubsystem;
       
       
       // Use addRequirements() here to declare subsystem dependencies.
@@ -43,14 +44,17 @@ public class vScoreAutoCmd extends Command {
     @Override
     public void execute() {
       if(Robot.sensorOuttake.get() == true || Robot.sensorIntake.get() == true){
-        vlauncherSubsystem.launcherPIDControllerTop.setReference(LauncherConstants.launcherMotorTopSpeed, CANSparkFlex.ControlType.kSmartVelocity);
-        Commands.waitUntil(() -> vlauncherSubsystem.m_launcherMotorTop.getEncoder().getVelocity() >= LauncherConstants.launcherMotorTopSpeed - 25);
-        IntakeSubsystem.launcherIndexerMotor.set(IntakeConstants.launcherIndexerOuttakeSpeed);
-        IntakeSubsystem.indexerMotor.set(IntakeConstants.indexerOuttakeSpeed);
+        vlauncherSubsystem.launcherPIDControllerTop.setReference(LauncherAimCMD.LauncherSpeedMult, CANSparkFlex.ControlType.kVelocity);
+            //if(((vlauncherSubsystem.m_launcherMotorTop.getEncoder().getVelocity()) >= LauncherConstants.SpeakerScoreSpeed - 100) &&
+            //    (vlauncherSubsystem.m_launcherMotorTop.getEncoder().getVelocity()) <= LauncherConstants.SpeakerScoreSpeed + 100) {
+              IntakeSubsystem.launcherIndexerMotor.set(IntakeConstants.launcherIndexerOuttakeSpeed);
+              IntakeSubsystem.indexerMotor.set(IntakeConstants.indexerOuttakeSpeed);
+            //}
       } else {
         hasNote = false;
       }
     }
+    
   
     // Called once the command ends or is interrupted.
     @Override

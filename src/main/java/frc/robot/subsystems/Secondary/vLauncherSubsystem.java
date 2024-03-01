@@ -43,14 +43,15 @@ public class vLauncherSubsystem extends SubsystemBase {
         encoderTop = m_launcherMotorTop.getEncoder();
         // launcherPIDControllerBot = m_launcherMotorBot.getPIDController();
         //m_launcherMotorBot.setInverted(true);
-        kP = 0.00005; 
-        kI = 0.000001;
-        kD = 0; 
+        kP = 0.0006; 
+        kI = 0.0000001;
+        kD = 0.001; 
         kIz = 0; 
         kFF = 0.000156; 
         kMaxOutput = 1; 
         kMinOutput = -1;
         maxRPM = 4250;
+        maxAcc = 1500;
 
         m_launcherMotorTop.enableVoltageCompensation(12.0);
         m_launcherMotorTop.setSmartCurrentLimit(40);        
@@ -66,14 +67,15 @@ public class vLauncherSubsystem extends SubsystemBase {
         m_launcherMotorTop.burnFlash();  //Remove this after everything is up and running to save flash wear
         m_launcherMotorBot.burnFlash();  //Remove this after everything is up and running to save flash wear
 
-        launcherPIDControllerTop.setSmartMotionMaxVelocity(5000.0,0); //ArmConstants.armRotateMaxVel, ArmConstants.armRotateSmartMotionSlot);
-        launcherPIDControllerTop.setSmartMotionMinOutputVelocity(0.0, 0); //ArmConstants.armRotateMinVel, ArmConstants.armRotateSmartMotionSlot);
-        launcherPIDControllerTop.setSmartMotionMaxAccel(1000.0,0); //ArmConstants.armRotateMaxAcc, ArmConstants.armRotateSmartMotionSlot);
+        //launcherPIDControllerTop.setSmartMotionMaxVelocity(5000.0,0); //ArmConstants.armRotateMaxVel, ArmConstants.armRotateSmartMotionSlot);
+        //launcherPIDControllerTop.setSmartMotionMinOutputVelocity(0.0, 0); //ArmConstants.armRotateMinVel, ArmConstants.armRotateSmartMotionSlot);
+        //launcherPIDControllerTop.setSmartMotionMaxAccel(1000.0,0); //ArmConstants.armRotateMaxAcc, ArmConstants.armRotateSmartMotionSlot);
         
         int smartMotionSlot = 0;
         launcherPIDControllerTop.setSmartMotionMaxVelocity(maxVel, smartMotionSlot);
         launcherPIDControllerTop.setSmartMotionMinOutputVelocity(minVel, smartMotionSlot);
         launcherPIDControllerTop.setSmartMotionMaxAccel(maxAcc, smartMotionSlot);
+        launcherPIDControllerTop.setSmartMotionAllowedClosedLoopError(0, smartMotionSlot);
 
     }
     
