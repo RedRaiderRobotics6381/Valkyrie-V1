@@ -50,14 +50,14 @@ public class LowerCmd extends Command {
     If they are, the lowered boolean variable is set to true.
     */
 
-    if (climberSubsystem.m_climberEncoderR.getPosition() >= -0.01 && climberSubsystem.m_climberEncoderR.getPosition() <= lowerDist){
+    if (climberSubsystem.m_climberEncoderR.getPosition() >= lowerStopDist && climberSubsystem.m_climberEncoderR.getPosition() <= lowerDist){
       climberSubsystem.m_climberMotorR.set(-.25);
     }
     if (climberSubsystem.m_climberEncoderR.getPosition() <= lowerStopDist) {
       climberSubsystem.m_climberMotorR.set(0);
     }
 
-    if (climberSubsystem.m_climberEncoderL.getPosition() >= -0.01 && climberSubsystem.m_climberEncoderL.getPosition() <= lowerDist){
+    if (climberSubsystem.m_climberEncoderL.getPosition() >= lowerStopDist && climberSubsystem.m_climberEncoderL.getPosition() <= lowerDist){
       climberSubsystem.m_climberMotorL.set(-.25);
     } 
     if (climberSubsystem.m_climberEncoderL.getPosition() <= lowerStopDist) {
@@ -71,7 +71,8 @@ public class LowerCmd extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-
+    climberSubsystem.m_climberMotorL.set(0);
+    climberSubsystem.m_climberMotorR.set(0);
   }
 
   // Returns true when the command should end.

@@ -13,13 +13,14 @@ import frc.robot.subsystems.Secondary.LEDsSubSystem;
 import frc.robot.subsystems.Secondary.LauncherRotateSubsystem;
 import edu.wpi.first.math.MathUtil;
 
-public class LauncherAimCMD extends Command
+public class LauncherAimAutonCMD extends Command
 {
   public static double Launcher_Pitch;
+  boolean aimedToTarget;
   
   private PhotonTrackedTarget lastTarget;
 
-  public LauncherAimCMD()
+  public LauncherAimAutonCMD()
   {
 
     // each subsystem used by the command must be passed into the
@@ -34,6 +35,8 @@ public class LauncherAimCMD extends Command
   public void initialize()
   {
     lastTarget = null;
+    aimedToTarget = false;
+
   }
 
   /**
@@ -64,6 +67,10 @@ public class LauncherAimCMD extends Command
             Double ID_HEIGHT = 2.775;//Meters
             Launcher_Pitch = ((Math.toDegrees(Math.atan(ID_HEIGHT / LAUNCHER_TO_TOWER))) + 90);
             LauncherRotateSubsystem.m_LauncherRotatePIDController.setReference(Launcher_Pitch,CANSparkMax.ControlType.kSmartMotion);
+            if (LauncherRotateSubsystem.m_LauncherRotateEncoder.getPosition() >= Launcher_Pitch - 2 &&
+                LauncherRotateSubsystem.m_LauncherRotateEncoder.getPosition() <= Launcher_Pitch + 2){
+              aimedToTarget = true;
+            }
             SmartDashboard.putNumber("Angle to Target", Launcher_Pitch);
             SmartDashboard.putNumber("Dist to Target", LAUNCHER_TO_TOWER);
 
@@ -94,7 +101,7 @@ public class LauncherAimCMD extends Command
   @Override
   public boolean isFinished()
   {
-    return Robot.sensorOuttake.get() == false;
+    return aimedToTarget;
   }
 
   /**

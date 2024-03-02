@@ -44,7 +44,7 @@ public class ScoreAutoCmd extends Command {
 
         launcherSubsystem.m_launcherMotorTop.set(LauncherConstants.launcherMotorTopSpeed);
         System.out.println(launcherSubsystem.m_launcherMotorTop.getEncoder().getVelocity());
-        if(((launcherSubsystem.m_launcherMotorTop.getEncoder().getVelocity()) >= LauncherAimCMD.LauncherSpeedMult)) {
+        if(((launcherSubsystem.m_launcherMotorTop.getEncoder().getVelocity()) >= LauncherConstants.LauncherSpeedMult)) {
           IntakeSubsystem.launcherIndexerMotor.set(IntakeConstants.launcherIndexerOuttakeSpeed);
           IntakeSubsystem.indexerMotor.set(IntakeConstants.indexerOuttakeSpeed);
         }

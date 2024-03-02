@@ -28,6 +28,7 @@ import frc.robot.commands.Secondary.ScoreSpeakerCmd;
 import frc.robot.commands.Secondary.ScoreTrapCmd;
 import frc.robot.commands.Secondary.vScoreAmpCmd;
 import frc.robot.commands.Secondary.vScoreAutoCmd;
+import frc.robot.commands.Secondary.vScoreSpeakerCmd;
 import frc.robot.commands.Secondary.vScoreTrapCmd;
 import frc.robot.commands.Vision.DriveToAmpCmd;
 //import frc.robot.commands.Secondary.ScoreSpeakerCmd;
@@ -39,12 +40,14 @@ import frc.robot.commands.Vision.DriveToSpeakerCmd;
 // import frc.robot.commands.Vision.DriveToAmpCmd;
 // import frc.robot.commands.Vision.DriveToSpeakerCmd_B;
 import frc.robot.commands.Vision.DriveToStageCmd;
+import frc.robot.commands.Vision.LauncherAimAutonCMD;
 import frc.robot.commands.Vision.LauncherAimCMD;
 import frc.robot.commands.Vision.PickUpNoteCmd;
 // import frc.robot.commands.Vision.PickUpNoteCmd;
 import frc.robot.subsystems.Secondary.ClimberSubsystem;
 import frc.robot.subsystems.Secondary.IntakeSubsystem;
 import frc.robot.subsystems.Secondary.LauncherRotateSubsystem;
+import frc.robot.subsystems.Secondary.LauncherSubsystem;
 // import frc.robot.subsystems.Secondary.IntakeSubsystem;
 // import frc.robot.subsystems.Secondary.LauncherRotateSubsystem;
 //import frc.robot.subsystems.Secondary.LauncherSubsystem;
@@ -93,8 +96,11 @@ public class RobotContainer
     //NamedCommands.registerCommand(null, null);
     // NamedCommands.registerCommand("Shoot", new ScoreAutoCmd(launcherSubsystem));
     NamedCommands.registerCommand("Shoot", new vScoreAutoCmd(vlauncherSubsystem));
-    NamedCommands.registerCommand("Aim", new LauncherAimCMD());
+    NamedCommands.registerCommand("Aim", new vScoreSpeakerCmd(vlauncherSubsystem));
     NamedCommands.registerCommand("Intake", new IntakeCmd());
+    NamedCommands.registerCommand("DriveToNote", new PickUpNoteCmd(drivebase));
+    NamedCommands.registerCommand("DriveToSpeaker", new DriveToSpeakerCmd(drivebase));
+
     // Build an auto chooser. This will use Commands.none() as the default option.
     autoChooser = AutoBuilder.buildAutoChooser();
     

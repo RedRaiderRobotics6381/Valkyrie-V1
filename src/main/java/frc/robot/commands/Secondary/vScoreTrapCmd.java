@@ -42,7 +42,7 @@ public class vScoreTrapCmd extends Command {
       if(Robot.sensorOuttake.get() == true || Robot.sensorIntake.get() == true){
         LauncherRotateSubsystem.m_LauncherRotatePIDController.setReference(LauncherConstants.TrapScoreAngle,CANSparkMax.ControlType.kSmartMotion);
         vlauncherSubsystem.launcherPIDControllerTop.setReference(LauncherConstants.TrapScoreSpeed, CANSparkFlex.ControlType.kVelocity);
-        if (LauncherRotateSubsystem.m_LauncherRotateEncoder.getPosition() >= LauncherConstants.TrapScoreAngle - 10){
+        if (LauncherRotateSubsystem.m_LauncherRotateEncoder.getPosition() >= LauncherConstants.TrapScoreAngle - 15){
             if(((vlauncherSubsystem.m_launcherMotorTop.getEncoder().getVelocity()) >= LauncherConstants.TrapScoreSpeed - 50) &&
                 (vlauncherSubsystem.m_launcherMotorTop.getEncoder().getVelocity()) <= LauncherConstants.TrapScoreSpeed + 50) {
               IntakeSubsystem.launcherIndexerMotor.set(IntakeConstants.launcherIndexerOuttakeSpeed);

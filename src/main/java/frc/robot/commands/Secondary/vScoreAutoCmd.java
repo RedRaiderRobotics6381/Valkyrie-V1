@@ -44,12 +44,12 @@ public class vScoreAutoCmd extends Command {
     @Override
     public void execute() {
       if(Robot.sensorOuttake.get() == true || Robot.sensorIntake.get() == true){
-        vlauncherSubsystem.launcherPIDControllerTop.setReference(LauncherAimCMD.LauncherSpeedMult, CANSparkFlex.ControlType.kVelocity);
-            //if(((vlauncherSubsystem.m_launcherMotorTop.getEncoder().getVelocity()) >= LauncherConstants.SpeakerScoreSpeed - 100) &&
-            //    (vlauncherSubsystem.m_launcherMotorTop.getEncoder().getVelocity()) <= LauncherConstants.SpeakerScoreSpeed + 100) {
+        vlauncherSubsystem.launcherPIDControllerTop.setReference(LauncherConstants.LauncherSpeedMult, CANSparkFlex.ControlType.kVelocity);
+            if(((vlauncherSubsystem.m_launcherMotorTop.getEncoder().getVelocity()) >= LauncherConstants.LauncherSpeedMult - 500) &&
+                (vlauncherSubsystem.m_launcherMotorTop.getEncoder().getVelocity()) <= LauncherConstants.LauncherSpeedMult + 500) {
               IntakeSubsystem.launcherIndexerMotor.set(IntakeConstants.launcherIndexerOuttakeSpeed);
-              IntakeSubsystem.indexerMotor.set(IntakeConstants.indexerOuttakeSpeed);
-            //}
+              IntakeSubsystem.indexerMotor.set(IntakeConstants.indexerOuttakeSpeed); 
+            }
       } else {
         hasNote = false;
       }
@@ -61,6 +61,7 @@ public class vScoreAutoCmd extends Command {
     public void end(boolean interrupted) {
       IntakeSubsystem.indexerMotor.set(0);
       IntakeSubsystem.launcherIndexerMotor.set(0);
+      vlauncherSubsystem.launcherPIDControllerTop.setReference(0, CANSparkFlex.ControlType.kVelocity);
       LauncherRotateSubsystem.m_LauncherRotatePIDController.setReference(0, CANSparkMax.ControlType.kSmartMotion);
     }
   
