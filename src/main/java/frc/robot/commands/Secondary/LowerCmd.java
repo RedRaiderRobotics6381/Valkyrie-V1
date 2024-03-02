@@ -51,14 +51,14 @@ public class LowerCmd extends Command {
     */
 
     if (climberSubsystem.m_climberEncoderR.getPosition() >= lowerStopDist && climberSubsystem.m_climberEncoderR.getPosition() <= lowerDist){
-      climberSubsystem.m_climberMotorR.set(-.25);
+      climberSubsystem.m_climberMotorR.set(-.50);
     }
     if (climberSubsystem.m_climberEncoderR.getPosition() <= lowerStopDist) {
       climberSubsystem.m_climberMotorR.set(0);
     }
 
     if (climberSubsystem.m_climberEncoderL.getPosition() >= lowerStopDist && climberSubsystem.m_climberEncoderL.getPosition() <= lowerDist){
-      climberSubsystem.m_climberMotorL.set(-.25);
+      climberSubsystem.m_climberMotorL.set(-.50);
     } 
     if (climberSubsystem.m_climberEncoderL.getPosition() <= lowerStopDist) {
       climberSubsystem.m_climberMotorL.set(0);

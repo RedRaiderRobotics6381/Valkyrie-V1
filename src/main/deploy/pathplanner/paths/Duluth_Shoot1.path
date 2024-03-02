@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.4057878828008366,
-        "y": 5.566417514601411
+        "x": 3.0,
+        "y": 5.57
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.4525645005705963,
-        "y": 7.3322348354098414
+        "x": 2.446567628177991,
+        "y": 5.566417514601411
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Duluth2_End"
     },
     {
       "anchor": {
-        "x": 2.8909454969907094,
-        "y": 7.016492665463964
+        "x": 1.5578118905525558,
+        "y": 5.57
       },
       "prevControl": {
-        "x": 2.8324747247785096,
-        "y": 7.0398809743488435
+        "x": 2.0511561365003064,
+        "y": 5.566417514601411
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Duluth_Shoot1_End"
     }
   ],
   "rotationTargets": [],

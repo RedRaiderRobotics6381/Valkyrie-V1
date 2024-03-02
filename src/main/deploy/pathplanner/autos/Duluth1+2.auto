@@ -18,19 +18,19 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "parallel",
           "data": {
             "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Duluth_PickUp1"
+                }
+              },
               {
                 "type": "named",
                 "data": {
                   "name": "Intake"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Duluth2"
                 }
               }
             ]
@@ -39,35 +39,23 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Duluth2_3"
+            "pathName": "Duluth_Shoot1"
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "DriveToSpeaker"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Aim"
-          }
-        },
-        {
-          "type": "deadline",
+          "type": "parallel",
           "data": {
             "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "DuluthPickUp2"
+                }
+              },
               {
                 "type": "named",
                 "data": {
                   "name": "Intake"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Duluth2_1"
                 }
               }
             ]
@@ -76,13 +64,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Duluth2_2"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "DriveToSpeaker"
+            "pathName": "Duluth_Shoot2"
           }
         },
         {

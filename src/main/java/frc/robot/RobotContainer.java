@@ -95,6 +95,7 @@ public class RobotContainer
 
     //NamedCommands.registerCommand(null, null);
     // NamedCommands.registerCommand("Shoot", new ScoreAutoCmd(launcherSubsystem));
+    drivebase.setupPathPlanner();
     NamedCommands.registerCommand("Shoot", new vScoreAutoCmd(vlauncherSubsystem));
     NamedCommands.registerCommand("Aim", new vScoreSpeakerCmd(vlauncherSubsystem));
     NamedCommands.registerCommand("Intake", new IntakeCmd());
@@ -246,7 +247,8 @@ public class RobotContainer
   public Command getAutonomousCommand()
   {
     // An example command will be run in autonomous
-    return drivebase.getAutonomousCommand("New Auto");
+    //return drivebase.getAutonomousCommand("New Auto");
+    return autoChooser.getSelected();
   }
 
   public void setDriveMode()
