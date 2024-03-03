@@ -3,36 +3,36 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.commands.Secondary;
-
-//import com.revrobotics.CANSparkMax;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Robot;
 import frc.robot.Constants.LauncherConstants;
-import frc.robot.commands.Vision.LauncherAimCMD;
 import frc.robot.subsystems.Secondary.IntakeSubsystem;
 import frc.robot.subsystems.Secondary.LauncherRotateSubsystem;
 import frc.robot.subsystems.Secondary.LauncherSubsystem;
 
-public class ScoreAutoCmd extends Command {
+public class ScoreCmd extends Command {
   /** Creates a new Outtake. */
   
+    
     private final LauncherSubsystem launcherSubsystem;
     private final IntakeSubsystem intakeSubsystem;
     private final LauncherRotateSubsystem launcherRotateSubsystem;
+    private final double LauncherAngle;
+    private final double LauncherSpeed;
+
     private boolean hasNote = true;
   
   
-    public ScoreAutoCmd(LauncherSubsystem launcherSubsystem, IntakeSubsystem intakeSubsystem, LauncherRotateSubsystem launcherRotateSubsystem) {
+    public ScoreCmd(double LauncherAngle, double LauncherSpeed, LauncherSubsystem launcherSubsystem, IntakeSubsystem intakeSubsystem, LauncherRotateSubsystem launcherRotateSubsystem) {
       this.launcherSubsystem = launcherSubsystem;
       this.intakeSubsystem = intakeSubsystem;
       this.launcherRotateSubsystem = launcherRotateSubsystem;
-      addRequirements(this.launcherSubsystem, this.intakeSubsystem, this.launcherRotateSubsystem);
-      
-      
+      this.LauncherAngle = LauncherAngle;
+      this.LauncherSpeed = LauncherSpeed;
       // Use addRequirements() here to declare subsystem dependencies.
+      addRequirements(this.launcherSubsystem, this.intakeSubsystem, this.launcherRotateSubsystem);
     }
   
     // Called when the command is initially scheduled.
@@ -40,14 +40,14 @@ public class ScoreAutoCmd extends Command {
     public void initialize() {
       hasNote = true;
     }
-  
-    // Called every time the scheduler runs while the command is scheduled.
+
+
+    // // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
       if(Robot.sensorOuttake.get() == true || Robot.sensorIntake.get() == true){
-        new LauncherAimCMD(launcherRotateSubsystem);
-
-        new LauncherSpeedCmd(LauncherConstants.LauncherSpeedMult, launcherSubsystem);
+        new LauncherRotateCmd(LauncherAngle, launcherRotateSubsystem);
+        new LauncherSpeedCmd(LauncherSpeed, launcherSubsystem);
         new WaitUntilCommand(() -> LauncherRotateCmd.rotateComplete).withTimeout(2);
         new WaitUntilCommand(() -> LauncherSpeedCmd.speedComplete).withTimeout(1);
         new OuttakeCmd(intakeSubsystem);
@@ -56,7 +56,6 @@ public class ScoreAutoCmd extends Command {
         hasNote = false;
       }
     }
-    
   
     // Called once the command ends or is interrupted.
     @Override

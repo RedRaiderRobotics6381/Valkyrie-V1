@@ -1,14 +1,12 @@
 package frc.robot.commands.Vision;
 
 import org.photonvision.targeting.PhotonTrackedTarget;
-
-import com.revrobotics.CANSparkMax;
-
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import frc.robot.Constants.AprilTagConstants;
 import frc.robot.Constants.LauncherConstants;
+import frc.robot.commands.Secondary.LauncherRotateCmd;
 import frc.robot.subsystems.Secondary.LEDsSubSystem;
 import frc.robot.subsystems.Secondary.LauncherRotateSubsystem;
 import edu.wpi.first.math.MathUtil;
@@ -18,8 +16,15 @@ public class LauncherAimCMD extends Command
   public static double Launcher_Pitch;
   
   private PhotonTrackedTarget lastTarget;
+  private final LauncherRotateSubsystem launcherRotateSubsystem;
 
-  public LauncherAimCMD()
+  public LauncherAimCMD(LauncherRotateSubsystem launcherRotateSubsystem)
+  {
+    this.launcherRotateSubsystem = launcherRotateSubsystem;
+    // each subsystem used by the command must be passed into the
+    // addRequirements() method (which takes a vararg of Subsystem)
+    addRequirements(this.launcherRotateSubsystem);
+  }
   {
 
     // each subsystem used by the command must be passed into the
@@ -63,7 +68,8 @@ public class LauncherAimCMD extends Command
             LauncherConstants.LauncherSpeedMult = MathUtil.clamp(LAUNCHER_TO_TOWER * 1750, 2750, 4000);
             Double ID_HEIGHT = 2.775;//Meters
             Launcher_Pitch = ((Math.toDegrees(Math.atan(ID_HEIGHT / LAUNCHER_TO_TOWER))) + 90);
-            LauncherRotateSubsystem.m_LauncherRotatePIDController.setReference(Launcher_Pitch,CANSparkMax.ControlType.kSmartMotion);
+            new LauncherRotateCmd(Launcher_Pitch, launcherRotateSubsystem).withTimeout(1);
+            //LauncherRotateSubsystem.m_LauncherRotatePIDController.setReference(Launcher_Pitch,CANSparkMax.ControlType.kSmartMotion);
             SmartDashboard.putNumber("Angle to Target", Launcher_Pitch);
             SmartDashboard.putNumber("Dist to Target", LAUNCHER_TO_TOWER);
 
@@ -94,7 +100,8 @@ public class LauncherAimCMD extends Command
   @Override
   public boolean isFinished()
   {
-    return Robot.sensorOuttake.get() == false;
+    //return Robot.sensorOuttake.get() == false;
+    return LauncherRotateCmd.rotateComplete;
   }
 
   /**

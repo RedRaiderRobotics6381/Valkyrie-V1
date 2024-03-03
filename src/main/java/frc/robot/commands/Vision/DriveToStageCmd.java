@@ -55,7 +55,7 @@ public class DriveToStageCmd extends Command
     omegaController.setSetpoint(omegaOffset); //degrees
    // omegaController.enableContinuousInput(-Math.PI, Math.PI);
     
-    addRequirements(swerveSubsystem);  
+    addRequirements(this.swerveSubsystem);  
   }
 
   /**

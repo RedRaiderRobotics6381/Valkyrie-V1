@@ -68,7 +68,7 @@ public class DriveToSpeakerCmd extends Command
     yController.setSetpoint(yOffset); //meters
     omegaController.setSetpoint(omegaOffset); //degrees
     //omegaController.enableContinuousInput(-Math.PI, Math.PI);
-    addRequirements(swerveSubsystem); 
+    addRequirements(this.swerveSubsystem); 
   }
 
   /**
