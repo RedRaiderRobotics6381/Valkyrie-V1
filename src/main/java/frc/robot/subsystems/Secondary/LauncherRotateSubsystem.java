@@ -94,7 +94,7 @@ public class LauncherRotateSubsystem extends SubsystemBase {
  @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Roator Set Pos", LauncherRotateSetpoint);
+    SmartDashboard.putNumber("Rotator Set Pos", LauncherRotateSetpoint);
     SmartDashboard.putNumber("Rotator Raw Pos", m_LauncherRotateEncoder.getPosition());
     SmartDashboard.putNumber("Rotator Rnd Pos", getLauncherRotatePos());
     SmartDashboard.putBoolean("Rotator at Set Pos", rotateComplete());

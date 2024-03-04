@@ -86,7 +86,7 @@ public class LauncherSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Launcher Set Speed", launcherSpeedSetpoint);
         SmartDashboard.putNumber("Launcher Raw Speed", encoderTop.getVelocity());
         SmartDashboard.putNumber("Launcher Rnd Speed", getLauncherSpeed());
-        SmartDashboard.putBoolean("Launch Mtr at Speed",speedComplete());
+        SmartDashboard.putBoolean("Launcher at Speed", speedComplete());
         //currentLauncherSpeed = (m_launcherMotorTop.getAbsoluteEncoder().getVelocity()) * 60;
         //launcherPIDControllerBot.setReference(1000, CANSparkFlex.ControlType.kSmartVelocity);
     }
