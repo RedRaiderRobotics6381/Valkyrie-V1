@@ -65,7 +65,7 @@ public class LauncherAimCMD extends Command
             Double targetY = target.getBestCameraToTarget().getY();
             Double LAUNCHER_TO_TOWER = Math.sqrt(Math.pow(targetX, 2) + Math.pow(targetY, 2));
             //Double LAUNCHER_TO_TOWER = target.getBestCameraToTarget().getX();
-            LauncherConstants.LauncherSpeedMult = MathUtil.clamp(LAUNCHER_TO_TOWER * LauncherConstants.kAutoScoreSpeed,
+            LauncherConstants.LauncherSpeedMult = (int)MathUtil.clamp(LAUNCHER_TO_TOWER * LauncherConstants.kAutoScoreSpeed,
                                                                  LauncherConstants.kAutoScoreSpeedMin,
                                                                  LauncherConstants.kAutoScoreSpeedMax);
 
