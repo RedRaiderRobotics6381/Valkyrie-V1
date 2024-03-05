@@ -3,43 +3,43 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.9026396514331485,
-        "y": 6.958021893251764
+        "x": 8.270256540513081,
+        "y": 0.49115448658247773
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.031275350299987,
-        "y": 4.911544865824773
+        "x": 7.2645592584632475,
+        "y": 0.18710647107903988
       },
       "isLocked": false,
-      "linkedName": "Duluth_PickUp_End"
+      "linkedName": "DuluthCorner_PickUpEnd"
     },
     {
       "anchor": {
-        "x": 1.5578118905525558,
-        "y": 5.57
+        "x": 1.1251281761822782,
+        "y": 4.280060525933018
       },
       "prevControl": {
-        "x": 2.1659079215594326,
-        "y": 5.83538306677753
+        "x": 0.5638087629451612,
+        "y": 0.7952025020859156
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Duluth_Shoot1_End"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 1.5,
-    "maxAcceleration": 1.5,
+    "maxVelocity": 2.0,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -1.0230301886677278,
+    "rotation": -46.78991060824604,
     "rotateFast": false
   },
   "reversed": false,
@@ -48,5 +48,5 @@
     "rotation": 0,
     "velocity": 0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

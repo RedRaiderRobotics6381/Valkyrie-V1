@@ -7,7 +7,6 @@ package frc.robot.commands.Secondary;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Secondary.ClimberSubsystem;
 
-
 public class LowerCmd extends Command {
 
   private final ClimberSubsystem climberSubsystem;
@@ -51,14 +50,14 @@ public class LowerCmd extends Command {
     */
 
     if (climberSubsystem.m_climberEncoderR.getPosition() >= lowerStopDist && climberSubsystem.m_climberEncoderR.getPosition() <= lowerDist){
-      climberSubsystem.m_climberMotorR.set(-.50);
+      climberSubsystem.m_climberMotorR.set(-.75);
     }
     if (climberSubsystem.m_climberEncoderR.getPosition() <= lowerStopDist) {
       climberSubsystem.m_climberMotorR.set(0);
     }
 
     if (climberSubsystem.m_climberEncoderL.getPosition() >= lowerStopDist && climberSubsystem.m_climberEncoderL.getPosition() <= lowerDist){
-      climberSubsystem.m_climberMotorL.set(-.50);
+      climberSubsystem.m_climberMotorL.set(-.75);
     } 
     if (climberSubsystem.m_climberEncoderL.getPosition() <= lowerStopDist) {
       climberSubsystem.m_climberMotorL.set(0);

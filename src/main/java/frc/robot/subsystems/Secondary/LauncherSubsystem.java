@@ -4,7 +4,7 @@ import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -67,6 +67,7 @@ public class LauncherSubsystem extends SubsystemBase {
     
     @Override
     public void periodic() {
+        SmartDashboard.putNumber("Launcher Velovity", m_launcherMotorTop.getEncoder().getVelocity());
         //currentLauncherSpeed = (m_launcherMotorTop.getAbsoluteEncoder().getVelocity()) * 60;
         //launcherPIDControllerBot.setReference(1000, CANSparkFlex.ControlType.kSmartVelocity);
     }

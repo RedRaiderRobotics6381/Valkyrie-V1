@@ -95,7 +95,7 @@ public class RobotContainer
 
     //NamedCommands.registerCommand(null, null);
     // NamedCommands.registerCommand("Shoot", new ScoreAutoCmd(launcherSubsystem));
-    drivebase.setupPathPlanner();
+    //drivebase.setupPathPlanner();
     NamedCommands.registerCommand("Shoot", new vScoreAutoCmd(vlauncherSubsystem));
     NamedCommands.registerCommand("Aim", new vScoreSpeakerCmd(vlauncherSubsystem));
     NamedCommands.registerCommand("Intake", new IntakeCmd());
@@ -192,6 +192,7 @@ public class RobotContainer
     new JoystickButton(engineerXbox, 4).onTrue(new vScoreTrapCmd(vlauncherSubsystem));
     new JoystickButton(engineerXbox, 2).onTrue(new vScoreAmpCmd(vlauncherSubsystem));
     new JoystickButton(engineerXbox, 6).onTrue(new vScoreAutoCmd(vlauncherSubsystem));
+    new JoystickButton(engineerXbox, 3).onTrue(new vScoreSpeakerCmd(vlauncherSubsystem));
     // new JoystickButton(engineerXbox, 4).onTrue(new ScoreTrapCmd(launcherSubsystem));
     // new JoystickButton(engineerXbox, 2).onTrue(new ScoreAmpCmd(launcherSubsystem));
     // new JoystickButton(engineerXbox, 6).onTrue(new ScoreAutoCmd(launcherSubsystem));

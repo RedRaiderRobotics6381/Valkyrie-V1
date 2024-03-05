@@ -47,20 +47,20 @@ public class ClimbCmd extends Command {
       If they are, the climbed boolean variable is set to true.
     */
 
-    if (climberSubsystem.m_climberEncoderR.getPosition() >= -0.1 && climberSubsystem.m_climberEncoderR.getPosition() <= climbDist){
+    if (climberSubsystem.m_climberEncoderR.getPosition() >= -0.1 && climberSubsystem.m_climberEncoderR.getPosition() <= climbDist - .5){
         climberSubsystem.m_climberMotorR.set(.75);
     }
-    if (climberSubsystem.m_climberEncoderR.getPosition() >= climbDist) {
+    if (climberSubsystem.m_climberEncoderR.getPosition() >= climbDist - .5) {
         climberSubsystem.m_climberMotorR.set(0);
     }
 
-    if (climberSubsystem.m_climberEncoderL.getPosition() >= -0.1 && climberSubsystem.m_climberEncoderL.getPosition() <= climbDist - 1.0){
+    if (climberSubsystem.m_climberEncoderL.getPosition() >= -0.1 && climberSubsystem.m_climberEncoderL.getPosition() <= climbDist - .5){
         climberSubsystem.m_climberMotorL.set(.75);
       } 
-    if (climberSubsystem.m_climberEncoderL.getPosition() >= climbDist - 1.0) {
+    if (climberSubsystem.m_climberEncoderL.getPosition() >= climbDist - .5) {
         climberSubsystem.m_climberMotorL.set(0);
     }
-    if (climberSubsystem.m_climberEncoderR.getPosition() >= climbDist && climberSubsystem.m_climberEncoderL.getPosition() >= climbDist - 1.0){
+    if (climberSubsystem.m_climberEncoderR.getPosition() >= climbDist -.5 && climberSubsystem.m_climberEncoderL.getPosition() >= climbDist - .5){
       climbed = true;
     }
   }

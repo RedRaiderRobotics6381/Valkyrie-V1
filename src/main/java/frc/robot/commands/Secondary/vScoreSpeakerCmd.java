@@ -44,8 +44,8 @@ public class vScoreSpeakerCmd extends Command {
             LauncherRotateSubsystem.m_LauncherRotatePIDController.setReference(LauncherConstants.SpeakerScoreAngle,CANSparkMax.ControlType.kSmartMotion);
             vlauncherSubsystem.launcherPIDControllerTop.setReference(LauncherConstants.SpeakerScoreSpeed, CANSparkFlex.ControlType.kVelocity);
             if (LauncherRotateSubsystem.m_LauncherRotateEncoder.getPosition() >= LauncherConstants.SpeakerScoreAngle - 10){
-                if(((vlauncherSubsystem.m_launcherMotorTop.getEncoder().getVelocity()) >= LauncherConstants.SpeakerScoreSpeed - 25) &&
-                    (vlauncherSubsystem.m_launcherMotorTop.getEncoder().getVelocity()) <= LauncherConstants.SpeakerScoreSpeed + 25) {
+                if(((vlauncherSubsystem.m_launcherMotorTop.getEncoder().getVelocity()) >= LauncherConstants.SpeakerScoreSpeed - 50) &&
+                    (vlauncherSubsystem.m_launcherMotorTop.getEncoder().getVelocity()) <= LauncherConstants.SpeakerScoreSpeed + 50) {
                   IntakeSubsystem.launcherIndexerMotor.set(IntakeConstants.launcherIndexerOuttakeSpeed);
                   IntakeSubsystem.indexerMotor.set(IntakeConstants.indexerOuttakeSpeed);
                 }
