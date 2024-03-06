@@ -4,9 +4,11 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 
 import com.revrobotics.CANSparkMax;
 
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.AprilTagConstants;
 import frc.robot.Constants.LauncherConstants;
 import frc.robot.subsystems.Secondary.LEDsSubSystem;
@@ -56,12 +58,12 @@ public class LauncherAimCMD extends Command
             var target = targetOpt.get();
             // This is new target data, so recalculate the goal
             lastTarget = target;
-            double targetX = target.getBestCameraToTarget().getX();
-            Double targetY = target.getBestCameraToTarget().getY();
+            double targetX = target.getBestCameraToTarget().getX() - 0.233;
+            Double targetY = target.getBestCameraToTarget().getY() + 0.306;
             Double LAUNCHER_TO_TOWER = Math.sqrt(Math.pow(targetX, 2) + Math.pow(targetY, 2));
             //Double LAUNCHER_TO_TOWER = target.getBestCameraToTarget().getX();
-            LauncherConstants.LauncherSpeedMult = MathUtil.clamp(LAUNCHER_TO_TOWER * 1750, 2750, 4000);
-            Double ID_HEIGHT = 2.775;//Meters
+            LauncherConstants.LauncherSpeedMult = MathUtil.clamp(LAUNCHER_TO_TOWER * 2000, 2750, 4000);
+            Double ID_HEIGHT = 2.2936;//Meters from 1.808 (2.1436)
             Launcher_Pitch = ((Math.toDegrees(Math.atan(ID_HEIGHT / LAUNCHER_TO_TOWER))) + 90);
             LauncherRotateSubsystem.m_LauncherRotatePIDController.setReference(Launcher_Pitch,CANSparkMax.ControlType.kSmartMotion);
             SmartDashboard.putNumber("Angle to Target", Launcher_Pitch);
@@ -69,7 +71,9 @@ public class LauncherAimCMD extends Command
 
             if (LAUNCHER_TO_TOWER <= 5){ 
               if (target.getYaw() >= -2  || target.getYaw() <=2){
-                LEDsSubSystem.setLEDwBlink(.73,.125);
+                //LEDsSubSystem.setLEDwBlink(.73,.125);
+               RobotContainer.driverXbox.setRumble(RumbleType.kBothRumble, 0.25);
+               RobotContainer.driverXbox.setRumble(RumbleType.kBothRumble, 0.25);
               }
             }
           }

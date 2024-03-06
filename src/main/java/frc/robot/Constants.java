@@ -70,7 +70,7 @@ public final class Constants {
     public static final double TrapScoreAngle = 145.0; //from 147.5
     public static final double TrapScoreSpeed = 2000; //from 712.5
     public static final double SpeakerScoreAngle = 153.5;
-    public static final double SpeakerScoreSpeed = 2200; //from 2000
+    public static final double SpeakerScoreSpeed = 2200; //from 2200
     public static final double AmpScoreAngle = 153.5;
     public static final double AmpScoreSpeed = 1000; //from 800
     public static double LauncherSpeedMult;

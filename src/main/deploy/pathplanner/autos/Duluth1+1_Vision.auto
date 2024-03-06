@@ -14,19 +14,19 @@
         {
           "type": "named",
           "data": {
-            "name": "Aim"
+            "name": "PVAim"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
           }
         },
         {
           "type": "parallel",
           "data": {
             "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
-              },
               {
                 "type": "named",
                 "data": {
@@ -39,13 +39,13 @@
         {
           "type": "named",
           "data": {
-            "name": "DriveToSpeaker"
+            "name": "PVAim"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Aim"
+            "name": "Shoot"
           }
         }
       ]

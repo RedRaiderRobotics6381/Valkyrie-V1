@@ -98,6 +98,7 @@ public class RobotContainer
     //drivebase.setupPathPlanner();
     NamedCommands.registerCommand("Shoot", new vScoreAutoCmd(vlauncherSubsystem));
     NamedCommands.registerCommand("Aim", new vScoreSpeakerCmd(vlauncherSubsystem));
+    NamedCommands.registerCommand("PVAim", new LauncherAimCMD());
     NamedCommands.registerCommand("Intake", new IntakeCmd());
     NamedCommands.registerCommand("DriveToNote", new PickUpNoteCmd(drivebase));
     NamedCommands.registerCommand("DriveToSpeaker", new DriveToSpeakerCmd(drivebase));
@@ -175,6 +176,7 @@ public class RobotContainer
     // Driver control button 2 is used in the pick up note command PickUpNoteCmd
 
     //==========================================================================
+
 
 
     new JoystickButton(driverXbox, 8).onTrue((new InstantCommand(drivebase::zeroGyro)));  //Button "Start"
