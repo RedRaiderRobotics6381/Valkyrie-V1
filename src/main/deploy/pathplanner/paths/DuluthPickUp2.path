@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.5812001994374358,
-        "y": 5.68335905902581
+        "x": 1.5,
+        "y": 5.55
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.6279768172071956,
-        "y": 7.449176379834241
+        "x": 1.5467766177697597,
+        "y": 7.3158173208084305
       },
       "isLocked": false,
       "linkedName": "Duluth_Shoot1_End"

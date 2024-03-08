@@ -52,7 +52,7 @@ public class LauncherRotateSubsystem extends SubsystemBase {
         m_LauncherRotateMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
         m_LauncherRotateMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
         m_LauncherRotateMotor.enableVoltageCompensation(12.0);
-        m_LauncherRotateMotor.setSmartCurrentLimit(60);
+        m_LauncherRotateMotor.setSmartCurrentLimit(20);
         m_LauncherRotateMotor.burnFlash();  //Remove this after everything is up and running to save flash wear
     
         // set PID coefficients
@@ -110,7 +110,7 @@ public class LauncherRotateSubsystem extends SubsystemBase {
   
   public Command rotatePosCommand(double LauncherRotateSetpoint) {
     // implicitly require `this`
-    return this.run(() -> m_LauncherRotatePIDController.setReference(LauncherRotateSetpoint, CANSparkMax.ControlType.kSmartMotion));
+    return this.runOnce(() -> m_LauncherRotatePIDController.setReference(LauncherRotateSetpoint, CANSparkMax.ControlType.kSmartMotion));
   }
 
   // public Command rotateIntakeCommand() {
