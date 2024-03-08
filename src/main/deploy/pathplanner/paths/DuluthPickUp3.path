@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.9026396514331485,
-        "y": 6.958021893251764
-      },
-      "prevControl": null,
-      "nextControl": {
-        "x": 2.9026396514331485,
-        "y": 5.297451962425293
-      },
-      "isLocked": false,
-      "linkedName": "Duluth_PickUp_End"
-    },
-    {
-      "anchor": {
         "x": 1.5812001994374358,
         "y": 5.68335905902581
       },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.604588508322316,
+        "y": 3.9139592528187905
+      },
+      "isLocked": false,
+      "linkedName": "Duluth_Shoot1_End"
+    },
+    {
+      "anchor": {
+        "x": 2.9026396514331485,
+        "y": 4.1046482092964185
+      },
       "prevControl": {
-        "x": 2.3296260837535914,
-        "y": 5.808412272494061
+        "x": 1.9026396514331485,
+        "y": 4.1046482092964185
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Duluth_Shoot1_End"
+      "linkedName": "DuluthPickUp3"
     }
   ],
   "rotationTargets": [],
@@ -39,7 +39,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -1.0230301886677278,
+    "rotation": 0,
     "rotateFast": false
   },
   "reversed": false,

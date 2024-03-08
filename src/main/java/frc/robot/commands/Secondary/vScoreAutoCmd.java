@@ -7,6 +7,8 @@ package frc.robot.commands.Secondary;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkMax;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 //import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -17,6 +19,7 @@ import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.LauncherConstants;
 import frc.robot.subsystems.Secondary.IntakeSubsystem;
 import frc.robot.subsystems.Secondary.LauncherRotateSubsystem;
+import frc.robot.subsystems.Secondary.LauncherSubsystem;
 //import frc.robot.subsystems.Secondary.LauncherRotateSubsystem;
 import frc.robot.subsystems.Secondary.vLauncherSubsystem;
 
@@ -45,8 +48,10 @@ public class vScoreAutoCmd extends Command {
     public void execute() {
       if(Robot.sensorOuttake.get() == true || Robot.sensorIntake.get() == true){
         vlauncherSubsystem.launcherPIDControllerTop.setReference(LauncherConstants.LauncherSpeedMult, CANSparkFlex.ControlType.kVelocity);
-            if(((vlauncherSubsystem.m_launcherMotorTop.getEncoder().getVelocity()) >= LauncherConstants.LauncherSpeedMult - 500) &&
-                (vlauncherSubsystem.m_launcherMotorTop.getEncoder().getVelocity()) <= LauncherConstants.LauncherSpeedMult + 500) {
+        if((Math.abs(vlauncherSubsystem.m_launcherMotorTop.getEncoder().getVelocity() - LauncherConstants.LauncherSpeedMult)) <= LauncherConstants.LauncherSpeedTol){   
+        //if(((vlauncherSubsystem.m_launcherMotorTop.getEncoder().getVelocity()) >= LauncherConstants.LauncherSpeedMult - 500) &&
+                //(vlauncherSubsystem.m_launcherMotorTop.getEncoder().getVelocity()) <= LauncherConstants.LauncherSpeedMult + 500) {
+             //SmartDashboard.putData("Launcher Speed:", LauncherConstants.LauncherSpeedMult);
               IntakeSubsystem.launcherIndexerMotor.set(IntakeConstants.launcherIndexerOuttakeSpeed);
               IntakeSubsystem.indexerMotor.set(IntakeConstants.indexerOuttakeSpeed); 
             }

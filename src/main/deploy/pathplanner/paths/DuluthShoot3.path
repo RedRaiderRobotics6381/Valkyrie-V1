@@ -4,15 +4,15 @@
     {
       "anchor": {
         "x": 2.9026396514331485,
-        "y": 6.958021893251764
+        "y": 4.1046482092964185
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.9026396514331485,
-        "y": 5.297451962425293
+        "x": 2.949416269202909,
+        "y": 5.70674736791069
       },
       "isLocked": false,
-      "linkedName": "Duluth_PickUp_End"
+      "linkedName": "DuluthPickUp3"
     },
     {
       "anchor": {
@@ -20,8 +20,8 @@
         "y": 5.68335905902581
       },
       "prevControl": {
-        "x": 2.3296260837535914,
-        "y": 5.808412272494061
+        "x": 2.3997910104082316,
+        "y": 5.66808241918478
       },
       "nextControl": null,
       "isLocked": false,
@@ -39,7 +39,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -1.0230301886677278,
+    "rotation": 0,
     "rotateFast": false
   },
   "reversed": false,

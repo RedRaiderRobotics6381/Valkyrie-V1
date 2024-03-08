@@ -8,6 +8,7 @@ import com.pathplanner.lib.util.PIDConstants;
 
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.util.sendable.Sendable;
 import swervelib.math.Matter;
 
 /**
@@ -70,10 +71,12 @@ public final class Constants {
     public static final double TrapScoreAngle = 145.0; //from 147.5
     public static final double TrapScoreSpeed = 2000; //from 712.5
     public static final double SpeakerScoreAngle = 153.5;
-    public static final double SpeakerScoreSpeed = 2200; //from 2200
+    public static final double SpeakerScoreSpeed = 2000; //from 2200
     public static final double AmpScoreAngle = 153.5;
     public static final double AmpScoreSpeed = 1000; //from 800
     public static double LauncherSpeedMult;
+    public static final double LauncherSpeedTol = 50;
+
 
     public static final double posMax = 60; //need to change
     public static final double posMin = 12.5; //need to change
