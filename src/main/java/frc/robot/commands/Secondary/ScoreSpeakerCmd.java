@@ -4,6 +4,7 @@
 
 package frc.robot.commands.Secondary;
 
+import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -35,29 +36,32 @@ public class ScoreSpeakerCmd extends Command {
     }
   
     // Called every time the scheduler runs while the command is scheduled.
-    @Override
-    public void execute() {
-      if(Robot.sensorOuttake.get() == true || Robot.sensorIntake.get() == true){
-        //launcherRotateSubsystem.rotatePosCommand(LauncherConstants.posSpeaker);
-        LauncherRotateSubsystem.m_LauncherRotatePIDController.setReference(LauncherConstants.posSpeaker,CANSparkMax.ControlType.kSmartMotion);
-
-        launcherSubsystem.m_launcherMotorTop.set(LauncherConstants.launcherMotorTopSpeed);
-        System.out.println(launcherSubsystem.m_launcherMotorTop.getEncoder().getVelocity());
-        if(((launcherSubsystem.m_launcherMotorTop.getEncoder().getVelocity()) >= 2000)) {
-          IntakeSubsystem.launcherIndexerMotor.set(IntakeConstants.launcherIndexerOuttakeSpeed);
-          IntakeSubsystem.indexerMotor.set(IntakeConstants.indexerOuttakeSpeed);
+        // // Called every time the scheduler runs while the command is scheduled.
+        @Override
+        public void execute() {
+          if(Robot.sensorOuttake.get() == true || Robot.sensorIntake.get() == true){
+            LauncherRotateSubsystem.m_LauncherRotatePIDController.setReference(LauncherConstants.SpeakerScoreAngle,CANSparkMax.ControlType.kSmartMotion);
+            launcherSubsystem.launcherPIDControllerTop.setReference(LauncherConstants.SpeakerScoreSpeed, CANSparkFlex.ControlType.kVelocity);
+            if ((Math.abs(LauncherRotateSubsystem.m_LauncherRotateEncoder.getPosition() -
+                 LauncherConstants.SpeakerScoreAngle) <= LauncherConstants.LauncherAngleTol)){
+                  if((Math.abs(launcherSubsystem.m_launcherMotorTop.getEncoder().getVelocity() -
+                      LauncherConstants.SpeakerScoreSpeed)) <= LauncherConstants.LauncherSpeedTol){
+                        IntakeSubsystem.launcherIndexerMotor.set(IntakeConstants.launcherIndexerOuttakeSpeed);
+                        IntakeSubsystem.indexerMotor.set(IntakeConstants.indexerOuttakeSpeed);
+                    }
+              } 
+            } else {
+              hasNote = false;
+            }
         }
-      } else {
-        hasNote = false;
-      }
-    }
   
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-      IntakeSubsystem.indexerMotor.set(IntakeConstants.zeroSpeed);
-      IntakeSubsystem.launcherIndexerMotor.set(IntakeConstants.zeroSpeed);
-      launcherSubsystem.m_launcherMotorTop.set(IntakeConstants.zeroSpeed);
+      IntakeSubsystem.indexerMotor.set(0);
+      IntakeSubsystem.launcherIndexerMotor.set(0);
+      launcherSubsystem.m_launcherMotorTop.set(0);
+      LauncherRotateSubsystem.m_LauncherRotatePIDController.setReference(0, CANSparkMax.ControlType.kSmartMotion);
     }
   
     // Returns true when the command should end.

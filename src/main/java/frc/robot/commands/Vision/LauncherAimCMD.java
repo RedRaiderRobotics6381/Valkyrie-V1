@@ -11,7 +11,6 @@ import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.AprilTagConstants;
 import frc.robot.Constants.LauncherConstants;
-import frc.robot.subsystems.Secondary.LEDsSubSystem;
 import frc.robot.subsystems.Secondary.LauncherRotateSubsystem;
 import edu.wpi.first.math.MathUtil;
 
@@ -71,7 +70,7 @@ public class LauncherAimCMD extends Command
 
             if (LAUNCHER_TO_TOWER <= 5){ 
               if (target.getYaw() >= -2  || target.getYaw() <=2){
-                //LEDsSubSystem.setLEDwBlink(.73,.125);
+                //LEDsSubSystem.setLEDwBlink(.73,.125); //Removed lights to stop alerting other teams we are ready to shoot.
                RobotContainer.driverXbox.setRumble(RumbleType.kBothRumble, 0.25);
                RobotContainer.driverXbox.setRumble(RumbleType.kBothRumble, 0.25);
               }

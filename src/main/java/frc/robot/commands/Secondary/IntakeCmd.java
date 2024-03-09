@@ -41,7 +41,7 @@ public class IntakeCmd extends Command {
       LauncherRotateSubsystem.m_LauncherRotatePIDController.setReference(LauncherConstants.posIntake,CANSparkMax.ControlType.kSmartMotion);
       IntakeSubsystem.indexerMotor.set(IntakeConstants.indexerIntakeSpeed);
       IntakeSubsystem.intakeMotor.set(IntakeConstants.intakeSpeed);
-      IntakeSubsystem.launcherIndexerMotor.set(IntakeConstants.launcherIndexerSpeed);
+      IntakeSubsystem.launcherIndexerMotor.set(IntakeConstants.launcherIndexerIntakeSpeed);
       //System.out.println(Robot.sensorIntake.get());
 
     }
