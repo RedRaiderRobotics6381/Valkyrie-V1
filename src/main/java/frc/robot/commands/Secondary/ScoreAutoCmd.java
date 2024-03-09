@@ -17,15 +17,19 @@ import frc.robot.subsystems.Secondary.LauncherSubsystem;
 public class ScoreAutoCmd extends Command {
   /** Creates a new Outtake. */
   
-    private final LauncherSubsystem launcherSubsystem;
+    private final LauncherSubsystem m_launcherSubsystem;
+    private final LauncherRotateSubsystem m_launcherRotateSubsystem;
+    private final IntakeSubsystem m_intakeSubsystem;
     private boolean hasNote = true;
   
   
-    public ScoreAutoCmd(LauncherSubsystem launcherSubsystem) {
-      this.launcherSubsystem = launcherSubsystem;
-      
+    public ScoreAutoCmd(LauncherSubsystem launcherSubsystem, LauncherRotateSubsystem launcherRotateSubsystem, IntakeSubsystem intakeSubsystem) {
+      this.m_launcherSubsystem = launcherSubsystem;
+      this.m_launcherRotateSubsystem = launcherRotateSubsystem;
+      this.m_intakeSubsystem = intakeSubsystem;
       
       // Use addRequirements() here to declare subsystem dependencies.
+      addRequirements(launcherSubsystem, launcherRotateSubsystem, intakeSubsystem);
     }
   
     // Called when the command is initially scheduled.
@@ -38,11 +42,11 @@ public class ScoreAutoCmd extends Command {
     @Override
     public void execute() {
       if(Robot.sensorOuttake.get() == true || Robot.sensorIntake.get() == true){
-        launcherSubsystem.launcherPIDControllerTop.setReference(LauncherConstants.LauncherSpeedMult, CANSparkFlex.ControlType.kVelocity);
-        if((Math.abs(launcherSubsystem.m_launcherMotorTop.getEncoder().getVelocity() -
+        m_launcherSubsystem.launcherPIDControllerTop.setReference(LauncherConstants.LauncherSpeedMult, CANSparkFlex.ControlType.kVelocity);
+        if((Math.abs(m_launcherSubsystem.launcherMotorTop.getEncoder().getVelocity() -
             LauncherConstants.LauncherSpeedMult)) <= LauncherConstants.LauncherSpeedTol){   
-              IntakeSubsystem.launcherIndexerMotor.set(IntakeConstants.launcherIndexerOuttakeSpeed);
-              IntakeSubsystem.indexerMotor.set(IntakeConstants.indexerOuttakeSpeed); 
+              m_intakeSubsystem.launcherIndexerMotor.set(IntakeConstants.launcherIndexerOuttakeSpeed);
+              m_intakeSubsystem.indexerMotor.set(IntakeConstants.indexerOuttakeSpeed); 
             }
       } else {
         hasNote = false;
@@ -53,10 +57,10 @@ public class ScoreAutoCmd extends Command {
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-      IntakeSubsystem.indexerMotor.set(0);
-      IntakeSubsystem.launcherIndexerMotor.set(0);
-      launcherSubsystem.launcherPIDControllerTop.setReference(0, CANSparkFlex.ControlType.kVelocity);
-      LauncherRotateSubsystem.m_LauncherRotatePIDController.setReference(0, CANSparkMax.ControlType.kSmartMotion);
+      m_intakeSubsystem.indexerMotor.set(0);
+      m_intakeSubsystem.launcherIndexerMotor.set(0);
+      m_launcherSubsystem.launcherPIDControllerTop.setReference(0, CANSparkFlex.ControlType.kVelocity);
+      m_launcherRotateSubsystem.launcherRotatePIDController.setReference(0, CANSparkMax.ControlType.kSmartMotion);
     }
   
     // Returns true when the command should end.

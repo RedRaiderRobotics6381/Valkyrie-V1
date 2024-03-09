@@ -19,8 +19,13 @@ public class LauncherAimCMD extends Command
   public static double Launcher_Pitch;
   
   private PhotonTrackedTarget lastTarget;
+  private final LauncherRotateSubsystem m_LauncherRotateSubsystem;
 
-  public LauncherAimCMD()
+  public LauncherAimCMD(LauncherRotateSubsystem launcherRotateSubsystem)
+  {
+    this.m_LauncherRotateSubsystem = launcherRotateSubsystem;
+    addRequirements(launcherRotateSubsystem);
+  }
   {
 
     // each subsystem used by the command must be passed into the
@@ -64,7 +69,7 @@ public class LauncherAimCMD extends Command
             LauncherConstants.LauncherSpeedMult = MathUtil.clamp(LAUNCHER_TO_TOWER * 2000, 2750, 4000);
             Double ID_HEIGHT = 2.5;//Meters from 1.808 (2.1436) (2.2936(3/7/24))
             Launcher_Pitch = ((Math.toDegrees(Math.atan(ID_HEIGHT / LAUNCHER_TO_TOWER))) + 90);
-            LauncherRotateSubsystem.m_LauncherRotatePIDController.setReference(Launcher_Pitch,CANSparkMax.ControlType.kSmartMotion);
+            m_LauncherRotateSubsystem.launcherRotatePIDController.setReference(Launcher_Pitch,CANSparkMax.ControlType.kSmartMotion);
             SmartDashboard.putNumber("Angle to Target", Launcher_Pitch);
             SmartDashboard.putNumber("Dist to Target", LAUNCHER_TO_TOWER);
 

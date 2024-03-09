@@ -19,8 +19,18 @@ public class LauncherAimAutonCMD extends Command
   boolean aimedToTarget;
   
   private PhotonTrackedTarget lastTarget;
+  private final LauncherRotateSubsystem m_launcherRotateSubsystem;
 
-  public LauncherAimAutonCMD()
+  public LauncherAimAutonCMD(LauncherRotateSubsystem launcherRotateSubsystem)
+  {
+    this.m_launcherRotateSubsystem = launcherRotateSubsystem;
+    addRequirements(launcherRotateSubsystem);
+  }
+  {
+    // each subsystem used by the command must be passed into the
+    // addRequirements() method (which takes a vararg of Subsystem)
+    
+  }
   {
 
     // each subsystem used by the command must be passed into the
@@ -66,9 +76,9 @@ public class LauncherAimAutonCMD extends Command
             LauncherConstants.LauncherSpeedMult = MathUtil.clamp(LAUNCHER_TO_TOWER * 1750, 2750, 4000);
             Double ID_HEIGHT = 2.775;//Meters
             Launcher_Pitch = ((Math.toDegrees(Math.atan(ID_HEIGHT / LAUNCHER_TO_TOWER))) + 90);
-            LauncherRotateSubsystem.m_LauncherRotatePIDController.setReference(Launcher_Pitch,CANSparkMax.ControlType.kSmartMotion);
-            if (LauncherRotateSubsystem.m_LauncherRotateEncoder.getPosition() >= Launcher_Pitch - 2 &&
-                LauncherRotateSubsystem.m_LauncherRotateEncoder.getPosition() <= Launcher_Pitch + 2){
+            m_launcherRotateSubsystem.launcherRotatePIDController.setReference(Launcher_Pitch,CANSparkMax.ControlType.kSmartMotion);
+            if (m_launcherRotateSubsystem.launcherRotateEncoder.getPosition() >= Launcher_Pitch - 2 &&
+                m_launcherRotateSubsystem.launcherRotateEncoder.getPosition() <= Launcher_Pitch + 2){
               aimedToTarget = true;
             }
             SmartDashboard.putNumber("Angle to Target", Launcher_Pitch);

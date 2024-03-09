@@ -78,11 +78,11 @@ public class RobotContainer
     //NamedCommands.registerCommand(null, null);
     // NamedCommands.registerCommand("Shoot", new ScoreAutoCmd(launcherSubsystem));
     //drivebase.setupPathPlanner();
-    NamedCommands.registerCommand("Shoot", new ScoreAutoCmd(launcherSubsystem));
-    NamedCommands.registerCommand("Aim", new ScoreSpeakerCmd(launcherSubsystem));
-    NamedCommands.registerCommand("PVAim", new LauncherAimCMD());
-    NamedCommands.registerCommand("Intake", new IntakeCmd());
-    NamedCommands.registerCommand("DriveToNote", new PickUpNoteCmd(drivebase));
+    NamedCommands.registerCommand("Shoot", new ScoreAutoCmd(launcherSubsystem, launcherRotateSubsystem, intakeSubsystem));
+    NamedCommands.registerCommand("Aim", new ScoreSpeakerCmd(launcherSubsystem, launcherRotateSubsystem, intakeSubsystem));
+    NamedCommands.registerCommand("PVAim", new LauncherAimCMD(launcherRotateSubsystem));
+    NamedCommands.registerCommand("Intake", new IntakeCmd(intakeSubsystem, launcherRotateSubsystem));
+    NamedCommands.registerCommand("DriveToNote", new PickUpNoteCmd(drivebase, intakeSubsystem, launcherRotateSubsystem));
     NamedCommands.registerCommand("DriveToSpeaker", new DriveToSpeakerCmd(drivebase));
 
     // Build an auto chooser. This will use Commands.none() as the default option.
@@ -147,23 +147,20 @@ public class RobotContainer
     // Driver control button 2 is used in the pick up note command PickUpNoteCmd
 
     //==========================================================================
-
-
-
     new JoystickButton(driverXbox, 8).onTrue((new InstantCommand(drivebase::zeroGyro)));  //Button "Start"
     new JoystickButton(driverXbox, 1).whileTrue(new DriveToAmpCmd(drivebase)); 
-    new JoystickButton(driverXbox, 2).whileTrue(new PickUpNoteCmd(drivebase));  //Button "B"
+    new JoystickButton(driverXbox, 2).whileTrue(new PickUpNoteCmd(drivebase, intakeSubsystem, launcherRotateSubsystem));  //Button "B"
     new JoystickButton(driverXbox, 3).whileTrue(new DriveToSpeakerCmd(drivebase)); //Button "X"
     new JoystickButton(driverXbox, 4).whileTrue(new DriveToStageCmd(drivebase)); //Button "Y"
     //Button 5 is used below in the spencerButtons method
     //Button 6 is used below in the spencerButtons method
 
-    new JoystickButton(engineerXbox, 1).whileTrue(new LauncherAimCMD()); //Button "A"
-    new JoystickButton(engineerXbox, 2).onTrue(new ScoreAmpCmd(launcherSubsystem));
-    new JoystickButton(engineerXbox, 3).onTrue(new ScoreSpeakerCmd(launcherSubsystem));
-    new JoystickButton(engineerXbox, 4).onTrue(new ScoreTrapCmd(launcherSubsystem));
-    new JoystickButton(engineerXbox, 5).onTrue(new IntakeCmd());
-    new JoystickButton(engineerXbox, 6).onTrue(new ScoreAutoCmd(launcherSubsystem));
+    new JoystickButton(engineerXbox, 1).whileTrue(new LauncherAimCMD(launcherRotateSubsystem)); //Button "A"
+    new JoystickButton(engineerXbox, 2).onTrue(new ScoreAmpCmd(launcherSubsystem, launcherRotateSubsystem, intakeSubsystem));
+    new JoystickButton(engineerXbox, 3).onTrue(new ScoreSpeakerCmd(launcherSubsystem, launcherRotateSubsystem, intakeSubsystem));
+    new JoystickButton(engineerXbox, 4).onTrue(new ScoreTrapCmd(launcherSubsystem, launcherRotateSubsystem, intakeSubsystem));
+    new JoystickButton(engineerXbox, 5).onTrue(new IntakeCmd(intakeSubsystem, launcherRotateSubsystem));
+    new JoystickButton(engineerXbox, 6).onTrue(new ScoreAutoCmd(launcherSubsystem, launcherRotateSubsystem, intakeSubsystem));
     
     new POVButton(engineerXbox, 0).onTrue(new ClimbCmd(climberSubsystem));
     new POVButton(engineerXbox, 180).onTrue(new LowerCmd(climberSubsystem));

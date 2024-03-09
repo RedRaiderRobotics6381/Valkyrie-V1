@@ -17,16 +17,19 @@ import frc.robot.subsystems.Secondary.LauncherSubsystem;
 
 public class ScoreTrapCmd extends Command {
   /** Creates a new Outtake. */
-  
-    
-    private final LauncherSubsystem launcherSubsystem;
+
+    private final LauncherSubsystem m_launcherSubsystem;
+    private final LauncherRotateSubsystem m_launcherRotateSubsystem;
+    private final IntakeSubsystem m_intakeSubsystem;
     private boolean hasNote = true;
   
   
-    public ScoreTrapCmd(LauncherSubsystem launcherSubsystem) {
-      this.launcherSubsystem = launcherSubsystem;
-      
+    public ScoreTrapCmd(LauncherSubsystem launcherSubsystem, LauncherRotateSubsystem launcherRotateSubsystem, IntakeSubsystem intakeSubsystem) {
+      this.m_launcherSubsystem = launcherSubsystem;
+      this.m_launcherRotateSubsystem = launcherRotateSubsystem;
+      this.m_intakeSubsystem = intakeSubsystem;
       // Use addRequirements() here to declare subsystem dependencies.
+      addRequirements(launcherSubsystem, launcherRotateSubsystem, intakeSubsystem);
     }
   
     // Called when the command is initially scheduled.
@@ -39,14 +42,14 @@ public class ScoreTrapCmd extends Command {
     @Override
     public void execute() {
       if(Robot.sensorOuttake.get() == true || Robot.sensorIntake.get() == true){
-        LauncherRotateSubsystem.m_LauncherRotatePIDController.setReference(LauncherConstants.TrapScoreAngle,CANSparkMax.ControlType.kSmartMotion);
-        launcherSubsystem.launcherPIDControllerTop.setReference(LauncherConstants.TrapScoreSpeed, CANSparkFlex.ControlType.kVelocity);
-        if ((Math.abs(LauncherRotateSubsystem.m_LauncherRotateEncoder.getPosition() -
+        m_launcherRotateSubsystem.launcherRotatePIDController.setReference(LauncherConstants.TrapScoreAngle,CANSparkMax.ControlType.kSmartMotion);
+        m_launcherSubsystem.launcherPIDControllerTop.setReference(LauncherConstants.TrapScoreSpeed, CANSparkFlex.ControlType.kVelocity);
+        if ((Math.abs(m_launcherRotateSubsystem.launcherRotateEncoder.getPosition() -
              LauncherConstants.TrapScoreAngle) <= LauncherConstants.LauncherAngleTol)){
-              if((Math.abs(launcherSubsystem.m_launcherMotorTop.getEncoder().getVelocity() -
+              if((Math.abs(m_launcherSubsystem.launcherMotorTop.getEncoder().getVelocity() -
                   LauncherConstants.TrapScoreSpeed)) <= LauncherConstants.LauncherSpeedTol){
-                    IntakeSubsystem.launcherIndexerMotor.set(IntakeConstants.launcherIndexerOuttakeSpeed);
-                    IntakeSubsystem.indexerMotor.set(IntakeConstants.indexerOuttakeSpeed);
+                    m_intakeSubsystem.launcherIndexerMotor.set(IntakeConstants.launcherIndexerOuttakeSpeed);
+                    m_intakeSubsystem.indexerMotor.set(IntakeConstants.indexerOuttakeSpeed);
                 }
           } 
         } else {
@@ -57,10 +60,10 @@ public class ScoreTrapCmd extends Command {
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-      IntakeSubsystem.indexerMotor.set(0);
-      IntakeSubsystem.launcherIndexerMotor.set(0);
-      launcherSubsystem.m_launcherMotorTop.set(0);
-      LauncherRotateSubsystem.m_LauncherRotatePIDController.setReference(0, CANSparkMax.ControlType.kSmartMotion);
+      m_intakeSubsystem.indexerMotor.set(0);
+      m_intakeSubsystem.launcherIndexerMotor.set(0);
+      m_launcherSubsystem.launcherMotorTop.set(0);
+      m_launcherRotateSubsystem.launcherRotatePIDController.setReference(0, CANSparkMax.ControlType.kSmartMotion);
     }
   
     // Returns true when the command should end.

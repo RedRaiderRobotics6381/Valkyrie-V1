@@ -11,8 +11,8 @@ import frc.robot.Constants;
 
 public class LauncherSubsystem extends SubsystemBase {
 
-    public CANSparkFlex m_launcherMotorTop;
-    public CANSparkFlex m_launcherMotorBot;
+    public CANSparkFlex launcherMotorTop;
+    public static CANSparkFlex m_launcherMotorBot;
     public SparkPIDController launcherPIDControllerTop;
     public static SparkPIDController launcherPIDControllerBot;
     public static RelativeEncoder encoderTop;
@@ -27,20 +27,20 @@ public class LauncherSubsystem extends SubsystemBase {
 
     public LauncherSubsystem() {
 
-        m_launcherMotorTop =  new CANSparkFlex(Constants.LauncherConstants.kLauncherT, MotorType.kBrushless);
+        launcherMotorTop =  new CANSparkFlex(Constants.LauncherConstants.kLauncherT, MotorType.kBrushless);
         m_launcherMotorBot =  new CANSparkFlex(Constants.LauncherConstants.kLauncherB, MotorType.kBrushless);
         
         //m_encoderTop = m_launcherMotorTop.getAbsoluteEncoder();
 
         
-        m_launcherMotorTop.restoreFactoryDefaults();  //Remove this when we remove the burnFlash() call below
+        launcherMotorTop.restoreFactoryDefaults();  //Remove this when we remove the burnFlash() call below
         m_launcherMotorBot.restoreFactoryDefaults();  //Remove this when we remove the burnFlash() call below
         
-        m_launcherMotorBot.follow(m_launcherMotorTop, true);
+        m_launcherMotorBot.follow(launcherMotorTop, true);
 
         // initialze PID controller and encoder objects
-        launcherPIDControllerTop = m_launcherMotorTop.getPIDController();
-        encoderTop = m_launcherMotorTop.getEncoder();
+        launcherPIDControllerTop = launcherMotorTop.getPIDController();
+        encoderTop = launcherMotorTop.getEncoder();
         // launcherPIDControllerBot = m_launcherMotorBot.getPIDController();
         //m_launcherMotorBot.setInverted(true);
         kP = 0.0006; 
@@ -53,10 +53,9 @@ public class LauncherSubsystem extends SubsystemBase {
         maxRPM = 4250;
         maxAcc = 1500;
 
-        m_launcherMotorTop.enableVoltageCompensation(12.0);
-        m_launcherMotorTop.setSmartCurrentLimit(40);        
+        launcherMotorTop.enableVoltageCompensation(12.0);
+        launcherMotorTop.setSmartCurrentLimit(40);        
 
-        
         launcherPIDControllerTop.setP(kP);
         launcherPIDControllerTop.setI(kI);
         launcherPIDControllerTop.setD(kD);
@@ -64,7 +63,7 @@ public class LauncherSubsystem extends SubsystemBase {
         launcherPIDControllerTop.setFF(kFF);
         launcherPIDControllerTop.setOutputRange(kMinOutput, kMaxOutput);
 
-        m_launcherMotorTop.burnFlash();  //Remove this after everything is up and running to save flash wear
+        launcherMotorTop.burnFlash();  //Remove this after everything is up and running to save flash wear
         m_launcherMotorBot.burnFlash();  //Remove this after everything is up and running to save flash wear
 
         //launcherPIDControllerTop.setSmartMotionMaxVelocity(5000.0,0); //ArmConstants.armRotateMaxVel, ArmConstants.armRotateSmartMotionSlot);
@@ -76,7 +75,6 @@ public class LauncherSubsystem extends SubsystemBase {
         launcherPIDControllerTop.setSmartMotionMinOutputVelocity(minVel, smartMotionSlot);
         launcherPIDControllerTop.setSmartMotionMaxAccel(maxAcc, smartMotionSlot);
         launcherPIDControllerTop.setSmartMotionAllowedClosedLoopError(0, smartMotionSlot);
-
     }
     
     @Override
@@ -87,7 +85,7 @@ public class LauncherSubsystem extends SubsystemBase {
     
     public Command LauncherCmd(double speed) {
         // implicitly require `this`
-        return this.run(() -> m_launcherMotorTop.set(.8));
+        return this.run(() -> launcherMotorTop.set(.8));
     }
 
 }

@@ -17,6 +17,8 @@ import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 public class PickUpNoteCmd extends Command
 {
   private final SwerveSubsystem swerveSubsystem;
+  private final IntakeSubsystem m_intakeSubsystem;
+  private final LauncherRotateSubsystem m_launcherRotateSubsystem;
   private final PIDController   xController;
   //private final PIDController   yController;
   private final PIDController   zController;
@@ -26,9 +28,12 @@ public class PickUpNoteCmd extends Command
   boolean outtakeHasNote;
   boolean intakeHasNote;
 
-  public PickUpNoteCmd(SwerveSubsystem swerveSubsystem)
+  public PickUpNoteCmd(SwerveSubsystem swerveSubsystem, IntakeSubsystem intakeSubsystem, LauncherRotateSubsystem launcherRotateSubsystem)
   {
     this.swerveSubsystem = swerveSubsystem;
+    this.m_intakeSubsystem = intakeSubsystem;
+    this.m_launcherRotateSubsystem = launcherRotateSubsystem;
+    
     xController = new PIDController(0.055, 0.00, 0.0);
     //yController = new PIDController(0.0625, 0.00375, 0.0001);
     zController = new PIDController(0.025,0.0, 0.000);
@@ -38,7 +43,7 @@ public class PickUpNoteCmd extends Command
 
     // each subsystem used by the command must be passed into the
     // addRequirements() method (which takes a vararg of Subsystem)
-    addRequirements(this.swerveSubsystem);
+    addRequirements(swerveSubsystem, intakeSubsystem, launcherRotateSubsystem);
   }
 
   /**
@@ -75,10 +80,10 @@ public class PickUpNoteCmd extends Command
             swerveSubsystem.drive(new Translation2d(translationValx, 0.0), translationValz, false);
           } else{
               if (!intakeHasNote && !droveToNote){ //If the note is not in the intake, run the intake command
-                LauncherRotateSubsystem.m_LauncherRotatePIDController.setReference(LauncherConstants.posIntake,CANSparkMax.ControlType.kSmartMotion);
-                IntakeSubsystem.intakeMotor.set(IntakeConstants.intakeSpeed);
-                IntakeSubsystem.indexerMotor.set(IntakeConstants.indexerIntakeSpeed);
-                IntakeSubsystem.launcherIndexerMotor.set(IntakeConstants.launcherIndexerIntakeSpeed);
+                m_launcherRotateSubsystem.launcherRotatePIDController.setReference(LauncherConstants.posIntake,CANSparkMax.ControlType.kSmartMotion);
+                m_intakeSubsystem.intakeMotor.set(IntakeConstants.intakeSpeed);
+                m_intakeSubsystem.indexerMotor.set(IntakeConstants.indexerIntakeSpeed);
+                m_intakeSubsystem.launcherIndexerMotor.set(IntakeConstants.launcherIndexerIntakeSpeed);
                 swerveSubsystem.drive(new Translation2d(0.5, 0.0), 0.0, false);
               }             // swerveSubsystem.drive(new Translation2d(0.5, 0.0), 0.0, false);
               else if(intakeHasNote){
@@ -178,9 +183,9 @@ public class PickUpNoteCmd extends Command
   public void end(boolean interrupted)
   {
     LEDsSubSystem.setLED(.71);
-    IntakeSubsystem.indexerMotor.set(IntakeConstants.zeroSpeed);
-    IntakeSubsystem.intakeMotor.set(IntakeConstants.zeroSpeed);
-    IntakeSubsystem.launcherIndexerMotor.set(IntakeConstants.zeroSpeed);
+    m_intakeSubsystem.indexerMotor.set(IntakeConstants.zeroSpeed);
+    m_intakeSubsystem.intakeMotor.set(IntakeConstants.zeroSpeed);
+    m_intakeSubsystem.launcherIndexerMotor.set(IntakeConstants.zeroSpeed);
   }
 }
 

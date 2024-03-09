@@ -18,12 +18,15 @@ public class IntakeCmd extends Command {
 
   
   private boolean hasNote = false;
+  private final IntakeSubsystem m_intakeSubsystem;
+  private final LauncherRotateSubsystem m_launcherRotateSubsystem;
 
-  public IntakeCmd() {
-    
-  
+  public IntakeCmd(IntakeSubsystem intakeSubsystem, LauncherRotateSubsystem launcherRotateSubsystem) {
+    this.m_intakeSubsystem = intakeSubsystem;
+    this.m_launcherRotateSubsystem = launcherRotateSubsystem;
     
     // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(intakeSubsystem, launcherRotateSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -38,10 +41,10 @@ public class IntakeCmd extends Command {
     if(Robot.sensorOuttake.get() == true){
       hasNote = true;
     } else {
-      LauncherRotateSubsystem.m_LauncherRotatePIDController.setReference(LauncherConstants.posIntake,CANSparkMax.ControlType.kSmartMotion);
-      IntakeSubsystem.indexerMotor.set(IntakeConstants.indexerIntakeSpeed);
-      IntakeSubsystem.intakeMotor.set(IntakeConstants.intakeSpeed);
-      IntakeSubsystem.launcherIndexerMotor.set(IntakeConstants.launcherIndexerIntakeSpeed);
+      m_launcherRotateSubsystem.launcherRotatePIDController.setReference(LauncherConstants.posIntake,CANSparkMax.ControlType.kSmartMotion);
+      m_intakeSubsystem.indexerMotor.set(IntakeConstants.indexerIntakeSpeed);
+      m_intakeSubsystem.intakeMotor.set(IntakeConstants.intakeSpeed);
+      m_intakeSubsystem.launcherIndexerMotor.set(IntakeConstants.launcherIndexerIntakeSpeed);
       //System.out.println(Robot.sensorIntake.get());
 
     }
@@ -51,9 +54,9 @@ public class IntakeCmd extends Command {
   @Override
   public void end(boolean interrupted) {
     LEDsSubSystem.setLED(.71);
-    IntakeSubsystem.indexerMotor.set(IntakeConstants.zeroSpeed);
-    IntakeSubsystem.intakeMotor.set(IntakeConstants.zeroSpeed);
-    IntakeSubsystem.launcherIndexerMotor.set(IntakeConstants.zeroSpeed);
+    m_intakeSubsystem.indexerMotor.set(IntakeConstants.zeroSpeed);
+    m_intakeSubsystem.intakeMotor.set(IntakeConstants.zeroSpeed);
+    m_intakeSubsystem.launcherIndexerMotor.set(IntakeConstants.zeroSpeed);
   }
 
   // Returns true when the command should end.
