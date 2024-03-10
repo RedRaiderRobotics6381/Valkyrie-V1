@@ -7,6 +7,7 @@ package frc.robot.subsystems.Secondary;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkAbsoluteEncoder;
 import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import frc.robot.Constants.LauncherConstants;
 import frc.robot.RobotContainer;
@@ -15,7 +16,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LauncherRotateSubsystem extends SubsystemBase {
-  public static CANSparkMax m_LauncherRotateMotor;
+  public CANSparkMax launcherRotateMotor;
   public SparkPIDController launcherRotatePIDController;
   public SparkAbsoluteEncoder launcherRotateEncoder;
   public static double LauncherRotateSetpoint;
@@ -27,33 +28,34 @@ public class LauncherRotateSubsystem extends SubsystemBase {
  * */
   public LauncherRotateSubsystem() {
         // initialize motor
-        m_LauncherRotateMotor = new CANSparkMax(LauncherConstants.kLauncherRotate, MotorType.kBrushless);
+        launcherRotateMotor = new CANSparkMax(LauncherConstants.kLauncherRotate, MotorType.kBrushless);
 
         /**
          * The RestoreFactoryDefaults method can be used to reset the configuration parameters
          * in the SPARK MAX to their factory default state. If no argument is passed, these
          * parameters will not persist between power cycles
          */
-        m_LauncherRotateMotor.restoreFactoryDefaults();  //Remove this when we remove the burnFlash() call below
-        launcherRotateEncoder = m_LauncherRotateMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
+        launcherRotateMotor.restoreFactoryDefaults();  //Remove this when we remove the burnFlash() call below
+        launcherRotateEncoder = launcherRotateMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
         launcherRotateEncoder.setPositionConversionFactor(360);
-        launcherRotateEncoder.setZeroOffset(342.4); //333.9
-        m_LauncherRotateMotor.setInverted(true);
+        launcherRotateEncoder.setZeroOffset(341.7); //333.9
+        launcherRotateMotor.setInverted(true);
         // m_LauncherRotateEncoder.setDistancePerRotation(360);
         // m_LauncherRotateEncoder.setPositionOffset(72.5);
 
         launcherRotateEncoder.setInverted(true); //Maybe this is not needed, depending on the direction the arm rotates.
     
         // initialze PID controller and encoder objects
-        launcherRotatePIDController = m_LauncherRotateMotor.getPIDController();
+        launcherRotatePIDController = launcherRotateMotor.getPIDController();
         launcherRotatePIDController.setFeedbackDevice(launcherRotateEncoder);
-        m_LauncherRotateMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, 103);
-        m_LauncherRotateMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward,179);
-        m_LauncherRotateMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
-        m_LauncherRotateMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
-        m_LauncherRotateMotor.enableVoltageCompensation(12.0);
-        m_LauncherRotateMotor.setSmartCurrentLimit(20);
-        m_LauncherRotateMotor.burnFlash();  //Remove this after everything is up and running to save flash wear
+        launcherRotateMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, 103);
+        launcherRotateMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward,179);
+        launcherRotateMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
+        launcherRotateMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
+        launcherRotateMotor.enableVoltageCompensation(12.0);
+        launcherRotateMotor.setSmartCurrentLimit(60);
+        launcherRotateMotor.setIdleMode(IdleMode.kBrake);
+        launcherRotateMotor.burnFlash();  //Remove this after everything is up and running to save flash wear
     
         // set PID coefficients
         launcherRotatePIDController.setP(0.000069);
@@ -120,6 +122,7 @@ public class LauncherRotateSubsystem extends SubsystemBase {
 
 
   public void setDefaultCommand(){
+    launcherRotateMotor.disable();
     //m_armPIDController.setReference(ArmRotateSetpoint, CANSparkMax.ControlType.kSmartMotion);
   }
 

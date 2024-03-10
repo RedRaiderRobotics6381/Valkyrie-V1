@@ -18,25 +18,19 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "Intake"
+                  "pathName": "DuluthPickUp3"
                 }
               },
               {
-                "type": "path",
+                "type": "named",
                 "data": {
-                  "pathName": "DuluthPickUp2"
+                  "name": "Intake"
                 }
               }
             ]
@@ -45,7 +39,32 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Duluth_Shoot2"
+            "pathName": "DuluthShoot3"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "PVAim"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.5
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
           }
         },
         {
@@ -61,9 +80,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "race",
           "data": {
-            "name": "Aim"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "PVAim"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.5
+                }
+              }
+            ]
           }
         },
         {
@@ -77,30 +109,37 @@
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "Intake"
+                  "pathName": "DuluthPickUp2"
                 }
               },
               {
-                "type": "path",
+                "type": "named",
                 "data": {
-                  "pathName": "DuluthPickUp3"
+                  "name": "Intake"
                 }
               }
             ]
           }
         },
         {
-          "type": "path",
+          "type": "race",
           "data": {
-            "pathName": "DuluthShoot3"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Aim"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "PVAim"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.5
+                }
+              }
+            ]
           }
         },
         {

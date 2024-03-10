@@ -14,32 +14,38 @@
         {
           "type": "named",
           "data": {
-            "name": "PVAim"
+            "name": "Aim"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shoot"
+            "name": "DriveToNote"
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
+          "data": {
+            "pathName": "Duluth_Shoot1"
+          }
+        },
+        {
+          "type": "race",
           "data": {
             "commands": [
               {
                 "type": "named",
                 "data": {
-                  "name": "DriveToNote"
+                  "name": "PVAim"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 1.25
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "PVAim"
           }
         },
         {

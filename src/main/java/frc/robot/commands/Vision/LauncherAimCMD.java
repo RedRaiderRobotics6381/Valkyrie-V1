@@ -4,6 +4,7 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 
 import com.revrobotics.CANSparkMax;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -17,6 +18,8 @@ import edu.wpi.first.math.MathUtil;
 public class LauncherAimCMD extends Command
 {
   public static double Launcher_Pitch;
+  public static double ID_HEIGHT = 2.19;//2.1936
+  
   
   private PhotonTrackedTarget lastTarget;
   private final LauncherRotateSubsystem m_LauncherRotateSubsystem;
@@ -63,11 +66,12 @@ public class LauncherAimCMD extends Command
             // This is new target data, so recalculate the goal
             lastTarget = target;
             double targetX = target.getBestCameraToTarget().getX() - 0.233; //0.233
-            Double targetY = target.getBestCameraToTarget().getY() + 0.306; //0.306
-            Double LAUNCHER_TO_TOWER = Math.sqrt(Math.pow(targetX, 2) + Math.pow(targetY, 2));
+            double targetY = target.getBestCameraToTarget().getY() + 0.306; //0.306
+            double LAUNCHER_TO_TOWER = Math.sqrt(Math.pow(targetX, 2) + Math.pow(targetY, 2));
+            
             //Double LAUNCHER_TO_TOWER = target.getBestCameraToTarget().getX();
-            LauncherConstants.LauncherSpeedMult = MathUtil.clamp(LAUNCHER_TO_TOWER * 2000, 2750, 4000);
-            Double ID_HEIGHT = 2.5;//Meters from 1.808 (2.1436) (2.2936(3/7/24))
+            LauncherConstants.LauncherSpeedMult = MathUtil.clamp(LAUNCHER_TO_TOWER * 1500, 2750, 4000);
+            //Meters from 1.808 (2.1436) (2.2936(3/7/24))
             Launcher_Pitch = ((Math.toDegrees(Math.atan(ID_HEIGHT / LAUNCHER_TO_TOWER))) + 90);
             m_LauncherRotateSubsystem.launcherRotatePIDController.setReference(Launcher_Pitch,CANSparkMax.ControlType.kSmartMotion);
             SmartDashboard.putNumber("Angle to Target", Launcher_Pitch);
@@ -76,8 +80,8 @@ public class LauncherAimCMD extends Command
             if (LAUNCHER_TO_TOWER <= 5){ 
               if (target.getYaw() >= -2  || target.getYaw() <=2){
                 //LEDsSubSystem.setLEDwBlink(.73,.125); //Removed lights to stop alerting other teams we are ready to shoot.
-               RobotContainer.driverXbox.setRumble(RumbleType.kBothRumble, 0.25);
-               RobotContainer.driverXbox.setRumble(RumbleType.kBothRumble, 0.25);
+              //  RobotContainer.driverXbox.setRumble(RumbleType.kBothRumble, 0.25);
+              //  RobotContainer.driverXbox.setRumble(RumbleType.kBothRumble, 0.25);
               }
             }
           }
@@ -116,5 +120,6 @@ public class LauncherAimCMD extends Command
   public void end(boolean interrupted)
   {
     //launcherSubsystem.LauncherCmd(0);
+    
   }
 }

@@ -53,7 +53,7 @@ public class IntakeCmd extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    LEDsSubSystem.setLED(.71);
+    LEDsSubSystem.setLED(.91);
     m_intakeSubsystem.indexerMotor.set(IntakeConstants.zeroSpeed);
     m_intakeSubsystem.intakeMotor.set(IntakeConstants.zeroSpeed);
     m_intakeSubsystem.launcherIndexerMotor.set(IntakeConstants.zeroSpeed);

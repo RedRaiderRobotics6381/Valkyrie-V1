@@ -5,7 +5,9 @@
 package frc.robot.commands.Secondary;
 
 import com.revrobotics.CANSparkFlex;
-import com.revrobotics.CANSparkMax;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+//import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import frc.robot.Constants.IntakeConstants;
@@ -43,6 +45,8 @@ public class ScoreAutoCmd extends Command {
     public void execute() {
       if(Robot.sensorOuttake.get() == true || Robot.sensorIntake.get() == true){
         m_launcherSubsystem.launcherPIDControllerTop.setReference(LauncherConstants.LauncherSpeedMult, CANSparkFlex.ControlType.kVelocity);
+         SmartDashboard.putNumber("Launcher Speed", m_launcherSubsystem.launcherMotorTop.getEncoder().getVelocity());
+        SmartDashboard.putNumber("Launcher Angle",m_launcherRotateSubsystem.launcherRotateEncoder.getPosition());
         if((Math.abs(m_launcherSubsystem.launcherMotorTop.getEncoder().getVelocity() -
             LauncherConstants.LauncherSpeedMult)) <= LauncherConstants.LauncherSpeedTol){   
               m_intakeSubsystem.launcherIndexerMotor.set(IntakeConstants.launcherIndexerOuttakeSpeed);
@@ -60,7 +64,7 @@ public class ScoreAutoCmd extends Command {
       m_intakeSubsystem.indexerMotor.set(0);
       m_intakeSubsystem.launcherIndexerMotor.set(0);
       m_launcherSubsystem.launcherPIDControllerTop.setReference(0, CANSparkFlex.ControlType.kVelocity);
-      m_launcherRotateSubsystem.launcherRotatePIDController.setReference(0, CANSparkMax.ControlType.kSmartMotion);
+      m_launcherRotateSubsystem.launcherRotateMotor.disable();
     }
   
     // Returns true when the command should end.

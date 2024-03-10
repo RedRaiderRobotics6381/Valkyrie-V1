@@ -36,7 +36,7 @@ public class PickUpNoteCmd extends Command
     
     xController = new PIDController(0.055, 0.00, 0.0);
     //yController = new PIDController(0.0625, 0.00375, 0.0001);
-    zController = new PIDController(0.025,0.0, 0.000);
+    zController = new PIDController(0.015,0.0, 0.000);
     xController.setTolerance(3);
     //yController.setTolerance(3);
     zController.setTolerance(.5);
@@ -73,7 +73,7 @@ public class PickUpNoteCmd extends Command
         double TZ = target.getYaw();
         double TX = target.getPitch();
 
-        double translationValx = MathUtil.clamp(-xController.calculate(TX, -19), -1.0 , 1.0); //Tune the setpoint to be where the note is just barely found.
+        double translationValx = MathUtil.clamp(-xController.calculate(TX, -19), -4.0 , 4.0); //Tune the setpoint to be where the note is just barely found.
         double translationValz = MathUtil.clamp(zController.calculate(TZ, 0.0), -2.0 , 2.0); //* throttle, 2.5 * throttle);
 
         if (xController.atSetpoint() != true) {
@@ -87,7 +87,8 @@ public class PickUpNoteCmd extends Command
                 swerveSubsystem.drive(new Translation2d(0.5, 0.0), 0.0, false);
               }             // swerveSubsystem.drive(new Translation2d(0.5, 0.0), 0.0, false);
               else if(intakeHasNote){
-                swerveSubsystem.drive(new Translation2d(0.0, 0.0), 0.0, false);
+                //swerveSubsystem.drive(new Translation2d(0.0, 0.0), 0.0, false);
+                swerveSubsystem.lock();
                 droveToNote = true;
               }
             }  
@@ -186,6 +187,7 @@ public class PickUpNoteCmd extends Command
     m_intakeSubsystem.indexerMotor.set(IntakeConstants.zeroSpeed);
     m_intakeSubsystem.intakeMotor.set(IntakeConstants.zeroSpeed);
     m_intakeSubsystem.launcherIndexerMotor.set(IntakeConstants.zeroSpeed);
+    swerveSubsystem.lock();
   }
 }
 

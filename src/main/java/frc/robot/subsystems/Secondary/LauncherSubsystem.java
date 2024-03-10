@@ -43,9 +43,9 @@ public class LauncherSubsystem extends SubsystemBase {
         encoderTop = launcherMotorTop.getEncoder();
         // launcherPIDControllerBot = m_launcherMotorBot.getPIDController();
         //m_launcherMotorBot.setInverted(true);
-        kP = 0.0006; 
-        kI = 0.0000001;
-        kD = 0.001; 
+        kP = 0.0003; 
+        kI = 0.0;
+        kD = 0.005; 
         kIz = 0; 
         kFF = 0.000156; 
         kMaxOutput = 1; 

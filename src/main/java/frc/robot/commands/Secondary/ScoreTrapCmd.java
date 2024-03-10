@@ -7,6 +7,7 @@ package frc.robot.commands.Secondary;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkMax;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import frc.robot.Constants.IntakeConstants;
@@ -44,6 +45,8 @@ public class ScoreTrapCmd extends Command {
       if(Robot.sensorOuttake.get() == true || Robot.sensorIntake.get() == true){
         m_launcherRotateSubsystem.launcherRotatePIDController.setReference(LauncherConstants.TrapScoreAngle,CANSparkMax.ControlType.kSmartMotion);
         m_launcherSubsystem.launcherPIDControllerTop.setReference(LauncherConstants.TrapScoreSpeed, CANSparkFlex.ControlType.kVelocity);
+        SmartDashboard.putNumber("Launcher Speed", m_launcherSubsystem.launcherMotorTop.getEncoder().getVelocity());
+        SmartDashboard.putNumber("Launcher Angle",m_launcherRotateSubsystem.launcherRotateEncoder.getPosition());
         if ((Math.abs(m_launcherRotateSubsystem.launcherRotateEncoder.getPosition() -
              LauncherConstants.TrapScoreAngle) <= LauncherConstants.LauncherAngleTol)){
               if((Math.abs(m_launcherSubsystem.launcherMotorTop.getEncoder().getVelocity() -
@@ -63,7 +66,7 @@ public class ScoreTrapCmd extends Command {
       m_intakeSubsystem.indexerMotor.set(0);
       m_intakeSubsystem.launcherIndexerMotor.set(0);
       m_launcherSubsystem.launcherMotorTop.set(0);
-      m_launcherRotateSubsystem.launcherRotatePIDController.setReference(0, CANSparkMax.ControlType.kSmartMotion);
+      m_launcherRotateSubsystem.launcherRotateMotor.disable();
     }
   
     // Returns true when the command should end.

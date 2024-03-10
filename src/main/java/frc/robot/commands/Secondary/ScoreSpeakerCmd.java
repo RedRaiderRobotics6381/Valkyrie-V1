@@ -48,9 +48,9 @@ public class ScoreSpeakerCmd extends Command {
             m_launcherRotateSubsystem.launcherRotatePIDController.setReference(LauncherConstants.SpeakerScoreAngle,CANSparkMax.ControlType.kSmartMotion);
             m_launcherSubsystem.launcherPIDControllerTop.setReference(LauncherConstants.SpeakerScoreSpeed, CANSparkFlex.ControlType.kVelocity);
             if ((Math.abs(m_launcherRotateSubsystem.launcherRotateEncoder.getPosition() -
-                 LauncherConstants.SpeakerScoreAngle) <= LauncherConstants.LauncherAngleTol)){
+                 LauncherConstants.SpeakerScoreAngle) <= LauncherConstants.LauncherAngleTol+2)){
                   if((Math.abs(m_launcherSubsystem.launcherMotorTop.getEncoder().getVelocity() -
-                      LauncherConstants.SpeakerScoreSpeed)) <= LauncherConstants.LauncherSpeedTol){
+                      LauncherConstants.SpeakerScoreSpeed)) <= LauncherConstants.LauncherSpeedTol+25){
                         m_intakeSubsystem.launcherIndexerMotor.set(IntakeConstants.launcherIndexerOuttakeSpeed);
                         m_intakeSubsystem.indexerMotor.set(IntakeConstants.indexerOuttakeSpeed);
                     }
@@ -66,7 +66,7 @@ public class ScoreSpeakerCmd extends Command {
       m_intakeSubsystem.indexerMotor.set(0);
       m_intakeSubsystem.launcherIndexerMotor.set(0);
       m_launcherSubsystem.launcherMotorTop.set(0);
-      m_launcherRotateSubsystem.launcherRotatePIDController.setReference(0, CANSparkMax.ControlType.kSmartMotion);
+      m_launcherRotateSubsystem.launcherRotateMotor.disable();
     }
   
     // Returns true when the command should end.
