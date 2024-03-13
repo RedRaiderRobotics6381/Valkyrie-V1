@@ -25,6 +25,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.AprilTagConstants;
 import frc.robot.Constants.LauncherConstants;
+import frc.robot.commands.Secondary.ClimberInitCmd;
+import frc.robot.subsystems.Secondary.ClimberSubsystem;
 import frc.robot.subsystems.Secondary.LEDsSubSystem;
 import swervelib.parser.SwerveParser;
 
@@ -38,6 +40,7 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
+  private ClimberSubsystem climberSubsystem;
   
   private Timer disabledTimer;
   
@@ -47,8 +50,7 @@ public class Robot extends TimedRobot {
   public static PhotonCamera camAprTgLow = new PhotonCamera("camAprTgLow");
   public static PhotonCamera camAprTgHigh = new PhotonCamera("camAprTgHigh");
    
-  public static DigitalInput rightLimitSwitch = new DigitalInput(3);
-  public static DigitalInput leftLimitSwitch = new DigitalInput(4);
+
   public static DigitalInput sensorIntake = new DigitalInput(1); //This is the lower sensor, it will be true when a note is first intaked
   public static DigitalInput sensorOuttake = new DigitalInput(0); //This is the upper sensor, it will be true when a note is ready for outtake
   public static ColorSensorV3 colorSensor = new ColorSensorV3(i2cPort);
@@ -81,8 +83,6 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Auto Score Speed", LauncherConstants.kAutoScoreSpeed);
     SmartDashboard.putNumber("Auto Score Speed Min", LauncherConstants.kAutoScoreSpeedMin);
     SmartDashboard.putNumber("Auto Score Speed Max", LauncherConstants.kAutoScoreSpeedMax);
-    SmartDashboard.putNumber("Left Limit Switch", leftLimitSwitch.get() ? 1 : 0);
-    SmartDashboard.putNumber("Right Limit Switch", rightLimitSwitch.get() ? 1 : 0);
 
 
   }
@@ -150,6 +150,7 @@ public class Robot extends TimedRobot {
     m_robotContainer.setMotorBrake(true);
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
     aprilTagAlliance();
+    new ClimberInitCmd(climberSubsystem);
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {

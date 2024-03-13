@@ -4,21 +4,20 @@
 
 package frc.robot.commands.Secondary;
 
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Robot;
 import frc.robot.subsystems.Secondary.ClimberSubsystem;
 
 
 public class ClimbCmd extends Command {
 
-  private final ClimberSubsystem climberSubsystem;
+  private final ClimberSubsystem m_climberSubsystem;
   private boolean climbed = false;
   private double climbDist = 12.25;
 
   
   public ClimbCmd(ClimberSubsystem climberSubsystem) {
-    this.climberSubsystem = climberSubsystem;
+    this.m_climberSubsystem = climberSubsystem;
+    addRequirements(climberSubsystem);
 
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -32,25 +31,19 @@ public class ClimbCmd extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(!Robot.rightLimitSwitch.get()){
-    if (climberSubsystem.m_climberEncoderR.getPosition() >= -0.1 && climberSubsystem.m_climberEncoderR.getPosition() <= climbDist - .5){
-        climberSubsystem.m_climberMotorR.set(.75);
+    if(!m_climberSubsystem.m_limitSwitch_R.get()){
+        m_climberSubsystem.m_climberMotorR.set(.75);
+    } else{
+      m_climberSubsystem.m_climberMotorR.set(0);
     }
-  }
-    if (climberSubsystem.m_climberEncoderR.getPosition() >= climbDist - .5) {
-        climberSubsystem.m_climberMotorR.set(0);
-    }
-  
-  if(!Robot.leftLimitSwitch.get()){
-    if (climberSubsystem.m_climberEncoderL.getPosition() >= -0.1 && climberSubsystem.m_climberEncoderL.getPosition() <= climbDist - .5){
-        climberSubsystem.m_climberMotorL.set(.75);
-      } 
-    }
-    if (climberSubsystem.m_climberEncoderL.getPosition() >= climbDist - .5) {
-      climberSubsystem.m_climberMotorL.set(0);
+
+    if(!m_climberSubsystem.m_limitSwitch_L.get()){
+        m_climberSubsystem.m_climberMotorL.set(.75);
+    } else{
+      m_climberSubsystem.m_climberMotorL.set(0);
     }
   
-    if (climberSubsystem.m_climberEncoderR.getPosition() >= climbDist -.5 && climberSubsystem.m_climberEncoderL.getPosition() >= climbDist - .5){
+    if (m_climberSubsystem.m_limitSwitch_R.get() &&  m_climberSubsystem.m_limitSwitch_L.get()){
       climbed = true;
     }
   
@@ -59,8 +52,8 @@ public class ClimbCmd extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-     climberSubsystem.m_climberMotorL.set(0);
-     climberSubsystem.m_climberMotorR.set(0);
+     m_climberSubsystem.m_climberMotorL.set(0);
+     m_climberSubsystem.m_climberMotorR.set(0);
   }
 
   // Returns true when the command should end.

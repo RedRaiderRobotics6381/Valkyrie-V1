@@ -7,13 +7,14 @@ package frc.robot.commands.Secondary;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Secondary.ClimberSubsystem;
 
-public class LowerCmd extends Command {
+
+public class ClimberInitCmd extends Command {
 
   private final ClimberSubsystem m_climberSubsystem;
-  private boolean lowered = false;
-  private double lowerDist = 13.0;
+  private boolean climberInitialized = false;
 
-  public LowerCmd(ClimberSubsystem climberSubsystem) {
+  
+  public ClimberInitCmd(ClimberSubsystem climberSubsystem) {
     this.m_climberSubsystem = climberSubsystem;
     addRequirements(climberSubsystem);
 
@@ -23,40 +24,41 @@ public class LowerCmd extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    lowered = false;
+    climberInitialized = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (Math.abs(m_climberSubsystem.m_climberEncoderR.getPosition()) <= lowerDist){
-      m_climberSubsystem.m_climberMotorR.set(-.75);
+    if(!m_climberSubsystem.m_limitSwitch_R.get()){
+      m_climberSubsystem.m_climberMotorR.set(.125);
     } else{
       m_climberSubsystem.m_climberMotorR.set(0);
     }
-
-    if (Math.abs(m_climberSubsystem.m_climberEncoderL.getPosition()) <= lowerDist){
-      m_climberSubsystem.m_climberMotorL.set(-.75);
+    
+    if(!m_climberSubsystem.m_limitSwitch_L.get()){
+      m_climberSubsystem.m_climberMotorL.set(.125);
     } else{
       m_climberSubsystem.m_climberMotorL.set(0);
     }
-  
-    if (Math.abs(m_climberSubsystem.m_climberEncoderR.getPosition()) <= lowerDist && Math.abs(m_climberSubsystem.m_climberEncoderL.getPosition()) <= lowerDist){
-    lowered = true;
-    }
 
+    if (m_climberSubsystem.m_limitSwitch_R.get() &&  m_climberSubsystem.m_limitSwitch_L.get()){
+      climberInitialized = true;
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     m_climberSubsystem.m_climberMotorL.set(0);
-    m_climberSubsystem.m_climberMotorR.set(0);
+    m_climberSubsystem.m_climberEncoderL.setPosition(0);
+    m_climberSubsystem.m_climberMotorL.set(0);
+    m_climberSubsystem.m_climberEncoderL.setPosition(0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return lowered;
+    return climberInitialized;
   }
 }
