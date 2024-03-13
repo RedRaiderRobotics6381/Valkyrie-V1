@@ -6,12 +6,16 @@ package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -26,7 +30,7 @@ import frc.robot.commands.Secondary.SafeScoreCmd;
 import frc.robot.commands.Secondary.ScoreAmpCmd;
 import frc.robot.commands.Secondary.ScoreAutoCmd;
 import frc.robot.commands.Secondary.ScoreSpeakerCmd;
-import frc.robot.commands.Secondary.ScoreTrapCmd;
+//import frc.robot.commands.Secondary.ScoreTrapCmd;
 import frc.robot.commands.Vision.DriveToAmpCmd;
 import frc.robot.commands.Vision.DriveToSpeakerCmd;
 import frc.robot.commands.Vision.DriveToStageCmd;
@@ -165,7 +169,10 @@ public class RobotContainer
     
     new POVButton(engineerXbox, 0).onTrue(new ClimbCmd(climberSubsystem));
     new POVButton(engineerXbox, 180).onTrue(new LowerCmd(climberSubsystem));
-    
+    new JoystickButton(driverXbox, 7).whileTrue(
+        Commands.deferredProxy(() -> drivebase.driveToPose(
+                                new Pose2d(new Translation2d(2, 0), Rotation2d.fromDegrees(0)))
+                          ));
 //    new JoystickButton(driverXbox, 3).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
   }
 
@@ -213,7 +220,7 @@ public class RobotContainer
       double yawToSpeakerValue = 0.0;
       PIDController zController = null;
       try {
-        zController = new PIDController(0.07,0.0, 0.000);
+        zController = new PIDController(.025, 0.05, 0.0);//0.07,0.0, 0.000;
         zController.setTolerance(.5);
 
         if (driverXbox.getRawButton(10) == false){  

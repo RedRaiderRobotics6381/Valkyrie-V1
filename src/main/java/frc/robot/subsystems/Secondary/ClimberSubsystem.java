@@ -7,6 +7,7 @@ import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 import frc.robot.Constants.ClimberConstants;
 
 //is this working?
@@ -26,6 +27,7 @@ public class ClimberSubsystem extends SubsystemBase{
       m_climberMotorR = new CANSparkMax(ClimberConstants.kClimberMotorR, MotorType.kBrushless);
       m_climberMotorL = new CANSparkMax(ClimberConstants.kClimberMotorL, MotorType.kBrushless);
 
+
       /**
        * The RestoreFactoryDefaults method can be used to reset the configuration parameters
        * in the SPARK MAX to their factory default state. If no argument is passed, these
@@ -36,6 +38,12 @@ public class ClimberSubsystem extends SubsystemBase{
       
       m_climberEncoderR = m_climberMotorR.getEncoder();
       m_climberEncoderL = m_climberMotorL.getEncoder();
+      if (Robot.rightLimitSwitch.get()) {
+        m_climberEncoderR.setPosition(0);
+      }
+      if (Robot.leftLimitSwitch.get()) {
+        m_climberEncoderL.setPosition(0);
+      }
 
       m_climberMotorL.setInverted(true);
 

@@ -4,7 +4,9 @@
 
 package frc.robot.commands.Secondary;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Robot;
 import frc.robot.subsystems.Secondary.ClimberSubsystem;
 
 
@@ -14,6 +16,7 @@ public class ClimbCmd extends Command {
   private boolean climbed = false;
   private double climbDist = 12.25;
 
+  
   public ClimbCmd(ClimberSubsystem climberSubsystem) {
     this.climberSubsystem = climberSubsystem;
 
@@ -29,27 +32,28 @@ public class ClimbCmd extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
+    if(!Robot.rightLimitSwitch.get()){
     if (climberSubsystem.m_climberEncoderR.getPosition() >= -0.1 && climberSubsystem.m_climberEncoderR.getPosition() <= climbDist - .5){
         climberSubsystem.m_climberMotorR.set(.75);
     }
-
+  }
     if (climberSubsystem.m_climberEncoderR.getPosition() >= climbDist - .5) {
         climberSubsystem.m_climberMotorR.set(0);
     }
-
+  
+  if(!Robot.leftLimitSwitch.get()){
     if (climberSubsystem.m_climberEncoderL.getPosition() >= -0.1 && climberSubsystem.m_climberEncoderL.getPosition() <= climbDist - .5){
         climberSubsystem.m_climberMotorL.set(.75);
       } 
-
+    }
     if (climberSubsystem.m_climberEncoderL.getPosition() >= climbDist - .5) {
       climberSubsystem.m_climberMotorL.set(0);
     }
-
+  
     if (climberSubsystem.m_climberEncoderR.getPosition() >= climbDist -.5 && climberSubsystem.m_climberEncoderL.getPosition() >= climbDist - .5){
       climbed = true;
     }
-
+  
   }
 
   // Called once the command ends or is interrupted.

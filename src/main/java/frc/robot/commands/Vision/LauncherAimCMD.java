@@ -19,6 +19,7 @@ public class LauncherAimCMD extends Command
 {
   public static double Launcher_Pitch;
   public static double ID_HEIGHT = 2.19;//2.1936
+  public boolean finishedAiming;
   
   
   private PhotonTrackedTarget lastTarget;
@@ -43,6 +44,7 @@ public class LauncherAimCMD extends Command
   public void initialize()
   {
     lastTarget = null;
+    finishedAiming = false;
   }
 
   /**
@@ -74,6 +76,10 @@ public class LauncherAimCMD extends Command
             //Meters from 1.808 (2.1436) (2.2936(3/7/24))
             Launcher_Pitch = ((Math.toDegrees(Math.atan(ID_HEIGHT / LAUNCHER_TO_TOWER))) + 90);
             m_LauncherRotateSubsystem.launcherRotatePIDController.setReference(Launcher_Pitch,CANSparkMax.ControlType.kSmartMotion);
+            if ((Math.abs(m_LauncherRotateSubsystem.launcherRotateEncoder.getPosition() -
+                 Launcher_Pitch) <= LauncherConstants.LauncherAngleTol)){
+              finishedAiming = true;
+            }
             SmartDashboard.putNumber("Angle to Target", Launcher_Pitch);
             SmartDashboard.putNumber("Dist to Target", LAUNCHER_TO_TOWER);
 
@@ -106,7 +112,8 @@ public class LauncherAimCMD extends Command
   @Override
   public boolean isFinished()
   {
-    return Robot.sensorOuttake.get() == false;
+    //return Robot.sensorOuttake.get() == false;
+    return finishedAiming;
   }
 
   /**

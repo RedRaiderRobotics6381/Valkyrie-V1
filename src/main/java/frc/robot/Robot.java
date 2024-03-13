@@ -10,10 +10,13 @@ import java.util.Optional;
 
 import org.photonvision.PhotonCamera;
 
+import com.revrobotics.ColorSensorV3;
+
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
@@ -38,12 +41,17 @@ public class Robot extends TimedRobot {
   
   private Timer disabledTimer;
   
+  public static I2C.Port i2cPort = I2C.Port.kOnboard;
+
   public static PhotonCamera camObj = new PhotonCamera("camObj");
   public static PhotonCamera camAprTgLow = new PhotonCamera("camAprTgLow");
   public static PhotonCamera camAprTgHigh = new PhotonCamera("camAprTgHigh");
    
+  public static DigitalInput rightLimitSwitch = new DigitalInput(3);
+  public static DigitalInput leftLimitSwitch = new DigitalInput(4);
   public static DigitalInput sensorIntake = new DigitalInput(1); //This is the lower sensor, it will be true when a note is first intaked
   public static DigitalInput sensorOuttake = new DigitalInput(0); //This is the upper sensor, it will be true when a note is ready for outtake
+  public static ColorSensorV3 colorSensor = new ColorSensorV3(i2cPort);
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -73,6 +81,9 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Auto Score Speed", LauncherConstants.kAutoScoreSpeed);
     SmartDashboard.putNumber("Auto Score Speed Min", LauncherConstants.kAutoScoreSpeedMin);
     SmartDashboard.putNumber("Auto Score Speed Max", LauncherConstants.kAutoScoreSpeedMax);
+    SmartDashboard.putNumber("Left Limit Switch", leftLimitSwitch.get() ? 1 : 0);
+    SmartDashboard.putNumber("Right Limit Switch", rightLimitSwitch.get() ? 1 : 0);
+
 
   }
 

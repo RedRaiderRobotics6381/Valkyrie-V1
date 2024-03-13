@@ -4,7 +4,9 @@
 
 package frc.robot.commands.Secondary;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Robot;
 import frc.robot.subsystems.Secondary.ClimberSubsystem;
 
 public class LowerCmd extends Command {
@@ -29,23 +31,24 @@ public class LowerCmd extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
+if(Robot.rightLimitSwitch.get()){
     if (climberSubsystem.m_climberEncoderR.getPosition() >= lowerStopDist && climberSubsystem.m_climberEncoderR.getPosition() <= lowerDist){
       climberSubsystem.m_climberMotorR.set(-.75);
     }
-
+  }
     if (climberSubsystem.m_climberEncoderR.getPosition() <= lowerStopDist) {
       climberSubsystem.m_climberMotorR.set(0);
     }
-
+  
+  if(Robot.leftLimitSwitch.get()){
     if (climberSubsystem.m_climberEncoderL.getPosition() >= lowerStopDist && climberSubsystem.m_climberEncoderL.getPosition() <= lowerDist){
       climberSubsystem.m_climberMotorL.set(-.75);
     } 
-
+  }
     if (climberSubsystem.m_climberEncoderL.getPosition() <= lowerStopDist) {
       climberSubsystem.m_climberMotorL.set(0);
     }
-
+  
     if (climberSubsystem.m_climberEncoderR.getPosition() <= lowerStopDist && climberSubsystem.m_climberEncoderL.getPosition() <= lowerStopDist){
     lowered = true;
     }
