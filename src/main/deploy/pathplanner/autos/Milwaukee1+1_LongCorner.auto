@@ -2,21 +2,15 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.69,
-      "y": 4.37
+      "x": 0.7392210795817603,
+      "y": 4.397002070357417
     },
-    "rotation": -62.90999999999997
+    "rotation": -61.189206257026946
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
-          }
-        },
         {
           "type": "named",
           "data": {
@@ -43,15 +37,28 @@
           }
         },
         {
-          "type": "path",
+          "type": "deadline",
           "data": {
-            "pathName": "MilwaukeeLongCorner_Shoot"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "PVAim"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "MilwaukeeLongCorner_Shoot"
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Aim"
+            "name": "Shoot"
           }
         }
       ]

@@ -2,21 +2,15 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.69,
-      "y": 4.37
+      "x": 0.8678567784485995,
+      "y": 6.759221267730286
     },
-    "rotation": -62.90999999999997
+    "rotation": 57.61932229343077
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
-          }
-        },
         {
           "type": "named",
           "data": {
@@ -28,30 +22,43 @@
           "data": {
             "commands": [
               {
-                "type": "path",
-                "data": {
-                  "pathName": "MilwaukeelongCorner_PickUp"
-                }
-              },
-              {
                 "type": "named",
                 "data": {
                   "name": "Intake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "MilwaukeeAmpCorner_PickUp"
                 }
               }
             ]
           }
         },
         {
-          "type": "path",
+          "type": "deadline",
           "data": {
-            "pathName": "MilwaukeeLongCorner_Shoot"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "PVAim"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "MilwaukeeAmpCorner_Shoot"
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Aim"
+            "name": "Shoot"
           }
         }
       ]
