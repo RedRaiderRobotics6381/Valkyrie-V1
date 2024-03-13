@@ -32,7 +32,7 @@ public class DriveToSpeakerCmd extends Command
   
   private double xTol = 0.1; //meters
   private double yTol = 0.05; //meters
-  private double omegaTol = 0.25; //degrees
+  private double omegaTol = 0.; //degrees
   
   private static double xOffset = 1.70; //meters
   private static double yOffset = 0.0; //meters

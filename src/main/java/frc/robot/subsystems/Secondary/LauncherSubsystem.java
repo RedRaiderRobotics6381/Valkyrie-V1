@@ -5,7 +5,6 @@ import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -18,6 +17,7 @@ public class LauncherSubsystem extends SubsystemBase {
     public static RelativeEncoder encoderTop;
     public static RelativeEncoder m_encoderBot;
     public double currentLauncherSpeed;
+    
 
     // double P = 0.0005;
     // double I = 0.0;
@@ -83,9 +83,6 @@ public class LauncherSubsystem extends SubsystemBase {
         //launcherPIDControllerBot.setReference(1000, CANSparkFlex.ControlType.kSmartVelocity);
     }
     
-    public Command LauncherCmd(double speed) {
-        // implicitly require `this`
-        return this.run(() -> launcherMotorTop.set(.8));
-    }
+
 
 }
