@@ -12,7 +12,7 @@ public class ClimbCmd extends Command {
 
   private final ClimberSubsystem m_climberSubsystem;
   private boolean climbed = false;
-  private double climbDist = 12.25;
+  //private double climbDist = 12.25;
 
   
   public ClimbCmd(ClimberSubsystem climberSubsystem) {
@@ -31,18 +31,19 @@ public class ClimbCmd extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+
     if(!m_climberSubsystem.m_limitSwitch_R.get()){
-        m_climberSubsystem.m_climberMotorR.set(.75);
-    } else{
+      m_climberSubsystem.m_climberMotorR.set(.75);
+    } else if(m_climberSubsystem.m_limitSwitch_R.get()) {
       m_climberSubsystem.m_climberMotorR.set(0);
     }
-
+    
     if(!m_climberSubsystem.m_limitSwitch_L.get()){
-        m_climberSubsystem.m_climberMotorL.set(.75);
-    } else{
+      m_climberSubsystem.m_climberMotorL.set(.75);
+    } else if(m_climberSubsystem.m_limitSwitch_L.get()){
       m_climberSubsystem.m_climberMotorL.set(0);
     }
-  
+
     if (m_climberSubsystem.m_limitSwitch_R.get() &&  m_climberSubsystem.m_limitSwitch_L.get()){
       climbed = true;
     }

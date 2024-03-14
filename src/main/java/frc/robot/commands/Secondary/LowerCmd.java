@@ -31,17 +31,17 @@ public class LowerCmd extends Command {
   public void execute() {
     if (Math.abs(m_climberSubsystem.m_climberEncoderR.getPosition()) <= lowerDist){
       m_climberSubsystem.m_climberMotorR.set(-.75);
-    } else{
+    } else if (Math.abs(m_climberSubsystem.m_climberEncoderR.getPosition()) >= lowerDist){
       m_climberSubsystem.m_climberMotorR.set(0);
     }
 
     if (Math.abs(m_climberSubsystem.m_climberEncoderL.getPosition()) <= lowerDist){
       m_climberSubsystem.m_climberMotorL.set(-.75);
-    } else{
+    } else if (Math.abs(m_climberSubsystem.m_climberEncoderL.getPosition()) >= lowerDist){
       m_climberSubsystem.m_climberMotorL.set(0);
     }
   
-    if (Math.abs(m_climberSubsystem.m_climberEncoderR.getPosition()) <= lowerDist && Math.abs(m_climberSubsystem.m_climberEncoderL.getPosition()) <= lowerDist){
+    if (Math.abs(m_climberSubsystem.m_climberEncoderR.getPosition()) >= lowerDist && Math.abs(m_climberSubsystem.m_climberEncoderL.getPosition()) >= lowerDist){
     lowered = true;
     }
 

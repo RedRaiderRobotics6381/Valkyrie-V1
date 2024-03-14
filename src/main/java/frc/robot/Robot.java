@@ -10,13 +10,13 @@ import java.util.Optional;
 
 import org.photonvision.PhotonCamera;
 
-import com.revrobotics.ColorSensorV3;
+// import com.revrobotics.ColorSensorV3;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj.I2C;
+// import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
@@ -27,6 +27,8 @@ import frc.robot.Constants.AprilTagConstants;
 import frc.robot.Constants.LauncherConstants;
 import frc.robot.commands.Secondary.ClimberInitCmd;
 import frc.robot.subsystems.Secondary.ClimberSubsystem;
+// import frc.robot.commands.Secondary.ClimberInitCmd;
+// import frc.robot.subsystems.Secondary.ClimberSubsystem;
 import frc.robot.subsystems.Secondary.LEDsSubSystem;
 import swervelib.parser.SwerveParser;
 
@@ -176,6 +178,7 @@ public class Robot extends TimedRobot {
     RobotContainer.driverXbox.setRumble(RumbleType.kBothRumble, 0);
     //m_robotContainer.setMotorBrake(true);
     //new ClimberInitCmd(climberSubsystem);
+    new ClimberInitCmd(climberSubsystem);
   }
 
   /** This function is called periodically during operator control. */

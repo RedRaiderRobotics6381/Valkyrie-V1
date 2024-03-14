@@ -24,6 +24,11 @@ public class PickUpNoteCmd extends Command
   private final PIDController   zController;
   private boolean hasTargets;
   private boolean droveToNote;
+  
+  int peakVelocity;
+  int currentVelocity;
+
+  boolean lowerIntakeHasNote;
   boolean hasNote;
   boolean outtakeHasNote;
   boolean intakeHasNote;
@@ -54,6 +59,8 @@ public class PickUpNoteCmd extends Command
   {
     droveToNote = false;
     hasNote = false;
+    peakVelocity = 0;
+    lowerIntakeHasNote = false;
   }
 
     /**
@@ -80,24 +87,41 @@ public class PickUpNoteCmd extends Command
 
         if (xController.atSetpoint() != true) {
             swerveSubsystem.drive(new Translation2d(translationValx, 0.0), translationValz, false);
-          } else{
+          }
+          else if(lowerIntakeHasNote){
+            //swerveSubsystem.drive(new Translation2d(0.0, 0.0), 0.0, false);
+            swerveSubsystem.lock();
+            droveToNote = true;
+          } 
+          else{
               if (!intakeHasNote && !droveToNote){ //If the note is not in the intake, run the intake command
                 m_launcherRotateSubsystem.launcherRotatePIDController.setReference(LauncherConstants.posIntake,CANSparkMax.ControlType.kSmartMotion);
                 m_intakeSubsystem.intakeMotor.set(IntakeConstants.intakeSpeed);
+
+                // Get the current velocity of the intake motor and round it to the nearest 10
+                currentVelocity = ((int)m_intakeSubsystem.intakeMotor.getEncoder().getVelocity()/10) * 10;
+
+                // If the current velocity is higher than the peak, update the peak
+                if (currentVelocity > peakVelocity) {
+                  peakVelocity = currentVelocity;
+                }
+
+                // If the current velocity has dropped 200 units below the peak, set the boolean to true
+                if (peakVelocity - currentVelocity >= 100) {
+                  lowerIntakeHasNote = true;
+                }
+
                 m_intakeSubsystem.indexerMotor.set(IntakeConstants.indexerIntakeSpeed);
                 m_intakeSubsystem.launcherIndexerMotor.set(IntakeConstants.launcherIndexerIntakeSpeed);
                 swerveSubsystem.drive(new Translation2d(0.5, 0.0), 0.0, false);
               }             // swerveSubsystem.drive(new Translation2d(0.5, 0.0), 0.0, false);
-              else if(intakeHasNote){
-                //swerveSubsystem.drive(new Translation2d(0.0, 0.0), 0.0, false);
-                swerveSubsystem.lock();
-                droveToNote = true;
-              }
             }  
         } 
       } else{
         hasNote = true;
       }
+      System.out.println(lowerIntakeHasNote);
+      
     }
 
 

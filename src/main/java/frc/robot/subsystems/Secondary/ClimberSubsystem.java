@@ -8,8 +8,10 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ClimberConstants;
+import frc.robot.commands.Secondary.ClimberInitCmd;
 
 //is this working?
 
@@ -45,26 +47,26 @@ public class ClimberSubsystem extends SubsystemBase{
       
       m_climberEncoderR = m_climberMotorR.getEncoder();
       m_climberEncoderL = m_climberMotorL.getEncoder();
-      if (m_limitSwitch_R.get()) {
-        m_climberEncoderR.setPosition(0);
-      }
-      if (m_limitSwitch_L.get()) {
-        m_climberEncoderL.setPosition(0);
-      }
+      // if (m_limitSwitch_R.get()) {
+      //   m_climberEncoderR.setPosition(0);
+      // }
+      // if (m_limitSwitch_L.get()) {
+      //   m_climberEncoderL.setPosition(0);
+      // }
 
       m_climberMotorL.setInverted(true);
 
       m_climberEncoderR.setPositionConversionFactor(.179); 
       m_climberEncoderL.setPositionConversionFactor(.179);
 
-      m_climberMotorR.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
-      m_climberMotorR.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 15);
+      //m_climberMotorR.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
+      //m_climberMotorR.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 15);
       m_climberMotorR.enableVoltageCompensation(12.0);
       m_climberMotorR.setSmartCurrentLimit(40);
       m_climberMotorR.setIdleMode(IdleMode.kBrake);
 
-      m_climberMotorL.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
-      m_climberMotorL.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 15);
+      //m_climberMotorL.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
+      //m_climberMotorL.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 15);
       m_climberMotorL.enableVoltageCompensation(12.0);
       m_climberMotorL.setSmartCurrentLimit(40);
       m_climberMotorL.setIdleMode(IdleMode.kBrake);
@@ -82,4 +84,9 @@ public class ClimberSubsystem extends SubsystemBase{
       SmartDashboard.putBoolean("Right Limit Switch", m_limitSwitch_R.get());
       SmartDashboard.putBoolean("Left Limit Switch", m_limitSwitch_L.get());
     }
+    
+  //   public Command climberInitCmdL() {
+  //   // implicitly require `this`
+  //   return this.run(() -> ClimberInitCmd(ClimberSubsystem));
+  // }
 }

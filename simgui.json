@@ -10,6 +10,11 @@
       "/SmartDashboard/Pigeon 2 (v6) [13]": "Gyro"
     },
     "windows": {
+      "/SmartDashboard/Auto Chooser": {
+        "window": {
+          "visible": true
+        }
+      },
       "/SmartDashboard/Field": {
         "bottom": 1476,
         "height": 8.210550308227539,

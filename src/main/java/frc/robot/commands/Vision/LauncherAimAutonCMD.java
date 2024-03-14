@@ -5,16 +5,12 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkMax;
 
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
-import frc.robot.RobotContainer;
 import frc.robot.Constants.AprilTagConstants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.LauncherConstants;
 import frc.robot.subsystems.Secondary.IntakeSubsystem;
-import frc.robot.subsystems.Secondary.LEDsSubSystem;
 import frc.robot.subsystems.Secondary.LauncherRotateSubsystem;
 import frc.robot.subsystems.Secondary.LauncherSubsystem;
 import edu.wpi.first.math.MathUtil;
