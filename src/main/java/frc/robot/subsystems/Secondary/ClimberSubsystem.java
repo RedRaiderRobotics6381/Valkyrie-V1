@@ -31,7 +31,7 @@ public class ClimberSubsystem extends SubsystemBase{
       m_climberMotorR = new CANSparkMax(ClimberConstants.kClimberMotorR, MotorType.kBrushless);
       m_climberMotorL = new CANSparkMax(ClimberConstants.kClimberMotorL, MotorType.kBrushless);
       m_limitSwitch_R = new DigitalInput(3);
-      m_limitSwitch_L = new DigitalInput(4);
+      m_limitSwitch_L = new DigitalInput(5);
       
 
 
@@ -58,13 +58,13 @@ public class ClimberSubsystem extends SubsystemBase{
       m_climberEncoderL.setPositionConversionFactor(.179);
 
       m_climberMotorR.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
-      m_climberMotorR.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 14);
+      m_climberMotorR.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 15);
       m_climberMotorR.enableVoltageCompensation(12.0);
       m_climberMotorR.setSmartCurrentLimit(40);
       m_climberMotorR.setIdleMode(IdleMode.kBrake);
 
       m_climberMotorL.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
-      m_climberMotorL.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 14);
+      m_climberMotorL.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 15);
       m_climberMotorL.enableVoltageCompensation(12.0);
       m_climberMotorL.setSmartCurrentLimit(40);
       m_climberMotorL.setIdleMode(IdleMode.kBrake);
@@ -78,8 +78,8 @@ public class ClimberSubsystem extends SubsystemBase{
     public void periodic() {
       // This method will be called once per scheduler run
       SmartDashboard.putNumber("RClimber Enc Val", m_climberEncoderR.getPosition());
-      SmartDashboard.putNumber("LClimber Enc Val", m_climberEncoderL.getPosition());
-      SmartDashboard.putBoolean("Left Limit Switch", m_limitSwitch_R.get());
-      SmartDashboard.putBoolean("Right Limit Switch", m_limitSwitch_L.get());
+      SmartDashboard.putNumber("LClimber5Enc Val", m_climberEncoderL.getPosition());
+      SmartDashboard.putBoolean("Right Limit Switch", m_limitSwitch_R.get());
+      SmartDashboard.putBoolean("Left Limit Switch", m_limitSwitch_L.get());
     }
 }

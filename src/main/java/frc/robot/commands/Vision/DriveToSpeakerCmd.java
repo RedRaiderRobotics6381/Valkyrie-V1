@@ -31,8 +31,8 @@ public class DriveToSpeakerCmd extends Command
   private final PIDController   omegaController;
   
   private double xTol = 0.1; //meters
-  private double yTol = 0.05; //meters
-  private double omegaTol = 0.; //degrees
+  private double yTol = 0.1; //meters
+  private double omegaTol = 4; //degrees
   
   private static double xOffset = 1.70; //meters
   private static double yOffset = 0.0; //meters

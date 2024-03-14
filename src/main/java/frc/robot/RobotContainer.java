@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.AprilTagConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Secondary.ClimbCmd;
+import frc.robot.commands.Secondary.ClimberInitCmd;
 import frc.robot.commands.Secondary.IntakeCmd;
 import frc.robot.commands.Secondary.LowerCmd;
 import frc.robot.commands.Secondary.SafeScoreCmd;
@@ -34,6 +35,7 @@ import frc.robot.commands.Secondary.ScoreSpeakerCmd;
 import frc.robot.commands.Vision.DriveToAmpCmd;
 import frc.robot.commands.Vision.DriveToSpeakerCmd;
 import frc.robot.commands.Vision.DriveToStageCmd;
+import frc.robot.commands.Vision.LauncherAimAutonCMD;
 import frc.robot.commands.Vision.LauncherAimCMD;
 import frc.robot.commands.Vision.PickUpNoteCmd;
 import frc.robot.subsystems.Secondary.ClimberSubsystem;
@@ -85,7 +87,8 @@ public class RobotContainer
     //drivebase.setupPathPlanner();
     NamedCommands.registerCommand("Shoot", new ScoreAutoCmd(launcherSubsystem, launcherRotateSubsystem, intakeSubsystem));
     NamedCommands.registerCommand("Aim", new ScoreSpeakerCmd(launcherSubsystem, launcherRotateSubsystem, intakeSubsystem));
-    NamedCommands.registerCommand("PVAim", new LauncherAimCMD(launcherRotateSubsystem));
+    // NamedCommands.registerCommand("PVAim", new LauncherAimCMD(launcherRotateSubsystem));
+    NamedCommands.registerCommand("PVAim", new LauncherAimAutonCMD(launcherRotateSubsystem, launcherSubsystem, intakeSubsystem));
     NamedCommands.registerCommand("Intake", new IntakeCmd(intakeSubsystem, launcherRotateSubsystem));
     NamedCommands.registerCommand("DriveToNote", new PickUpNoteCmd(drivebase, intakeSubsystem, launcherRotateSubsystem));
     NamedCommands.registerCommand("DriveToSpeaker", new DriveToSpeakerCmd(drivebase));
@@ -169,6 +172,7 @@ public class RobotContainer
     
     new POVButton(engineerXbox, 0).onTrue(new ClimbCmd(climberSubsystem));
     new POVButton(engineerXbox, 180).onTrue(new LowerCmd(climberSubsystem));
+    new POVButton(engineerXbox, 90).whileTrue(new ClimberInitCmd(climberSubsystem));
     new JoystickButton(driverXbox, 7).whileTrue(
         Commands.deferredProxy(() -> drivebase.driveToPose(
                                 new Pose2d(new Translation2d(2, 0), Rotation2d.fromDegrees(0)))

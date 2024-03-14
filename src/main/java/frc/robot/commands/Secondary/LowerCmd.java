@@ -15,7 +15,7 @@ public class LowerCmd extends Command {
 
   public LowerCmd(ClimberSubsystem climberSubsystem) {
     this.m_climberSubsystem = climberSubsystem;
-    addRequirements(climberSubsystem);
+    //addRequirements(climberSubsystem);
 
     // Use addRequirements() here to declare subsystem dependencies.
   }

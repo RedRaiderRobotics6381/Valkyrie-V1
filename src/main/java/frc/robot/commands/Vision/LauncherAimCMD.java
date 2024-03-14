@@ -1,10 +1,7 @@
 package frc.robot.commands.Vision;
 
 import org.photonvision.targeting.PhotonTrackedTarget;
-
 import com.revrobotics.CANSparkMax;
-
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -86,8 +83,8 @@ public class LauncherAimCMD extends Command
             if (LAUNCHER_TO_TOWER <= 5){ 
               if (target.getYaw() >= -2  || target.getYaw() <=2){
                 //LEDsSubSystem.setLEDwBlink(.73,.125); //Removed lights to stop alerting other teams we are ready to shoot.
-              //  RobotContainer.driverXbox.setRumble(RumbleType.kBothRumble, 0.25);
-              //  RobotContainer.driverXbox.setRumble(RumbleType.kBothRumble, 0.25);
+              RobotContainer.driverXbox.setRumble(RumbleType.kBothRumble, 0.125);
+              RobotContainer.driverXbox.setRumble(RumbleType.kBothRumble, 0.125);
               }
             }
           }
@@ -126,6 +123,8 @@ public class LauncherAimCMD extends Command
   @Override
   public void end(boolean interrupted)
   {
+    RobotContainer.driverXbox.setRumble(RumbleType.kBothRumble, 0.0);
+    RobotContainer.driverXbox.setRumble(RumbleType.kBothRumble, 0.0);
     //launcherSubsystem.LauncherCmd(0);
     
   }

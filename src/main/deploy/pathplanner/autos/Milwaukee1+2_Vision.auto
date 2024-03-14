@@ -36,27 +36,21 @@
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "Shoot"
+            "pathName": "MilwaukeePickUp2"
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "DuluthPickUp2"
+            "name": "DriveToNote"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "PVAim"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
           }
         }
       ]

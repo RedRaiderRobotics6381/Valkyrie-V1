@@ -53,7 +53,7 @@ public class LauncherRotateSubsystem extends SubsystemBase {
         launcherRotateMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
         launcherRotateMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
         launcherRotateMotor.enableVoltageCompensation(12.0);
-        launcherRotateMotor.setSmartCurrentLimit(60);
+        launcherRotateMotor.setSmartCurrentLimit(70);
         launcherRotateMotor.setIdleMode(IdleMode.kBrake);
         launcherRotateMotor.burnFlash();  //Remove this after everything is up and running to save flash wear
     

@@ -26,13 +26,13 @@
         {
           "type": "named",
           "data": {
-            "name": "PVAim"
+            "name": "DriveToSpeaker"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shoot"
+            "name": "PVAim"
           }
         }
       ]

@@ -2,15 +2,21 @@ package frc.robot.commands.Vision;
 
 import org.photonvision.targeting.PhotonTrackedTarget;
 
+import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkMax;
 
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.AprilTagConstants;
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.LauncherConstants;
+import frc.robot.subsystems.Secondary.IntakeSubsystem;
 import frc.robot.subsystems.Secondary.LEDsSubSystem;
 import frc.robot.subsystems.Secondary.LauncherRotateSubsystem;
+import frc.robot.subsystems.Secondary.LauncherSubsystem;
 import edu.wpi.first.math.MathUtil;
 
 public class LauncherAimAutonCMD extends Command
@@ -20,11 +26,15 @@ public class LauncherAimAutonCMD extends Command
   
   private PhotonTrackedTarget lastTarget;
   private final LauncherRotateSubsystem m_launcherRotateSubsystem;
+  private final LauncherSubsystem m_launcherSubsystem;
+  private final IntakeSubsystem m_intakeSubsystem;
 
-  public LauncherAimAutonCMD(LauncherRotateSubsystem launcherRotateSubsystem)
+  public LauncherAimAutonCMD(LauncherRotateSubsystem launcherRotateSubsystem, LauncherSubsystem launcherSubsystem, IntakeSubsystem intakeSubsystem)
   {
     this.m_launcherRotateSubsystem = launcherRotateSubsystem;
-    addRequirements(launcherRotateSubsystem);
+    this.m_launcherSubsystem = launcherSubsystem;
+    this.m_intakeSubsystem = intakeSubsystem;
+    addRequirements(launcherRotateSubsystem, launcherSubsystem, intakeSubsystem);
   }
   {
     // each subsystem used by the command must be passed into the
@@ -76,21 +86,23 @@ public class LauncherAimAutonCMD extends Command
             LauncherConstants.LauncherSpeedMult = MathUtil.clamp(LAUNCHER_TO_TOWER * 1750, 2750, 4000);
             Double ID_HEIGHT = 2.775;//Meters
             Launcher_Pitch = ((Math.toDegrees(Math.atan(ID_HEIGHT / LAUNCHER_TO_TOWER))) + 90);
+             m_launcherSubsystem.launcherPIDControllerTop.setReference(LauncherConstants.LauncherSpeedMult, CANSparkFlex.ControlType.kVelocity);
             m_launcherRotateSubsystem.launcherRotatePIDController.setReference(Launcher_Pitch,CANSparkMax.ControlType.kSmartMotion);
-            if (m_launcherRotateSubsystem.launcherRotateEncoder.getPosition() >= Launcher_Pitch - 2 &&
-                m_launcherRotateSubsystem.launcherRotateEncoder.getPosition() <= Launcher_Pitch + 2){
-              aimedToTarget = true;
+            if ((Math.abs(m_launcherRotateSubsystem.launcherRotateEncoder.getPosition() -
+                 Launcher_Pitch) <= LauncherConstants.LauncherAngleTol+.5) && ((Math.abs(m_launcherSubsystem.launcherMotorTop.getEncoder().getVelocity() -
+                 LauncherConstants.LauncherSpeedMult)) <= LauncherConstants.LauncherSpeedTol+50)){
+                m_intakeSubsystem.launcherIndexerMotor.set(IntakeConstants.launcherIndexerOuttakeSpeed);
+                m_intakeSubsystem.indexerMotor.set(IntakeConstants.indexerOuttakeSpeed);
+              } 
             }
-            SmartDashboard.putNumber("Angle to Target", Launcher_Pitch);
-            SmartDashboard.putNumber("Dist to Target", LAUNCHER_TO_TOWER);
+            
+            // SmartDashboard.putNumber("Angle to Target", Launcher_Pitch);
+            // SmartDashboard.putNumber("Dist to Target", LAUNCHER_TO_TOWER);
 
-            if (LAUNCHER_TO_TOWER <= 5){ 
-              if (target.getYaw() >= -2  || target.getYaw() <=2){
-                LEDsSubSystem.setLEDwBlink(.73,.125);
-              }
-            }
-          }
+          
         } 
+      } else {
+        aimedToTarget = true;
       } 
     }
    
@@ -124,6 +136,9 @@ public class LauncherAimAutonCMD extends Command
   @Override
   public void end(boolean interrupted)
   {
-    //launcherSubsystem.LauncherCmd(0);
+    m_intakeSubsystem.indexerMotor.set(0);
+    m_intakeSubsystem.launcherIndexerMotor.set(0);
+    m_launcherSubsystem.launcherPIDControllerTop.setReference(0, CANSparkFlex.ControlType.kVelocity);
+    m_launcherRotateSubsystem.launcherRotateMotor.disable();
   }
 }

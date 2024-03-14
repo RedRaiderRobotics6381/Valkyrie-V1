@@ -44,7 +44,7 @@ public class Robot extends TimedRobot {
   
   private Timer disabledTimer;
   
-  public static I2C.Port i2cPort = I2C.Port.kOnboard;
+  
 
   public static PhotonCamera camObj = new PhotonCamera("camObj");
   public static PhotonCamera camAprTgLow = new PhotonCamera("camAprTgLow");
@@ -53,7 +53,7 @@ public class Robot extends TimedRobot {
 
   public static DigitalInput sensorIntake = new DigitalInput(1); //This is the lower sensor, it will be true when a note is first intaked
   public static DigitalInput sensorOuttake = new DigitalInput(0); //This is the upper sensor, it will be true when a note is ready for outtake
-  public static ColorSensorV3 colorSensor = new ColorSensorV3(i2cPort);
+  
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -150,7 +150,7 @@ public class Robot extends TimedRobot {
     m_robotContainer.setMotorBrake(true);
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
     aprilTagAlliance();
-    new ClimberInitCmd(climberSubsystem);
+    // new ClimberInitCmd(climberSubsystem);
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
@@ -175,6 +175,7 @@ public class Robot extends TimedRobot {
     aprilTagAlliance();
     RobotContainer.driverXbox.setRumble(RumbleType.kBothRumble, 0);
     //m_robotContainer.setMotorBrake(true);
+    //new ClimberInitCmd(climberSubsystem);
   }
 
   /** This function is called periodically during operator control. */
@@ -182,6 +183,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     m_robotContainer.spencerButtons();
     watchForNote();
+
     //System.out.println(sensorOuttake.get());
   }
 

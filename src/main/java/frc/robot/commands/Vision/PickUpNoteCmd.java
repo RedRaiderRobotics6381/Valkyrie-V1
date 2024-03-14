@@ -64,9 +64,9 @@ public class PickUpNoteCmd extends Command
   public void execute()
   {
     outtakeHasNote = Robot.sensorOuttake.get(); //Check if the note is in the outtake
-    intakeHasNote = Robot.colorSensor.getProximity() > 1500;
-    System.out.println(Robot.colorSensor.getProximity());
-    //intakeHasNote = Robot.sensorIntake.get(); //Check if the note is in the intake
+    //intakeHasNote = m_intakeSubsystem.colorSensor.getProximity() > 1500;
+    
+    intakeHasNote = Robot.sensorIntake.get(); //Check if the note is in the intake
     var result = Robot.camObj.getLatestResult();  // Get the latest result from PhotonVision
     hasTargets = result.hasTargets(); // Check if the latest result has any targets.
     PhotonTrackedTarget target = result.getBestTarget();
