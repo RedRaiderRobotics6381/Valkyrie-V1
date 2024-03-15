@@ -115,7 +115,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putBoolean("High April Tag", photonResHigh.hasTargets());
     SmartDashboard.putNumber("HX", photonResHigh.getBestTarget().getBestCameraToTarget().getX());
     SmartDashboard.putNumber("HY", photonResHigh.getBestTarget().getBestCameraToTarget().getY());
-
+    
     }
     // double nAmpScoreAngle = SmartDashboard.getNumber("Amp Angle", 0);
     // double nAmpScoreSpeed = SmartDashboard.getNumber("Amp Speed", 0);

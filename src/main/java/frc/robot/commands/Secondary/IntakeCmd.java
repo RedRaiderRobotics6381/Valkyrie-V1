@@ -16,7 +16,10 @@ import frc.robot.subsystems.Secondary.LauncherRotateSubsystem;
 
 public class IntakeCmd extends Command {
 
-  
+  int peakVelocity = 0;
+  int currentVelocity;
+
+  boolean lowerIntakeHasNote;
   private boolean hasNote = false;
   private final IntakeSubsystem m_intakeSubsystem;
   private final LauncherRotateSubsystem m_launcherRotateSubsystem;
@@ -32,6 +35,7 @@ public class IntakeCmd extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    lowerIntakeHasNote = false;
     hasNote = false;
   }
 
@@ -46,8 +50,9 @@ public class IntakeCmd extends Command {
       m_intakeSubsystem.intakeMotor.set(IntakeConstants.intakeSpeed);
       m_intakeSubsystem.launcherIndexerMotor.set(IntakeConstants.launcherIndexerIntakeSpeed);
       //System.out.println(Robot.sensorIntake.get());
-
     }
+    lowerIntakeHasNote = haslowerintakenote();
+    System.out.println(lowerIntakeHasNote);
   }
 
   // Called once the command ends or is interrupted.
@@ -64,4 +69,20 @@ public class IntakeCmd extends Command {
   public boolean isFinished() {
     return hasNote;
   }
+  private boolean haslowerintakenote() {
+    //Get the current velocity of the intake motor and round it to the nearest 10
+    currentVelocity = ((int)m_intakeSubsystem.intakeMotor.getEncoder().getVelocity()/10) * 10;
+
+    // If the current velocity is higher than the peak, update the peak
+    if (currentVelocity > peakVelocity) {
+      peakVelocity = currentVelocity;
+    }
+
+    // If the current velocity has dropped 200 units below the peak, set the boolean to true
+    if (peakVelocity - currentVelocity >= 100) {
+      lowerIntakeHasNote = true;
+    }
+    return lowerIntakeHasNote;
+
+}
 }

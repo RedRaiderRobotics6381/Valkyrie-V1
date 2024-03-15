@@ -59,6 +59,7 @@ public class PickUpNoteCmd extends Command
   {
     droveToNote = false;
     hasNote = false;
+    lowerIntakeHasNote = false;
   }
 
     /**
@@ -94,6 +95,7 @@ public class PickUpNoteCmd extends Command
 
                 m_intakeSubsystem.indexerMotor.set(IntakeConstants.indexerIntakeSpeed);
                 m_intakeSubsystem.launcherIndexerMotor.set(IntakeConstants.launcherIndexerIntakeSpeed);
+                lowerIntakeHasNote = haslowerintakenote();
                 if (!lowerIntakeHasNote) {
                 swerveSubsystem.drive(new Translation2d(0.5, 0.0), 0.0, false);
               }             // swerveSubsystem.drive(new Translation2d(0.5, 0.0), 0.0, false);
