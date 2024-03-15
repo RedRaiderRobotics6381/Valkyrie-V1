@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.270256540513081,
-        "y": 0.49115448658247773
+        "x": 5.27,
+        "y": 1.6839582397113522
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.5922951731943344,
-        "y": 1.5436283864020728
+        "x": 3.9368663935618464,
+        "y": 1.7424290119235524
       },
       "isLocked": false,
-      "linkedName": "DuluthCorner_PickUpEnd"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.1251281761822782,
-        "y": 4.280060525933018
+        "x": 2.9,
+        "y": 2.923538610609985
       },
       "prevControl": {
-        "x": 3.4522649102278256,
-        "y": 2.619490595106547
+        "x": 3.00524738998196,
+        "y": 1.3799102242079133
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,19 +33,19 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 2.0,
-    "maxAcceleration": 2.0,
+    "maxAcceleration": 0.75,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": -46.78991060824604,
+    "velocity": 1.5,
+    "rotation": -70.0,
     "rotateFast": false
   },
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": -35.36246188706915,
     "velocity": 0
   },
   "useDefaultConstraints": false

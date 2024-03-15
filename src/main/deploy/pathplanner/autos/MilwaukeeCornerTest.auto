@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7392210795817603,
-      "y": 4.397002070357417
+      "x": 0.96,
+      "y": 4.24
     },
-    "rotation": -61.189206257026946
+    "rotation": -60.0
   },
   "command": {
     "type": "sequential",
@@ -20,31 +20,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "MilwaukeelongCorner_PickUp"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "DriveToNote"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
             "pathName": "MilwaukeeLongCornerShoot_2"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "DriveToSpeaker"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "PVAim"
+            "name": "DriveToNote"
           }
         }
       ]
