@@ -25,7 +25,7 @@ public class PickUpNoteCmd extends Command
   private boolean hasTargets;
   private boolean droveToNote;
   
-  int peakVelocity;
+  int peakVelocity = 0;
   int currentVelocity;
 
   boolean lowerIntakeHasNote;
@@ -92,32 +92,22 @@ public class PickUpNoteCmd extends Command
                 m_launcherRotateSubsystem.launcherRotatePIDController.setReference(LauncherConstants.posIntake,CANSparkMax.ControlType.kSmartMotion);
                 m_intakeSubsystem.intakeMotor.set(IntakeConstants.intakeSpeed);
 
-                // // Get the current velocity of the intake motor and round it to the nearest 10
-                // currentVelocity = ((int)m_intakeSubsystem.intakeMotor.getEncoder().getVelocity()/10) * 10;
-
-                // // If the current velocity is higher than the peak, update the peak
-                // if (currentVelocity > peakVelocity) {
-                //   peakVelocity = currentVelocity;
-                // }
-
-                // // If the current velocity has dropped 200 units below the peak, set the boolean to true
-                // if (peakVelocity - currentVelocity >= 100) {
-                //   lowerIntakeHasNote = true;
-                // }
-
                 m_intakeSubsystem.indexerMotor.set(IntakeConstants.indexerIntakeSpeed);
                 m_intakeSubsystem.launcherIndexerMotor.set(IntakeConstants.launcherIndexerIntakeSpeed);
+                if (!lowerIntakeHasNote) {
                 swerveSubsystem.drive(new Translation2d(0.5, 0.0), 0.0, false);
               }             // swerveSubsystem.drive(new Translation2d(0.5, 0.0), 0.0, false);
-              else if (intakeHasNote){
+              else if (lowerIntakeHasNote){
                 swerveSubsystem.drive(new Translation2d(0.0, 0.0), 0.0, false);
-                //swerveSubsystem.lock();
-                droveToNote = true;                
-              }
+                swerveSubsystem.lock();
+                droveToNote = true;  
+              }              
+               
             }
           
         } 
-      } else{
+      }
+    } else{
         hasNote = true;
       }
       //System.out.println(lowerIntakeHasNote);
@@ -160,6 +150,22 @@ public class PickUpNoteCmd extends Command
     m_intakeSubsystem.intakeMotor.set(IntakeConstants.zeroSpeed);
     m_intakeSubsystem.launcherIndexerMotor.set(IntakeConstants.zeroSpeed);
     swerveSubsystem.lock();
+  }
+  private boolean haslowerintakenote() {
+                //Get the current velocity of the intake motor and round it to the nearest 10
+                currentVelocity = ((int)m_intakeSubsystem.intakeMotor.getEncoder().getVelocity()/10) * 10;
+
+                // If the current velocity is higher than the peak, update the peak
+                if (currentVelocity > peakVelocity) {
+                  peakVelocity = currentVelocity;
+                }
+
+                // If the current velocity has dropped 200 units below the peak, set the boolean to true
+                if (peakVelocity - currentVelocity >= 100) {
+                  lowerIntakeHasNote = true;
+                }
+                return lowerIntakeHasNote;
+
   }
 }
 

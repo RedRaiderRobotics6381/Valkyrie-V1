@@ -43,6 +43,7 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
   private ClimberSubsystem climberSubsystem;
+  private ClimberInitCmd m_ClimberInitCmd;
   
   private Timer disabledTimer;
   
@@ -66,6 +67,7 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+    m_ClimberInitCmd = new ClimberInitCmd(climberSubsystem);
     
     // Create a timer to disable motor brake a few seconds after disable.  This will let the robot stop
     // immediately when disabled, but then also let it be pushed more 
@@ -75,16 +77,16 @@ public class Robot extends TimedRobot {
     camAprTgLow.setDriverMode(false);
     DriverStation.silenceJoystickConnectionWarning(true); // Disable joystick connection warning
     
-    SmartDashboard.putNumber("Amp Angle", LauncherConstants.AmpScoreAngle);
-    SmartDashboard.putNumber("Amp Speed", LauncherConstants.AmpScoreSpeed);
-    SmartDashboard.putNumber("Speaker Angle", LauncherConstants.SpeakerScoreAngle);
-    SmartDashboard.putNumber("Speaker Speed", LauncherConstants.SpeakerScoreSpeed);
-    SmartDashboard.putNumber("Trap Angle", LauncherConstants.TrapScoreAngle);
-    SmartDashboard.putNumber("Trap Speed", LauncherConstants.TrapScoreSpeed);
-    SmartDashboard.putNumber("Auto Score Aim Height", LauncherConstants.kAutoScoreAimHeight);
-    SmartDashboard.putNumber("Auto Score Speed", LauncherConstants.kAutoScoreSpeed);
-    SmartDashboard.putNumber("Auto Score Speed Min", LauncherConstants.kAutoScoreSpeedMin);
-    SmartDashboard.putNumber("Auto Score Speed Max", LauncherConstants.kAutoScoreSpeedMax);
+    // SmartDashboard.putNumber("Amp Angle", LauncherConstants.AmpScoreAngle);
+    // SmartDashboard.putNumber("Amp Speed", LauncherConstants.AmpScoreSpeed);
+    // SmartDashboard.putNumber("Speaker Angle", LauncherConstants.SpeakerScoreAngle);
+    // SmartDashboard.putNumber("Speaker Speed", LauncherConstants.SpeakerScoreSpeed);
+    // SmartDashboard.putNumber("Trap Angle", LauncherConstants.TrapScoreAngle);
+    // SmartDashboard.putNumber("Trap Speed", LauncherConstants.TrapScoreSpeed);
+    // SmartDashboard.putNumber("Auto Score Aim Height", LauncherConstants.kAutoScoreAimHeight);
+    // SmartDashboard.putNumber("Auto Score Speed", LauncherConstants.kAutoScoreSpeed);
+    // SmartDashboard.putNumber("Auto Score Speed Min", LauncherConstants.kAutoScoreSpeedMin);
+    // SmartDashboard.putNumber("Auto Score Speed Max", LauncherConstants.kAutoScoreSpeedMax);
 
 
   }
@@ -104,28 +106,38 @@ public class Robot extends TimedRobot {
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
 
-    double nAmpScoreAngle = SmartDashboard.getNumber("Amp Angle", 0);
-    double nAmpScoreSpeed = SmartDashboard.getNumber("Amp Speed", 0);
-    double nSpeakerScoreAngle = SmartDashboard.getNumber("Speaker Angle", 0);
-    double nSpeakerScoreSpeed = SmartDashboard.getNumber("Speaker Speed", 0);
-    double nTrapScoreAngle = SmartDashboard.getNumber("Trap Angle", 0);
-    double nTrapScoreSpeed = SmartDashboard.getNumber("Trap Speed", 0);
-    double nAutoScoreAimHeight = SmartDashboard.getNumber("Auto Score Aim Height", 0);
-    double nAutoScoreSpeed = SmartDashboard.getNumber("Auto Score Speed", 0);
-    double nAutoScoreSpeedMin = SmartDashboard.getNumber("Auto Score Speed Min", 0);
-    double nAutoScoreSpeedMax = SmartDashboard.getNumber("Auto Score Speed Max", 0);
+    var photonResLow = Robot.camAprTgLow.getLatestResult();
+    var photonResHigh = Robot.camAprTgHigh.getLatestResult();
+    var photonRes = photonResLow; // Default to low resolution result
+    SmartDashboard.putBoolean("Low April Tag", photonResLow.hasTargets());
+    SmartDashboard.putNumber("LX", photonResLow.getBestTarget().getBestCameraToTarget().getX());
+    SmartDashboard.putNumber("LY", photonResLow.getBestTarget().getBestCameraToTarget().getY());
+    SmartDashboard.putBoolean("High April Tag", photonResHigh.hasTargets());
+    SmartDashboard.putNumber("HX", photonResHigh.getBestTarget().getBestCameraToTarget().getX());
+    SmartDashboard.putNumber("HY", photonResHigh.getBestTarget().getBestCameraToTarget().getY());
 
-    if (nAmpScoreAngle != LauncherConstants.AmpScoreAngle) {LauncherConstants.AmpScoreAngle = nAmpScoreAngle;}
-    if (nAmpScoreSpeed != LauncherConstants.AmpScoreSpeed) {LauncherConstants.AmpScoreSpeed = nAmpScoreSpeed;}
-    if (nSpeakerScoreAngle != LauncherConstants.SpeakerScoreAngle) {LauncherConstants.SpeakerScoreAngle = nSpeakerScoreAngle;}
-    if (nSpeakerScoreSpeed != LauncherConstants.SpeakerScoreSpeed) {LauncherConstants.SpeakerScoreSpeed = nSpeakerScoreSpeed;}
-    if (nTrapScoreAngle != LauncherConstants.TrapScoreAngle) {LauncherConstants.TrapScoreAngle = nTrapScoreAngle;}
-    if (nTrapScoreSpeed != LauncherConstants.TrapScoreSpeed) {LauncherConstants.TrapScoreSpeed = nTrapScoreSpeed;}
-    if (nAutoScoreAimHeight != LauncherConstants.kAutoScoreAimHeight) {LauncherConstants.kAutoScoreAimHeight = nAutoScoreAimHeight;}
-    if (nAutoScoreSpeed != LauncherConstants.kAutoScoreSpeed) {LauncherConstants.kAutoScoreSpeed = nAutoScoreSpeed;}
-    if (nAutoScoreSpeedMin != LauncherConstants.kAutoScoreSpeedMin) {LauncherConstants.kAutoScoreSpeedMin = nAutoScoreSpeedMin;}
-    if (nAutoScoreSpeedMax != LauncherConstants.kAutoScoreSpeedMax) {LauncherConstants.kAutoScoreSpeedMax = nAutoScoreSpeedMax;}
-  }
+    }
+    // double nAmpScoreAngle = SmartDashboard.getNumber("Amp Angle", 0);
+    // double nAmpScoreSpeed = SmartDashboard.getNumber("Amp Speed", 0);
+    // double nSpeakerScoreAngle = SmartDashboard.getNumber("Speaker Angle", 0);
+    // double nSpeakerScoreSpeed = SmartDashboard.getNumber("Speaker Speed", 0);
+    // double nTrapScoreAngle = SmartDashboard.getNumber("Trap Angle", 0);
+    // double nTrapScoreSpeed = SmartDashboard.getNumber("Trap Speed", 0);
+    // double nAutoScoreAimHeight = SmartDashboard.getNumber("Auto Score Aim Height", 0);
+    // double nAutoScoreSpeed = SmartDashboard.getNumber("Auto Score Speed", 0);
+    // double nAutoScoreSpeedMin = SmartDashboard.getNumber("Auto Score Speed Min", 0);
+    // double nAutoScoreSpeedMax = SmartDashboard.getNumber("Auto Score Speed Max", 0);
+
+    // if (nAmpScoreAngle != LauncherConstants.AmpScoreAngle) {LauncherConstants.AmpScoreAngle = nAmpScoreAngle;}
+    // if (nAmpScoreSpeed != LauncherConstants.AmpScoreSpeed) {LauncherConstants.AmpScoreSpeed = nAmpScoreSpeed;}
+    // if (nSpeakerScoreAngle != LauncherConstants.SpeakerScoreAngle) {LauncherConstants.SpeakerScoreAngle = nSpeakerScoreAngle;}
+    // if (nSpeakerScoreSpeed != LauncherConstants.SpeakerScoreSpeed) {LauncherConstants.SpeakerScoreSpeed = nSpeakerScoreSpeed;}
+    // if (nTrapScoreAngle != LauncherConstants.TrapScoreAngle) {LauncherConstants.TrapScoreAngle = nTrapScoreAngle;}
+    // if (nTrapScoreSpeed != LauncherConstants.TrapScoreSpeed) {LauncherConstants.TrapScoreSpeed = nTrapScoreSpeed;}
+    // if (nAutoScoreAimHeight != LauncherConstants.kAutoScoreAimHeight) {LauncherConstants.kAutoScoreAimHeight = nAutoScoreAimHeight;}
+    // if (nAutoScoreSpeed != LauncherConstants.kAutoScoreSpeed) {LauncherConstants.kAutoScoreSpeed = nAutoScoreSpeed;}
+    // if (nAutoScoreSpeedMin != LauncherConstants.kAutoScoreSpeedMin) {LauncherConstants.kAutoScoreSpeedMin = nAutoScoreSpeedMin;}
+    // if (nAutoScoreSpeedMax != LauncherConstants.kAutoScoreSpeedMax) {LauncherConstants.kAutoScoreSpeedMax = nAutoScoreSpeedMax;}
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
@@ -149,6 +161,9 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+    // m_ClimberInitCmd.schedule();
+    // m_ClimberInitCmd.initialize();
+    // m_ClimberInitCmd.execute();
     m_robotContainer.setMotorBrake(true);
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
     aprilTagAlliance();
@@ -170,6 +185,9 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
+    m_ClimberInitCmd.schedule();
+    // m_ClimberInitCmd.initialize();
+    // m_ClimberInitCmd.execute();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }

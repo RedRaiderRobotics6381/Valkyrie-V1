@@ -18,47 +18,39 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "wait",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "MilwaukeeAmpCorner_PickUp"
-                }
-              }
-            ]
+            "waitTime": 10.0
           }
         },
         {
-          "type": "deadline",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "PVAim"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "MilwaukeeAmpCorner_Shoot"
-                }
-              }
-            ]
+            "pathName": "MilwaukeeAmpCorner_PickUp"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shoot"
+            "name": "DriveToNote"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "MilwaukeeAmpCorner_Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "DriveToSpeaker"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PVAim"
           }
         }
       ]
