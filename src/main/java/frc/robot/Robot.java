@@ -103,28 +103,34 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+    var photonResLow = Robot.camAprTgLow.getLatestResult();
+    var photonResHigh = Robot.camAprTgHigh.getLatestResult();
+    var photonRes = photonResLow; // Default to low resolution result
+    SmartDashboard.putBoolean("Low April Tag", photonResLow.hasTargets());
+    SmartDashboard.putBoolean("High April Tag", photonResHigh.hasTargets()); 
 
-    double nAmpScoreAngle = SmartDashboard.getNumber("Amp Angle", 0);
-    double nAmpScoreSpeed = SmartDashboard.getNumber("Amp Speed", 0);
-    double nSpeakerScoreAngle = SmartDashboard.getNumber("Speaker Angle", 0);
-    double nSpeakerScoreSpeed = SmartDashboard.getNumber("Speaker Speed", 0);
-    double nTrapScoreAngle = SmartDashboard.getNumber("Trap Angle", 0);
-    double nTrapScoreSpeed = SmartDashboard.getNumber("Trap Speed", 0);
-    double nAutoScoreAimHeight = SmartDashboard.getNumber("Auto Score Aim Height", 0);
-    double nAutoScoreSpeed = SmartDashboard.getNumber("Auto Score Speed", 0);
-    double nAutoScoreSpeedMin = SmartDashboard.getNumber("Auto Score Speed Min", 0);
-    double nAutoScoreSpeedMax = SmartDashboard.getNumber("Auto Score Speed Max", 0);
 
-    if (nAmpScoreAngle != LauncherConstants.AmpScoreAngle) {LauncherConstants.AmpScoreAngle = nAmpScoreAngle;}
-    if (nAmpScoreSpeed != LauncherConstants.AmpScoreSpeed) {LauncherConstants.AmpScoreSpeed = nAmpScoreSpeed;}
-    if (nSpeakerScoreAngle != LauncherConstants.SpeakerScoreAngle) {LauncherConstants.SpeakerScoreAngle = nSpeakerScoreAngle;}
-    if (nSpeakerScoreSpeed != LauncherConstants.SpeakerScoreSpeed) {LauncherConstants.SpeakerScoreSpeed = nSpeakerScoreSpeed;}
-    if (nTrapScoreAngle != LauncherConstants.TrapScoreAngle) {LauncherConstants.TrapScoreAngle = nTrapScoreAngle;}
-    if (nTrapScoreSpeed != LauncherConstants.TrapScoreSpeed) {LauncherConstants.TrapScoreSpeed = nTrapScoreSpeed;}
-    if (nAutoScoreAimHeight != LauncherConstants.kAutoScoreAimHeight) {LauncherConstants.kAutoScoreAimHeight = nAutoScoreAimHeight;}
-    if (nAutoScoreSpeed != LauncherConstants.kAutoScoreSpeed) {LauncherConstants.kAutoScoreSpeed = nAutoScoreSpeed;}
-    if (nAutoScoreSpeedMin != LauncherConstants.kAutoScoreSpeedMin) {LauncherConstants.kAutoScoreSpeedMin = nAutoScoreSpeedMin;}
-    if (nAutoScoreSpeedMax != LauncherConstants.kAutoScoreSpeedMax) {LauncherConstants.kAutoScoreSpeedMax = nAutoScoreSpeedMax;}
+    // double nAmpScoreAngle = SmartDashboard.getNumber("Amp Angle", 0);
+    // double nAmpScoreSpeed = SmartDashboard.getNumber("Amp Speed", 0);
+    // double nSpeakerScoreAngle = SmartDashboard.getNumber("Speaker Angle", 0);
+    // double nSpeakerScoreSpeed = SmartDashboard.getNumber("Speaker Speed", 0);
+    // double nTrapScoreAngle = SmartDashboard.getNumber("Trap Angle", 0);
+    // double nTrapScoreSpeed = SmartDashboard.getNumber("Trap Speed", 0);
+    // double nAutoScoreAimHeight = SmartDashboard.getNumber("Auto Score Aim Height", 0);
+    // double nAutoScoreSpeed = SmartDashboard.getNumber("Auto Score Speed", 0);
+    // double nAutoScoreSpeedMin = SmartDashboard.getNumber("Auto Score Speed Min", 0);
+    // double nAutoScoreSpeedMax = SmartDashboard.getNumber("Auto Score Speed Max", 0);
+
+    // if (nAmpScoreAngle != LauncherConstants.AmpScoreAngle) {LauncherConstants.AmpScoreAngle = nAmpScoreAngle;}
+    // if (nAmpScoreSpeed != LauncherConstants.AmpScoreSpeed) {LauncherConstants.AmpScoreSpeed = nAmpScoreSpeed;}
+    // if (nSpeakerScoreAngle != LauncherConstants.SpeakerScoreAngle) {LauncherConstants.SpeakerScoreAngle = nSpeakerScoreAngle;}
+    // if (nSpeakerScoreSpeed != LauncherConstants.SpeakerScoreSpeed) {LauncherConstants.SpeakerScoreSpeed = nSpeakerScoreSpeed;}
+    // if (nTrapScoreAngle != LauncherConstants.TrapScoreAngle) {LauncherConstants.TrapScoreAngle = nTrapScoreAngle;}
+    // if (nTrapScoreSpeed != LauncherConstants.TrapScoreSpeed) {LauncherConstants.TrapScoreSpeed = nTrapScoreSpeed;}
+    // if (nAutoScoreAimHeight != LauncherConstants.kAutoScoreAimHeight) {LauncherConstants.kAutoScoreAimHeight = nAutoScoreAimHeight;}
+    // if (nAutoScoreSpeed != LauncherConstants.kAutoScoreSpeed) {LauncherConstants.kAutoScoreSpeed = nAutoScoreSpeed;}
+    // if (nAutoScoreSpeedMin != LauncherConstants.kAutoScoreSpeedMin) {LauncherConstants.kAutoScoreSpeedMin = nAutoScoreSpeedMin;}
+    // if (nAutoScoreSpeedMax != LauncherConstants.kAutoScoreSpeedMax) {LauncherConstants.kAutoScoreSpeedMax = nAutoScoreSpeedMax;}
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -250,6 +256,7 @@ public class Robot extends TimedRobot {
         LEDsSubSystem.setLED(.99);
       }
     }
+    SmartDashboard.putBoolean("Has Targets", hasTargets);
     return hasTargets;
   }
 }
