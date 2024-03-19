@@ -15,7 +15,7 @@ import edu.wpi.first.math.MathUtil;
 public class LauncherAimCMD extends Command
 {
   public static double Launcher_Pitch;
-  public static double ID_HEIGHT = 2.19;//2.1936
+  public static double ID_HEIGHT = 2.18;// 2.19 2.1936
   public boolean finishedAiming;
   
   

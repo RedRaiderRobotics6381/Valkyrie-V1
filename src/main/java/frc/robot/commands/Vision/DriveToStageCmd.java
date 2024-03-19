@@ -89,7 +89,7 @@ public class DriveToStageCmd extends Command
   {
 
     var photonResLow = Robot.camAprTgLow.getLatestResult();
-    var photonResHigh = Robot.camAprTgHigh.getLatestResult();
+    //var photonResHigh = Robot.camAprTgHigh.getLatestResult();
     var photonRes = photonResLow; // Default to low resolution result
     // In your periodic method (like robotPeriodic or execute in a command), update the PID values from the SmartDashboard
     double p = SmartDashboard.getNumber("DtS Omega P", 0.0);
@@ -99,9 +99,9 @@ public class DriveToStageCmd extends Command
     if (photonResLow.hasTargets()) {
       photonRes = Robot.camAprTgLow.getLatestResult();
     }
-    if (photonResHigh.hasTargets()) {
-      photonRes = Robot.camAprTgHigh.getLatestResult();
-    }
+    // if (photonResHigh.hasTargets()) {
+    //   photonRes = Robot.camAprTgHigh.getLatestResult();
+    // }
   
     //System.out.println(photonRes.hasTargets());
     if (photonRes.hasTargets()) {

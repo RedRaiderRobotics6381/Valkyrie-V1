@@ -17,13 +17,13 @@ import frc.robot.commands.Secondary.ClimberInitCmd;
 
 
 public class ClimberSubsystem extends SubsystemBase{
-    public CANSparkMax m_climberMotorL;  
-    public CANSparkMax m_climberMotorR;
-    public RelativeEncoder m_climberEncoderR;
-    public RelativeEncoder m_climberEncoderL;
-    public DigitalInput m_limitSwitch_R;
-    public DigitalInput m_limitSwitch_L;
-    ShuffleboardTab tab = Shuffleboard.getTab("Climber");
+    public static CANSparkMax m_climberMotorL;  
+    public static CANSparkMax m_climberMotorR;
+    public static RelativeEncoder m_climberEncoderR;
+    public static RelativeEncoder m_climberEncoderL;
+    public static DigitalInput m_limitSwitch_R;
+    public static DigitalInput m_limitSwitch_L;
+    //ShuffleboardTab tab = Shuffleboard.getTab("Climber");
 
     /**
     * @param ClimberCmd
@@ -87,6 +87,6 @@ public class ClimberSubsystem extends SubsystemBase{
     
   //   public Command climberInitCmdL() {
   //   // implicitly require `this`
-  //   return this.run(() -> ClimberInitCmd(ClimberSubsystem));
+  //   return this.run(() -> ClimberInitCmd());
   // }
 }

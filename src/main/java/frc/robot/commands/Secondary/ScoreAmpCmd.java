@@ -50,7 +50,7 @@ public class ScoreAmpCmd extends Command {
         if ((Math.abs(m_launcherRotateSubsystem.launcherRotateEncoder.getPosition() -
              LauncherConstants.AmpScoreAngle) <= LauncherConstants.LauncherAngleTol)){
               if((Math.abs(m_launcherSubsystem.launcherMotorTop.getEncoder().getVelocity() -
-                  LauncherConstants.AmpScoreSpeed)) <= LauncherConstants.LauncherSpeedTol){
+                  LauncherConstants.AmpScoreSpeed)) <= LauncherConstants.LauncherSpeedTol + 25){
                     m_intakeSubsystem.launcherIndexerMotor.set(IntakeConstants.launcherIndexerOuttakeSpeed);
                     m_intakeSubsystem.indexerMotor.set(IntakeConstants.indexerOuttakeSpeed);
                 }

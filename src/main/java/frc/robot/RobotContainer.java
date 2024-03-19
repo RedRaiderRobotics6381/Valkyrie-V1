@@ -27,6 +27,7 @@ import frc.robot.commands.Secondary.ClimbCmd;
 import frc.robot.commands.Secondary.ClimberInitCmd;
 import frc.robot.commands.Secondary.IntakeCmd;
 import frc.robot.commands.Secondary.LowerCmd;
+import frc.robot.commands.Secondary.RVEIntakeCmd;
 import frc.robot.commands.Secondary.SafeScoreCmd;
 import frc.robot.commands.Secondary.ScoreAmpCmd;
 import frc.robot.commands.Secondary.ScoreAutoCmd;
@@ -163,7 +164,8 @@ public class RobotContainer
     //Button 5 is used below in the spencerButtons method
     //Button 6 is used below in the spencerButtons method
 
-    new JoystickButton(engineerXbox, 1).whileTrue(new LauncherAimCMD(launcherRotateSubsystem)); //Button "A"
+    new JoystickButton(engineerXbox, 1).whileTrue(new LauncherAimAutonCMD(launcherRotateSubsystem, launcherSubsystem, intakeSubsystem)); //Button "A"
+    //new JoystickButton(engineerXbox, 1).whileTrue(new LauncherAimCMD(launcherRotateSubsystem)); //Button "A"
     new JoystickButton(engineerXbox, 2).onTrue(new ScoreAmpCmd(launcherSubsystem, launcherRotateSubsystem, intakeSubsystem));
     new JoystickButton(engineerXbox, 3).onTrue(new ScoreSpeakerCmd(launcherSubsystem, launcherRotateSubsystem, intakeSubsystem));
     new JoystickButton(engineerXbox, 4).onTrue(new SafeScoreCmd(launcherSubsystem, launcherRotateSubsystem, intakeSubsystem));
@@ -173,6 +175,7 @@ public class RobotContainer
     new POVButton(engineerXbox, 0).onTrue(new ClimbCmd(climberSubsystem));
     new POVButton(engineerXbox, 180).onTrue(new LowerCmd(climberSubsystem));
     new POVButton(engineerXbox, 90).whileTrue(new ClimberInitCmd(climberSubsystem));
+    new POVButton(engineerXbox, 270).whileTrue(new RVEIntakeCmd(intakeSubsystem, launcherRotateSubsystem));
     new JoystickButton(driverXbox, 7).whileTrue(
         Commands.deferredProxy(() -> drivebase.driveToPose(
                                 new Pose2d(new Translation2d(2, 0), Rotation2d.fromDegrees(0)))
@@ -208,16 +211,16 @@ public class RobotContainer
     }
     if (driverXbox.getRawButton(5) == true && driverXbox.getRawButton(6) == false){
       System.out.println("MedSpd");
-      Constants.Drivebase.Max_Speed_Multiplier = 0.85;
+      Constants.Drivebase.Max_Speed_Multiplier = 0.75;
     }
     if (driverXbox.getRawButton(5) == false && driverXbox.getRawButton(6) == true){
       System.out.println("MedSpd");
-      Constants.Drivebase.Max_Speed_Multiplier = 0.85;
+      Constants.Drivebase.Max_Speed_Multiplier = 0.75;
     }
 
     if (driverXbox.getRawButton(5) == false && (driverXbox.getRawButton(6) == false)){
       //System.out.println("LowSpd");
-      Constants.Drivebase.Max_Speed_Multiplier = 0.69;
+      Constants.Drivebase.Max_Speed_Multiplier = 0.50;
     }
   }
       public double yawToSpeaker(){

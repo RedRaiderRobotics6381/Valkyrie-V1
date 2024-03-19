@@ -31,13 +31,13 @@ public class ClimberInitCmd extends Command {
   @Override
   public void execute() {
     if(!m_climberSubsystem.m_limitSwitch_R.get()){
-      m_climberSubsystem.m_climberMotorR.set(.1);
+      m_climberSubsystem.m_climberMotorR.set(.25);
     } else if(m_climberSubsystem.m_limitSwitch_R.get()) {
       m_climberSubsystem.m_climberMotorR.set(0);
     }
     
     if(!m_climberSubsystem.m_limitSwitch_L.get()){
-      m_climberSubsystem.m_climberMotorL.set(.1);
+      m_climberSubsystem.m_climberMotorL.set(.25);
     } else if(m_climberSubsystem.m_limitSwitch_L.get()){
       m_climberSubsystem.m_climberMotorL.set(0);
     }

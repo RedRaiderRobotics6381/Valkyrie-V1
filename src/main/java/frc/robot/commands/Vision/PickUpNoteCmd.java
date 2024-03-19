@@ -1,5 +1,9 @@
 package frc.robot.commands.Vision;
 
+import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonUtils;
+import org.photonvision.PhotonVersion;
+import org.photonvision.proto.Photon;
 import org.photonvision.targeting.PhotonTrackedTarget;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.MathUtil;
@@ -120,7 +124,10 @@ public class PickUpNoteCmd extends Command
       } else{
         hasNote = true;
       }
-      //System.out.println(lowerIntakeHasNote);
+      // if (!Robot.camObj.isConnected()) {
+      //           swerveSubsystem.lock();
+      //         }
+      // //System.out.println(lowerIntakeHasNote);
       
     }
 
@@ -155,7 +162,7 @@ public class PickUpNoteCmd extends Command
   @Override
   public void end(boolean interrupted)
   {
-    LEDsSubSystem.setLED(.71);
+    LEDsSubSystem.setLED(.91);
     m_intakeSubsystem.indexerMotor.set(IntakeConstants.zeroSpeed);
     m_intakeSubsystem.intakeMotor.set(IntakeConstants.zeroSpeed);
     m_intakeSubsystem.launcherIndexerMotor.set(IntakeConstants.zeroSpeed);
