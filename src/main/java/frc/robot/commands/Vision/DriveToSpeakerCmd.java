@@ -31,8 +31,8 @@ public class DriveToSpeakerCmd extends Command
   private final PIDController   omegaController;
   
   private double xTol = 0.1; //meters
-  private double yTol = 0.05; //meters
-  private double omegaTol = 1.5; //degrees
+  private double yTol = 0.1; //meters
+  private double omegaTol = 4; //degrees
   
   private static double xOffset = 1.70; //meters
   private static double yOffset = 0.0; //meters
@@ -60,7 +60,7 @@ public class DriveToSpeakerCmd extends Command
     yController = new PIDController(1.0, 0.0, 0); //1.575
     // xController = new PIDController(0.0625, 0.00375, 0.2);
     // yController = new PIDController(0.0625, 0.00375, 0.0001);
-    omegaController = new PIDController(0.0625,0.00025, 0.01);
+    omegaController = new PIDController(0.09,0.00025, 0.01); //0.00625
     xController.setTolerance(xTol); //meters
     yController.setTolerance(yTol); //meters
     omegaController.setTolerance(omegaTol); //degrees
@@ -122,11 +122,11 @@ public class DriveToSpeakerCmd extends Command
       // swerveSubsystem.lock();
     } else {
       // Drive to the target
-      double translationValx = MathUtil.clamp(xController.calculate(TX, xOffset), -1 , 1);
-      double translationValy = MathUtil.clamp(yController.calculate(TY, yOffset), -1 , 1);
-      double translationValz = MathUtil.clamp(omegaController.calculate(TZ, omegaOffset), -1 , 1);
+      double translationValx = MathUtil.clamp(xController.calculate(TX, xOffset), -2.0 , 2.0);
+      double translationValy = MathUtil.clamp(yController.calculate(TY, yOffset), -2.0 , 2.0);
+      double translationValz = MathUtil.clamp(omegaController.calculate(TZ, omegaOffset), -2.0 , 2.0);
       //|| omegaController.atSetpoint() != true
-      if ( xController.atSetpoint() != true || yController.atSetpoint() != true){
+      if ( xController.atSetpoint() != true || yController.atSetpoint() != true || omegaController.atSetpoint() != true){
         swerveSubsystem.drive(new Translation2d(translationValx, translationValy),
         translationValz,
         false);

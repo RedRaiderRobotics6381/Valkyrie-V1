@@ -14,14 +14,14 @@ import frc.robot.subsystems.Secondary.IntakeSubsystem;
 import frc.robot.subsystems.Secondary.LEDsSubSystem;
 import frc.robot.subsystems.Secondary.LauncherRotateSubsystem;
 
-public class IntakeCmd extends Command {
+public class RVEIntakeCmd extends Command {
 
   
   private boolean hasNote = false;
   private final IntakeSubsystem m_intakeSubsystem;
   private final LauncherRotateSubsystem m_launcherRotateSubsystem;
 
-  public IntakeCmd(IntakeSubsystem intakeSubsystem, LauncherRotateSubsystem launcherRotateSubsystem) {
+  public RVEIntakeCmd(IntakeSubsystem intakeSubsystem, LauncherRotateSubsystem launcherRotateSubsystem) {
     this.m_intakeSubsystem = intakeSubsystem;
     this.m_launcherRotateSubsystem = launcherRotateSubsystem;
     
@@ -38,13 +38,13 @@ public class IntakeCmd extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(Robot.sensorOuttake.get() == true){
+    if(Robot.sensorOuttake.get() == true || Robot.sensorIntake.get() == true){
       hasNote = true;
     } else {
       m_launcherRotateSubsystem.launcherRotatePIDController.setReference(LauncherConstants.posIntake,CANSparkMax.ControlType.kSmartMotion);
-      m_intakeSubsystem.indexerMotor.set(IntakeConstants.indexerIntakeSpeed);
-      m_intakeSubsystem.intakeMotor.set(IntakeConstants.intakeSpeed);
-      m_intakeSubsystem.launcherIndexerMotor.set(IntakeConstants.launcherIndexerIntakeSpeed);
+      m_intakeSubsystem.indexerMotor.set(-IntakeConstants.indexerIntakeSpeed);
+      m_intakeSubsystem.intakeMotor.set(-IntakeConstants.intakeSpeed);
+      //m_intakeSubsystem.launcherIndexerMotor.set(-IntakeConstants.launcherIndexerIntakeSpeed);
       //System.out.println(Robot.sensorIntake.get());
 
     }

@@ -6,12 +6,16 @@ package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -20,35 +24,28 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.AprilTagConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Secondary.ClimbCmd;
+import frc.robot.commands.Secondary.ClimberInitCmd;
 import frc.robot.commands.Secondary.IntakeCmd;
 import frc.robot.commands.Secondary.LowerCmd;
+import frc.robot.commands.Secondary.RVEIntakeCmd;
+import frc.robot.commands.Secondary.SafeScoreCmd;
 import frc.robot.commands.Secondary.ScoreAmpCmd;
 import frc.robot.commands.Secondary.ScoreAutoCmd;
 import frc.robot.commands.Secondary.ScoreSpeakerCmd;
-import frc.robot.commands.Secondary.ScoreTrapCmd;
+//import frc.robot.commands.Secondary.ScoreTrapCmd;
 import frc.robot.commands.Vision.DriveToAmpCmd;
-//import frc.robot.commands.Secondary.ScoreSpeakerCmd;
-//import frc.robot.commands.Vision.DriveToObjectCmd;
 import frc.robot.commands.Vision.DriveToSpeakerCmd;
-//import frc.robot.commands.Secondary.IntakeCmd;
-// import frc.robot.commands.Secondary.ScoreAmpCmd;
-// import frc.robot.commands.Secondary.ScoreSpeakerCmd;
-// import frc.robot.commands.Vision.DriveToAmpCmd;
-// import frc.robot.commands.Vision.DriveToSpeakerCmd_B;
 import frc.robot.commands.Vision.DriveToStageCmd;
+import frc.robot.commands.Vision.LauncherAimAutonCMD;
 import frc.robot.commands.Vision.LauncherAimCMD;
 import frc.robot.commands.Vision.PickUpNoteCmd;
-// import frc.robot.commands.Vision.PickUpNoteCmd;
 import frc.robot.subsystems.Secondary.ClimberSubsystem;
 import frc.robot.subsystems.Secondary.IntakeSubsystem;
 import frc.robot.subsystems.Secondary.LauncherRotateSubsystem;
-// import frc.robot.subsystems.Secondary.IntakeSubsystem;
-// import frc.robot.subsystems.Secondary.LauncherRotateSubsystem;
 import frc.robot.subsystems.Secondary.LauncherSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
 import com.pathplanner.lib.auto.AutoBuilder;
-//import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.auto.NamedCommands;
 
 /**
@@ -70,6 +67,7 @@ public class RobotContainer
   private final SendableChooser<Command> autoChooser;
   static double lastTime = -1;
 
+  //LauncherSubsystem launcherSubsystem = new LauncherSubsystem();
   LauncherSubsystem launcherSubsystem = new LauncherSubsystem();
   LauncherRotateSubsystem launcherRotateSubsystem = new LauncherRotateSubsystem();
   IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
@@ -86,9 +84,16 @@ public class RobotContainer
     // Register Named Commands
 
     //NamedCommands.registerCommand(null, null);
-    NamedCommands.registerCommand("Shoot", new ScoreAutoCmd(launcherSubsystem));
-    NamedCommands.registerCommand("Aim", new LauncherAimCMD());
-    NamedCommands.registerCommand("Intake", new IntakeCmd());
+    // NamedCommands.registerCommand("Shoot", new ScoreAutoCmd(launcherSubsystem));
+    //drivebase.setupPathPlanner();
+    NamedCommands.registerCommand("Shoot", new ScoreAutoCmd(launcherSubsystem, launcherRotateSubsystem, intakeSubsystem));
+    NamedCommands.registerCommand("Aim", new ScoreSpeakerCmd(launcherSubsystem, launcherRotateSubsystem, intakeSubsystem));
+    // NamedCommands.registerCommand("PVAim", new LauncherAimCMD(launcherRotateSubsystem));
+    NamedCommands.registerCommand("PVAim", new LauncherAimAutonCMD(launcherRotateSubsystem, launcherSubsystem, intakeSubsystem));
+    NamedCommands.registerCommand("Intake", new IntakeCmd(intakeSubsystem, launcherRotateSubsystem));
+    NamedCommands.registerCommand("DriveToNote", new PickUpNoteCmd(drivebase, intakeSubsystem, launcherRotateSubsystem));
+    NamedCommands.registerCommand("DriveToSpeaker", new DriveToSpeakerCmd(drivebase));
+
     // Build an auto chooser. This will use Commands.none() as the default option.
     autoChooser = AutoBuilder.buildAutoChooser();
     
@@ -99,12 +104,6 @@ public class RobotContainer
     // controls are front-left positive
     // left stick controls translation
     // right stick controls the angular velocity of the robot
-    // Command driveFieldOrientedAnglularVelocity = drivebase.driveCommand(
-    //     () -> MathUtil.applyDeadband(-driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND) *
-    //                                                          Constants.Drivebase.Max_Speed_Multiplier,
-    //     () -> MathUtil.applyDeadband(-driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND) *
-    //                                                          Constants.Drivebase.Max_Speed_Multiplier,
-    //     () -> MathUtil.applyDeadband(-driverXbox.getRawAxis(4), OperatorConstants.RIGHT_X_DEADBAND) );
 
     Command driveFieldOrientedAnglularVelocity = drivebase.driveCommand(
         () -> MathUtil.applyDeadband(-driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND) *
@@ -135,11 +134,6 @@ public class RobotContainer
   private void configureBindings()
   {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-
-    
-    new JoystickButton(driverXbox, 8).onTrue((new InstantCommand(drivebase::zeroGyro)));
-    
-
     
     //Button 1 is "A" on xbox controller
     //Button 2 is "B" on xbox controller
@@ -162,64 +156,30 @@ public class RobotContainer
     // Driver control button 2 is used in the pick up note command PickUpNoteCmd
 
     //==========================================================================
-
-
     new JoystickButton(driverXbox, 8).onTrue((new InstantCommand(drivebase::zeroGyro)));  //Button "Start"
     new JoystickButton(driverXbox, 1).whileTrue(new DriveToAmpCmd(drivebase)); 
-    new JoystickButton(driverXbox, 2).whileTrue(new PickUpNoteCmd(drivebase));  //Button "B"
-    //new JoystickButton(driverXbox, 2).whileTrue(new DriveToObjectCmd(drivebase));
+    new JoystickButton(driverXbox, 2).whileTrue(new PickUpNoteCmd(drivebase, intakeSubsystem, launcherRotateSubsystem));  //Button "B"
     new JoystickButton(driverXbox, 3).whileTrue(new DriveToSpeakerCmd(drivebase)); //Button "X"
-    // new JoystickButton(driverXbox, 3).whileTrue(new DriveToSpeakerCmd_B(drivebase));
-    // new JoystickButton(driverXbox, 1).whileTrue(new DriveToAmpCmd(drivebase));
     new JoystickButton(driverXbox, 4).whileTrue(new DriveToStageCmd(drivebase)); //Button "Y"
+    //Button 5 is used below in the spencerButtons method
+    //Button 6 is used below in the spencerButtons method
 
-    new JoystickButton(engineerXbox, 1).whileTrue(new LauncherAimCMD()); //Button "A"
-    // new JoystickButton(engineerXbox, 1).onTrue(launcherRotateSubsystem.rotatePosCommand(LauncherConstants.posOuttake));
-    // new JoystickButton(engineerXbox, 3).onTrue(launcherRotateSubsystem.rotatePosCommand(LauncherConstants.posDefault)); //190.0 // DO NOT RUN AT 190. LAUNCHER WILL BREAK!!
-    new JoystickButton(engineerXbox, 4).onTrue(new ScoreTrapCmd(launcherSubsystem));
-    new JoystickButton(engineerXbox, 2).onTrue(new ScoreAmpCmd(launcherSubsystem));
-    new JoystickButton(engineerXbox, 6).onTrue(new ScoreAutoCmd(launcherSubsystem));
-    // //new JoystickButton(engineerXbox, 4).onTrue(new  IntakeCmd(intakeSubsystem, launcherRotateSubsystem));
-    
-    
-    new JoystickButton(engineerXbox, 5).onTrue(new IntakeCmd());
-    
+    new JoystickButton(engineerXbox, 1).whileTrue(new LauncherAimAutonCMD(launcherRotateSubsystem, launcherSubsystem, intakeSubsystem)); //Button "A"
+    //new JoystickButton(engineerXbox, 1).whileTrue(new LauncherAimCMD(launcherRotateSubsystem)); //Button "A"
+    new JoystickButton(engineerXbox, 2).onTrue(new ScoreAmpCmd(launcherSubsystem, launcherRotateSubsystem, intakeSubsystem));
+    new JoystickButton(engineerXbox, 3).onTrue(new ScoreSpeakerCmd(launcherSubsystem, launcherRotateSubsystem, intakeSubsystem));
+    new JoystickButton(engineerXbox, 4).onTrue(new SafeScoreCmd(launcherSubsystem, launcherRotateSubsystem, intakeSubsystem));
+    new JoystickButton(engineerXbox, 5).onTrue(new IntakeCmd(intakeSubsystem, launcherRotateSubsystem));
+    new JoystickButton(engineerXbox, 6).onTrue(new ScoreAutoCmd(launcherSubsystem, launcherRotateSubsystem, intakeSubsystem));
     
     new POVButton(engineerXbox, 0).onTrue(new ClimbCmd(climberSubsystem));
     new POVButton(engineerXbox, 180).onTrue(new LowerCmd(climberSubsystem));
-    
- 
- // new JoystickButton(driverXbox,
-    //                    2).whileTrue(
-    //     Commands.deferredProxy(() -> drivebase.driveToPose(
-    //                                new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)))
-    //                           ));
-    // driverXbox.x().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
-      
-
-    //new JoystickButton(engineerXbox, 2).onTrue(new InstantCommand(climberSubsystem::lowerCmd, climberSubsystem));
-    
-
-    //new JoystickButton(engineerXbox, 4).onTrue(launcherRotateSubsystem.rotatePosCommand(LauncherConstants.posDefault));
-    //new JoystickButton(engineerXbox, 6).onTrue(intakeSubsystem.InitialIntakeCmd());
-    //new JoystickButton(engineerXbox, 5).onTrue(intakeSubsystem.LaunchIntakeCmd());
-    //new JoystickButton(engineerXbox, 5).whileTrue(launcherSubsystem.LauncherCmd(.75));
-    //new JoystickButton(engineerXbox, 3).whileTrue(climberSubsystem.climberInCmd()); 
-    
-    
-    //new JoystickButton(engineerXbox, 7).onTrue(LauncherRotateSubsystem.rotateAutoPosCommand());
-
-    //new JoystickButton(engineerXbox,3 ).whileTrue(new ArmIntakeInCmd(armIntakeSubsystem));
-    // new JoystickButton(engineerXbox,3 ).whileTrue(LauncherSubsystem.ArmIntakeCmd(LauncherConstants.intakeSpeedIn));
-    // new JoystickButton(engineerXbox, 3).onFalse(LauncherSubsystem.ArmIntakeCmd(LauncherConstants.intakeSpeedHold));
-    // new JoystickButton(engineerXbox,2 ).whileTrue(LauncherSubsystem.ArmIntakeCmd(LauncherConstants.intakeSpeedOut));
-    // new JoystickButton(engineerXbox, 2).onFalse(LauncherSubsystem.ArmIntakeCmd(0));
-
-    // new JoystickButton(driverXbox,
-    //                    2).whileTrue(
-    //     Commands.deferredProxy(() -> drivebase.driveToPose(
-    //                                new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)))
-    //                           ));
+    new POVButton(engineerXbox, 90).whileTrue(new ClimberInitCmd(climberSubsystem));
+    new POVButton(engineerXbox, 270).whileTrue(new RVEIntakeCmd(intakeSubsystem, launcherRotateSubsystem));
+    new JoystickButton(driverXbox, 7).whileTrue(
+        Commands.deferredProxy(() -> drivebase.driveToPose(
+                                new Pose2d(new Translation2d(2, 0), Rotation2d.fromDegrees(0)))
+                          ));
 //    new JoystickButton(driverXbox, 3).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
   }
 
@@ -231,7 +191,8 @@ public class RobotContainer
   public Command getAutonomousCommand()
   {
     // An example command will be run in autonomous
-    return drivebase.getAutonomousCommand("New Auto");
+    //return drivebase.getAutonomousCommand("New Auto");
+    return autoChooser.getSelected();
   }
 
   public void setDriveMode()
@@ -250,23 +211,23 @@ public class RobotContainer
     }
     if (driverXbox.getRawButton(5) == true && driverXbox.getRawButton(6) == false){
       System.out.println("MedSpd");
-      Constants.Drivebase.Max_Speed_Multiplier = 0.85;
+      Constants.Drivebase.Max_Speed_Multiplier = 0.75;
     }
     if (driverXbox.getRawButton(5) == false && driverXbox.getRawButton(6) == true){
       System.out.println("MedSpd");
-      Constants.Drivebase.Max_Speed_Multiplier = 0.85;
+      Constants.Drivebase.Max_Speed_Multiplier = 0.75;
     }
 
     if (driverXbox.getRawButton(5) == false && (driverXbox.getRawButton(6) == false)){
       //System.out.println("LowSpd");
-      Constants.Drivebase.Max_Speed_Multiplier = 0.69;
+      Constants.Drivebase.Max_Speed_Multiplier = 0.50;
     }
   }
       public double yawToSpeaker(){
       double yawToSpeakerValue = 0.0;
       PIDController zController = null;
       try {
-        zController = new PIDController(0.07,0.0, 0.000);
+        zController = new PIDController(.025, 0.05, 0.0);//0.07,0.0, 0.000;
         zController.setTolerance(.5);
 
         if (driverXbox.getRawButton(10) == false){  

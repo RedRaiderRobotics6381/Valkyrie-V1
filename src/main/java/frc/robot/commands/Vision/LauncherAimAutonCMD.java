@@ -1,31 +1,41 @@
 package frc.robot.commands.Vision;
 
 import org.photonvision.targeting.PhotonTrackedTarget;
+
+import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkMax;
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
-import frc.robot.RobotContainer;
 import frc.robot.Constants.AprilTagConstants;
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.LauncherConstants;
+import frc.robot.subsystems.Secondary.IntakeSubsystem;
 import frc.robot.subsystems.Secondary.LauncherRotateSubsystem;
+import frc.robot.subsystems.Secondary.LauncherSubsystem;
 import edu.wpi.first.math.MathUtil;
 
-public class LauncherAimCMD extends Command
+public class LauncherAimAutonCMD extends Command
 {
   public static double Launcher_Pitch;
-  public static double ID_HEIGHT = 2.18;// 2.19 2.1936
-  public boolean finishedAiming;
-  
+  boolean aimedToTarget;
   
   private PhotonTrackedTarget lastTarget;
-  private final LauncherRotateSubsystem m_LauncherRotateSubsystem;
+  private final LauncherRotateSubsystem m_launcherRotateSubsystem;
+  private final LauncherSubsystem m_launcherSubsystem;
+  private final IntakeSubsystem m_intakeSubsystem;
 
-  public LauncherAimCMD(LauncherRotateSubsystem launcherRotateSubsystem)
+  public LauncherAimAutonCMD(LauncherRotateSubsystem launcherRotateSubsystem, LauncherSubsystem launcherSubsystem, IntakeSubsystem intakeSubsystem)
   {
-    this.m_LauncherRotateSubsystem = launcherRotateSubsystem;
-    addRequirements(launcherRotateSubsystem);
+    this.m_launcherRotateSubsystem = launcherRotateSubsystem;
+    this.m_launcherSubsystem = launcherSubsystem;
+    this.m_intakeSubsystem = intakeSubsystem;
+    addRequirements(launcherRotateSubsystem, launcherSubsystem, intakeSubsystem);
+  }
+  {
+    // each subsystem used by the command must be passed into the
+    // addRequirements() method (which takes a vararg of Subsystem)
+    
   }
   {
 
@@ -41,7 +51,8 @@ public class LauncherAimCMD extends Command
   public void initialize()
   {
     lastTarget = null;
-    finishedAiming = false;
+    aimedToTarget = false;
+
   }
 
   /**
@@ -64,31 +75,30 @@ public class LauncherAimCMD extends Command
             var target = targetOpt.get();
             // This is new target data, so recalculate the goal
             lastTarget = target;
-            double targetX = target.getBestCameraToTarget().getX() - 0.233; //0.233
-            double targetY = target.getBestCameraToTarget().getY() + 0.306; //0.306
-            double LAUNCHER_TO_TOWER = Math.sqrt(Math.pow(targetX, 2) + Math.pow(targetY, 2));
-            
+            double targetX = target.getBestCameraToTarget().getX();
+            Double targetY = target.getBestCameraToTarget().getY();
+            Double LAUNCHER_TO_TOWER = Math.sqrt(Math.pow(targetX, 2) + Math.pow(targetY, 2));
             //Double LAUNCHER_TO_TOWER = target.getBestCameraToTarget().getX();
-            LauncherConstants.LauncherSpeedMult = MathUtil.clamp(LAUNCHER_TO_TOWER * 1500, 2750, 4000);
-            //Meters from 1.808 (2.1436) (2.2936(3/7/24))
+            LauncherConstants.LauncherSpeedMult = MathUtil.clamp(LAUNCHER_TO_TOWER * 1750, 2750, 4000);
+            Double ID_HEIGHT = 2.19;//Meters
             Launcher_Pitch = ((Math.toDegrees(Math.atan(ID_HEIGHT / LAUNCHER_TO_TOWER))) + 90);
-            m_LauncherRotateSubsystem.launcherRotatePIDController.setReference(Launcher_Pitch,CANSparkMax.ControlType.kSmartMotion);
-            if ((Math.abs(m_LauncherRotateSubsystem.launcherRotateEncoder.getPosition() -
-                 Launcher_Pitch) <= LauncherConstants.LauncherAngleTol)){
-              finishedAiming = true;
+             m_launcherSubsystem.launcherPIDControllerTop.setReference(LauncherConstants.LauncherSpeedMult, CANSparkFlex.ControlType.kVelocity);
+            m_launcherRotateSubsystem.launcherRotatePIDController.setReference(Launcher_Pitch,CANSparkMax.ControlType.kSmartMotion);
+            if ((Math.abs(m_launcherRotateSubsystem.launcherRotateEncoder.getPosition() -
+                 Launcher_Pitch) <= LauncherConstants.LauncherAngleTol+.5) && ((Math.abs(m_launcherSubsystem.launcherMotorTop.getEncoder().getVelocity() -
+                 LauncherConstants.LauncherSpeedMult)) <= LauncherConstants.LauncherSpeedTol+50)){
+                m_intakeSubsystem.launcherIndexerMotor.set(IntakeConstants.launcherIndexerOuttakeSpeed);
+                m_intakeSubsystem.indexerMotor.set(IntakeConstants.indexerOuttakeSpeed);
+              } 
             }
-            SmartDashboard.putNumber("Angle to Target", Launcher_Pitch);
-            SmartDashboard.putNumber("Dist to Target", LAUNCHER_TO_TOWER);
+            
+            // SmartDashboard.putNumber("Angle to Target", Launcher_Pitch);
+            // SmartDashboard.putNumber("Dist to Target", LAUNCHER_TO_TOWER);
 
-            if (LAUNCHER_TO_TOWER <= 5){ 
-              if (target.getYaw() >= -2  || target.getYaw() <=2){
-                //LEDsSubSystem.setLEDwBlink(.73,.125); //Removed lights to stop alerting other teams we are ready to shoot.
-              RobotContainer.driverXbox.setRumble(RumbleType.kBothRumble, 0.125);
-              RobotContainer.driverXbox.setRumble(RumbleType.kBothRumble, 0.125);
-              }
-            }
-          }
+          
         } 
+      } else {
+        aimedToTarget = true;
       } 
     }
    
@@ -109,8 +119,7 @@ public class LauncherAimCMD extends Command
   @Override
   public boolean isFinished()
   {
-    //return Robot.sensorOuttake.get() == false;
-    return finishedAiming;
+    return aimedToTarget;
   }
 
   /**
@@ -123,9 +132,9 @@ public class LauncherAimCMD extends Command
   @Override
   public void end(boolean interrupted)
   {
-    RobotContainer.driverXbox.setRumble(RumbleType.kBothRumble, 0.0);
-    RobotContainer.driverXbox.setRumble(RumbleType.kBothRumble, 0.0);
-    //launcherSubsystem.LauncherCmd(0);
-    
+    m_intakeSubsystem.indexerMotor.set(0);
+    m_intakeSubsystem.launcherIndexerMotor.set(0);
+    m_launcherSubsystem.launcherPIDControllerTop.setReference(0, CANSparkFlex.ControlType.kVelocity);
+    m_launcherRotateSubsystem.launcherRotateMotor.disable();
   }
 }

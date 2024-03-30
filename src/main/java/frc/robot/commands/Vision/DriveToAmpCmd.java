@@ -76,14 +76,14 @@ public class DriveToAmpCmd extends Command
   {
 
     var photonResLow = Robot.camAprTgLow.getLatestResult();
-    var photonResHigh = Robot.camAprTgHigh.getLatestResult();
+    //var photonResHigh = Robot.camAprTgHigh.getLatestResult();
     var photonRes = photonResLow; // Default to low resolution result
     if (photonResLow.hasTargets()) {
       photonRes = Robot.camAprTgLow.getLatestResult();
     }
-    if (photonResHigh.hasTargets()) {
-      photonRes = Robot.camAprTgHigh.getLatestResult();
-    }
+    // if (photonResHigh.hasTargets()) {
+    //   photonRes = Robot.camAprTgHigh.getLatestResult();
+    // }
   
     //System.out.println(photonRes.hasTargets());
     if (photonRes.hasTargets()) {

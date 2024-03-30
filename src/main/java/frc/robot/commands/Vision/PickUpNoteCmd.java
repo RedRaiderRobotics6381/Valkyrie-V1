@@ -1,5 +1,9 @@
 package frc.robot.commands.Vision;
 
+import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonUtils;
+import org.photonvision.PhotonVersion;
+import org.photonvision.proto.Photon;
 import org.photonvision.targeting.PhotonTrackedTarget;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.MathUtil;
@@ -17,28 +21,38 @@ import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 public class PickUpNoteCmd extends Command
 {
   private final SwerveSubsystem swerveSubsystem;
+  private final IntakeSubsystem m_intakeSubsystem;
+  private final LauncherRotateSubsystem m_launcherRotateSubsystem;
   private final PIDController   xController;
   //private final PIDController   yController;
   private final PIDController   zController;
   private boolean hasTargets;
   private boolean droveToNote;
+  
+  int peakVelocity;
+  int currentVelocity;
+
+  boolean lowerIntakeHasNote;
   boolean hasNote;
   boolean outtakeHasNote;
   boolean intakeHasNote;
 
-  public PickUpNoteCmd(SwerveSubsystem swerveSubsystem)
+  public PickUpNoteCmd(SwerveSubsystem swerveSubsystem, IntakeSubsystem intakeSubsystem, LauncherRotateSubsystem launcherRotateSubsystem)
   {
     this.swerveSubsystem = swerveSubsystem;
+    this.m_intakeSubsystem = intakeSubsystem;
+    this.m_launcherRotateSubsystem = launcherRotateSubsystem;
+    
     xController = new PIDController(0.055, 0.00, 0.0);
     //yController = new PIDController(0.0625, 0.00375, 0.0001);
-    zController = new PIDController(0.025,0.0, 0.000);
+    zController = new PIDController(0.015,0.0, 0.000);
     xController.setTolerance(3);
     //yController.setTolerance(3);
     zController.setTolerance(.5);
 
     // each subsystem used by the command must be passed into the
     // addRequirements() method (which takes a vararg of Subsystem)
-    addRequirements(this.swerveSubsystem);
+    addRequirements(swerveSubsystem, intakeSubsystem, launcherRotateSubsystem);
   }
 
   /**
@@ -59,6 +73,8 @@ public class PickUpNoteCmd extends Command
   public void execute()
   {
     outtakeHasNote = Robot.sensorOuttake.get(); //Check if the note is in the outtake
+    //intakeHasNote = m_intakeSubsystem.colorSensor.getProximity() > 1500;
+    
     intakeHasNote = Robot.sensorIntake.get(); //Check if the note is in the intake
     var result = Robot.camObj.getLatestResult();  // Get the latest result from PhotonVision
     hasTargets = result.hasTargets(); // Check if the latest result has any targets.
@@ -68,84 +84,53 @@ public class PickUpNoteCmd extends Command
         double TZ = target.getYaw();
         double TX = target.getPitch();
 
-        double translationValx = MathUtil.clamp(-xController.calculate(TX, -19), -1.0 , 1.0); //Tune the setpoint to be where the note is just barely found.
+        double translationValx = MathUtil.clamp(-xController.calculate(TX, -19), -4.0 , 4.0); //Tune the setpoint to be where the note is just barely found.
         double translationValz = MathUtil.clamp(zController.calculate(TZ, 0.0), -2.0 , 2.0); //* throttle, 2.5 * throttle);
 
         if (xController.atSetpoint() != true) {
             swerveSubsystem.drive(new Translation2d(translationValx, 0.0), translationValz, false);
-          } else{
-              if (!intakeHasNote && !droveToNote){ //If the note is not in the intake, run the intake command
-                LauncherRotateSubsystem.m_LauncherRotatePIDController.setReference(LauncherConstants.posIntake,CANSparkMax.ControlType.kSmartMotion);
-                IntakeSubsystem.intakeMotor.set(IntakeConstants.intakeSpeed);
-                IntakeSubsystem.indexerMotor.set(IntakeConstants.indexerIntakeSpeed);
-                IntakeSubsystem.launcherIndexerMotor.set(IntakeConstants.launcherIndexerIntakeSpeed);
+          } else {
+        
+
+        if (!intakeHasNote && !droveToNote){ //If the note is not in the intake, run the intake command
+                m_launcherRotateSubsystem.launcherRotatePIDController.setReference(LauncherConstants.posIntake,CANSparkMax.ControlType.kSmartMotion);
+                m_intakeSubsystem.intakeMotor.set(IntakeConstants.intakeSpeed);
+
+                // // Get the current velocity of the intake motor and round it to the nearest 10
+                // currentVelocity = ((int)m_intakeSubsystem.intakeMotor.getEncoder().getVelocity()/10) * 10;
+
+                // // If the current velocity is higher than the peak, update the peak
+                // if (currentVelocity > peakVelocity) {
+                //   peakVelocity = currentVelocity;
+                // }
+
+                // // If the current velocity has dropped 200 units below the peak, set the boolean to true
+                // if (peakVelocity - currentVelocity >= 100) {
+                //   lowerIntakeHasNote = true;
+                // }
+
+                m_intakeSubsystem.indexerMotor.set(IntakeConstants.indexerIntakeSpeed);
+                m_intakeSubsystem.launcherIndexerMotor.set(IntakeConstants.launcherIndexerIntakeSpeed);
                 swerveSubsystem.drive(new Translation2d(0.5, 0.0), 0.0, false);
               }             // swerveSubsystem.drive(new Translation2d(0.5, 0.0), 0.0, false);
-              else if(intakeHasNote){
+              else if (intakeHasNote){
                 swerveSubsystem.drive(new Translation2d(0.0, 0.0), 0.0, false);
-                droveToNote = true;
+                //swerveSubsystem.lock();
+                droveToNote = true;                
               }
-            }  
+            }
+          
         } 
       } else{
         hasNote = true;
       }
+      // if (!Robot.camObj.isConnected()) {
+      //           swerveSubsystem.lock();
+      //         }
+      // //System.out.println(lowerIntakeHasNote);
+      
     }
 
-  // /**
-  //  * The main body of a command.  Called repeatedly while the command is scheduled. (That is, it is called repeatedly
-  //  * until {@link #isFinished()}) returns true.)
-  //  */
-  // @Override
-  // public void execute()
-  // {
-  //   hasNote = Robot.sensorOuttake.get(); //Check if the note is in the intake
-  //   var result = Robot.camObj.getLatestResult();  // Get the latest result from PhotonVision
-  //   hasTargets = result.hasTargets(); // Check if the latest result has any targets.
-  //   PhotonTrackedTarget target = result.getBestTarget();
-    
-  //   if (hasTargets == true) { // && RobotContainer.driverXbox.getRawButton(2) == true
-  //     double TZ = target.getYaw();
-  //     double TX = target.getPitch();
-
-  //     double translationValx = MathUtil.clamp(-xController.calculate(TX, -19), -1.0 , 1.0); //Tune the setpoint to be where the note is just barely found.
-  //     double translationValz = MathUtil.clamp(zController.calculate(TZ, 0.0), -2.0 , 2.0); //* throttle, 2.5 * throttle);
-
-  //     if (xController.atSetpoint() != true) {
-  //         swerveSubsystem.drive(new Translation2d(translationValx, 0.0), translationValz, false);
-  //         //new IntakeSubsystem().IntakeCmd();
-          
-  //       } else{
-          
-  //         //swerveSubsystem.getPose();
-          
-  //           if (!hasNote){ //If the note is not in the intake, run the intake command
-  //             LauncherRotateSubsystem.m_LauncherRotatePIDController.setReference(LauncherConstants.posIntake,CANSparkMax.ControlType.kSmartMotion);
-              
-  //             IntakeSubsystem.intakeMotor.set(IntakeConstants.intakeSpeed);
-  //             IntakeSubsystem.indexerMotor.set(IntakeConstants.indexerIntakeSpeed);
-  //             IntakeSubsystem.launcherIndexerMotor.set(IntakeConstants.launcherIndexerIntakeSpeed);
-  //           }
-  //           if (droveToNote == false){     
-  //             // swerveSubsystem.drive(new Translation2d(0.5, 0.0), 0.0, false);
-  //             if(!Robot.sensorIntake.get()){  
-  //               swerveSubsystem.drive(new Translation2d(0.5, 0.0), 0.0, false);
-  //               } else {
-  //                 swerveSubsystem.drive(new Translation2d(0.0, 0.0), 0.0, false);
-  //                 droveToNote = true;
-  //               }
-              
-  //             }
-  //           //} else{ //If the note is in the intake, stop the intake command
-              
-  //           //     // IntakeSubsystem.indexerMotor.set(IntakeConstants.zeroSpeed);
-  //           //     // IntakeSubsystem.intakeMotor.set(IntakeConstants.zeroSpeed);
-  //           //     // IntakeSubsystem.launcherIndexerMotor.set(IntakeConstants.zeroSpeed);
-  //           //     //droveToNote = true;
-  //           // }   
-  //         } 
-  //   }
-  // }
 
   /**
    * <p>
@@ -177,10 +162,11 @@ public class PickUpNoteCmd extends Command
   @Override
   public void end(boolean interrupted)
   {
-    LEDsSubSystem.setLED(.71);
-    IntakeSubsystem.indexerMotor.set(IntakeConstants.zeroSpeed);
-    IntakeSubsystem.intakeMotor.set(IntakeConstants.zeroSpeed);
-    IntakeSubsystem.launcherIndexerMotor.set(IntakeConstants.zeroSpeed);
+    LEDsSubSystem.setLED(.91);
+    m_intakeSubsystem.indexerMotor.set(IntakeConstants.zeroSpeed);
+    m_intakeSubsystem.intakeMotor.set(IntakeConstants.zeroSpeed);
+    m_intakeSubsystem.launcherIndexerMotor.set(IntakeConstants.zeroSpeed);
+    swerveSubsystem.lock();
   }
 }
 

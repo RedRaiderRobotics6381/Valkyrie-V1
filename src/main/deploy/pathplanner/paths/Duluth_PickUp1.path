@@ -8,7 +8,7 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.3369801633478868,
+        "x": 2.3,
         "y": 5.57
       },
       "isLocked": false,
@@ -16,25 +16,19 @@
     },
     {
       "anchor": {
-        "x": 2.8,
+        "x": 2.8909454969907094,
         "y": 5.57
       },
       "prevControl": {
-        "x": 2.8,
-        "y": 5.553461968187016
+        "x": 1.8909454969907094,
+        "y": 5.57
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "ROTATE"
+      "linkedName": "Duluth2_End"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.75,
-      "rotationDegrees": 90.0,
-      "rotateFast": false
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -45,7 +39,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 90.0,
+    "rotation": 0,
     "rotateFast": false
   },
   "reversed": false,
