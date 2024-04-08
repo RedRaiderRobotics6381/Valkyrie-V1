@@ -18,6 +18,7 @@ public class IntakeCmd extends Command {
 
   
   private boolean hasNote = false;
+  
   private final IntakeSubsystem m_intakeSubsystem;
   private final LauncherRotateSubsystem m_launcherRotateSubsystem;
 
