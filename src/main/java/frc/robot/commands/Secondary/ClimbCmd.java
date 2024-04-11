@@ -17,7 +17,7 @@ public class ClimbCmd extends Command {
   
   public ClimbCmd(ClimberSubsystem climberSubsystem) {
     this.m_climberSubsystem = climberSubsystem;
-    //addRequirements(climberSubsystem);
+    addRequirements(climberSubsystem);
 
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -32,19 +32,19 @@ public class ClimbCmd extends Command {
   @Override
   public void execute() {
 
-    if(!m_climberSubsystem.m_limitSwitch_R.get()){
-      m_climberSubsystem.m_climberMotorR.set(.75);
-    } else if(m_climberSubsystem.m_limitSwitch_R.get()) {
-      m_climberSubsystem.m_climberMotorR.set(0);
+    if(!m_climberSubsystem.limitSwitch_R.get()){
+      m_climberSubsystem.climberMotorR.set(.75);
+    } else if(m_climberSubsystem.limitSwitch_R.get()) {
+      m_climberSubsystem.climberMotorR.set(0);
     }
     
-    if(!m_climberSubsystem.m_limitSwitch_L.get()){
-      m_climberSubsystem.m_climberMotorL.set(.75);
-    } else if(m_climberSubsystem.m_limitSwitch_L.get()){
-      m_climberSubsystem.m_climberMotorL.set(0);
+    if(!m_climberSubsystem.limitSwitch_L.get()){
+      m_climberSubsystem.climberMotorL.set(.75);
+    } else if(m_climberSubsystem.limitSwitch_L.get()){
+      m_climberSubsystem.climberMotorL.set(0);
     }
 
-    if (m_climberSubsystem.m_limitSwitch_R.get() &&  m_climberSubsystem.m_limitSwitch_L.get()){
+    if (m_climberSubsystem.limitSwitch_R.get() &&  m_climberSubsystem.limitSwitch_L.get()){
       climbed = true;
     }
   
@@ -53,8 +53,8 @@ public class ClimbCmd extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-     m_climberSubsystem.m_climberMotorL.set(0);
-     m_climberSubsystem.m_climberMotorR.set(0);
+    m_climberSubsystem.climberMotorL.set(0);
+    m_climberSubsystem.climberMotorR.set(0);
   }
 
   // Returns true when the command should end.

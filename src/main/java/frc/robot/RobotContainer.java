@@ -37,7 +37,7 @@ import frc.robot.commands.Vision.DriveToAmpCmd;
 import frc.robot.commands.Vision.DriveToSpeakerCmd;
 import frc.robot.commands.Vision.DriveToStageCmd;
 import frc.robot.commands.Vision.LauncherAimAutonCMD;
-import frc.robot.commands.Vision.LauncherAimCMD;
+//import frc.robot.commands.Vision.LauncherAimCMD;
 import frc.robot.commands.Vision.PickUpNoteCmd;
 import frc.robot.subsystems.Secondary.ClimberSubsystem;
 import frc.robot.subsystems.Secondary.IntakeSubsystem;
@@ -204,6 +204,12 @@ public class RobotContainer
   {
     drivebase.setMotorBrake(brake);
   }
+
+  public void initClimber()
+  {
+    new ClimberInitCmd(climberSubsystem);
+  }
+
   public void spencerButtons(){
     if (driverXbox.getRawButton(5) == true && driverXbox.getRawButton(6) == true){
       System.out.println("HighSpd");

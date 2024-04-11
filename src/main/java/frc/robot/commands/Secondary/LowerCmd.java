@@ -15,7 +15,7 @@ public class LowerCmd extends Command {
 
   public LowerCmd(ClimberSubsystem climberSubsystem) {
     this.m_climberSubsystem = climberSubsystem;
-    //addRequirements(climberSubsystem);
+    addRequirements(climberSubsystem);
 
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -29,19 +29,19 @@ public class LowerCmd extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (Math.abs(m_climberSubsystem.m_climberEncoderR.getPosition()) <= lowerDist){
-      m_climberSubsystem.m_climberMotorR.set(-.75);
-    } else if (Math.abs(m_climberSubsystem.m_climberEncoderR.getPosition()) >= lowerDist){
-      m_climberSubsystem.m_climberMotorR.set(0);
+    if (Math.abs(m_climberSubsystem.climberEncoderR.getPosition()) <= lowerDist){
+      m_climberSubsystem.climberMotorR.set(-.75);
+    } else if (Math.abs(m_climberSubsystem.climberEncoderR.getPosition()) >= lowerDist){
+      m_climberSubsystem.climberMotorR.set(0);
     }
 
-    if (Math.abs(m_climberSubsystem.m_climberEncoderL.getPosition()) <= lowerDist){
-      m_climberSubsystem.m_climberMotorL.set(-.75);
-    } else if (Math.abs(m_climberSubsystem.m_climberEncoderL.getPosition()) >= lowerDist){
-      m_climberSubsystem.m_climberMotorL.set(0);
+    if (Math.abs(m_climberSubsystem.climberEncoderL.getPosition()) <= lowerDist){
+      m_climberSubsystem.climberMotorL.set(-.75);
+    } else if (Math.abs(m_climberSubsystem.climberEncoderL.getPosition()) >= lowerDist){
+      m_climberSubsystem.climberMotorL.set(0);
     }
   
-    if (Math.abs(m_climberSubsystem.m_climberEncoderR.getPosition()) >= lowerDist && Math.abs(m_climberSubsystem.m_climberEncoderL.getPosition()) >= lowerDist){
+    if (Math.abs(m_climberSubsystem.climberEncoderR.getPosition()) >= lowerDist && Math.abs(m_climberSubsystem.climberEncoderL.getPosition()) >= lowerDist){
     lowered = true;
     }
 
@@ -50,8 +50,8 @@ public class LowerCmd extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_climberSubsystem.m_climberMotorL.set(0);
-    m_climberSubsystem.m_climberMotorR.set(0);
+    m_climberSubsystem.climberMotorL.set(0);
+    m_climberSubsystem.climberMotorR.set(0);
   }
 
   // Returns true when the command should end.

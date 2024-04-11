@@ -16,7 +16,7 @@ public class ClimberInitCmd extends Command {
   
   public ClimberInitCmd(ClimberSubsystem climberSubsystem) {
     this.m_climberSubsystem = climberSubsystem;
-    //addRequirements(climberSubsystem);
+    addRequirements(climberSubsystem);
 
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -30,19 +30,19 @@ public class ClimberInitCmd extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(!m_climberSubsystem.m_limitSwitch_R.get()){
-      m_climberSubsystem.m_climberMotorR.set(.25);
-    } else if(m_climberSubsystem.m_limitSwitch_R.get()) {
-      m_climberSubsystem.m_climberMotorR.set(0);
+    if(!m_climberSubsystem.limitSwitch_R.get()){
+      m_climberSubsystem.climberMotorR.set(.25);
+    } else if(m_climberSubsystem.limitSwitch_R.get()) {
+      m_climberSubsystem.climberMotorR.set(0);
     }
     
-    if(!m_climberSubsystem.m_limitSwitch_L.get()){
-      m_climberSubsystem.m_climberMotorL.set(.25);
-    } else if(m_climberSubsystem.m_limitSwitch_L.get()){
-      m_climberSubsystem.m_climberMotorL.set(0);
+    if(!m_climberSubsystem.limitSwitch_L.get()){
+      m_climberSubsystem.climberMotorL.set(.25);
+    } else if(m_climberSubsystem.limitSwitch_L.get()){
+      m_climberSubsystem.climberMotorL.set(0);
     }
 
-    if (m_climberSubsystem.m_limitSwitch_R.get() &&  m_climberSubsystem.m_limitSwitch_L.get()){
+    if (m_climberSubsystem.limitSwitch_R.get() &&  m_climberSubsystem.limitSwitch_L.get()){
       climberInitialized = true;
     }
   }
@@ -50,10 +50,10 @@ public class ClimberInitCmd extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_climberSubsystem.m_climberMotorR.set(0);
-    m_climberSubsystem.m_climberEncoderR.setPosition(0);
-    m_climberSubsystem.m_climberMotorL.set(0);
-    m_climberSubsystem.m_climberEncoderL.setPosition(0);
+    m_climberSubsystem.climberMotorR.set(0);
+    m_climberSubsystem.climberEncoderR.setPosition(0);
+    m_climberSubsystem.climberMotorL.set(0);
+    m_climberSubsystem.climberEncoderL.setPosition(0);
   }
 
   // Returns true when the command should end.

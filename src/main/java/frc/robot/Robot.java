@@ -20,14 +20,14 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.RunCommand;
+//import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.Constants.AprilTagConstants;
-import frc.robot.Constants.LauncherConstants;
-import frc.robot.commands.Secondary.ClimberInitCmd;
-import frc.robot.subsystems.Secondary.ClimberSubsystem;
+//import frc.robot.Constants.LauncherConstants;
+//import frc.robot.commands.Secondary.ClimberInitCmd;
+//import frc.robot.subsystems.Secondary.ClimberSubsystem;
 // import frc.robot.commands.Secondary.ClimberInitCmd;
 // import frc.robot.subsystems.Secondary.ClimberSubsystem;
 import frc.robot.subsystems.Secondary.LEDsSubSystem;
@@ -43,8 +43,8 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
-  private ClimberSubsystem m_climberSubsystem;
-  private ClimberInitCmd m_climberInitCmd;
+  //private ClimberSubsystem m_climberSubsystem;
+  //private ClimberInitCmd m_climberInitCmd;
   
   private Timer disabledTimer;
   
@@ -69,7 +69,7 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-    m_climberInitCmd = new ClimberInitCmd(m_climberSubsystem);
+    //m_climberInitCmd = new ClimberInitCmd(m_climberSubsystem);
     
     // Create a timer to disable motor brake a few seconds after disable.  This will let the robot stop
     // immediately when disabled, but then also let it be pushed more 
@@ -171,7 +171,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    m_climberInitCmd.schedule();
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
@@ -184,6 +183,7 @@ public class Robot extends TimedRobot {
     RobotContainer.driverXbox.setRumble(RumbleType.kBothRumble, 0);
     //m_robotContainer.setMotorBrake(true);
     // m_climberInitCmd.schedule();
+    m_robotContainer.initClimber();
   }
 
   /** This function is called periodically during operator control. */
