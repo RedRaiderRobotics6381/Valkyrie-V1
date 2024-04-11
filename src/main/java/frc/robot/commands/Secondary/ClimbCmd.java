@@ -12,6 +12,8 @@ public class ClimbCmd extends Command {
 
   private final ClimberSubsystem m_climberSubsystem;
   private boolean climbed = false;
+  private boolean climbedL = false;
+  private boolean climbedR = false;
   //private double climbDist = 12.25;
 
   
@@ -26,35 +28,59 @@ public class ClimbCmd extends Command {
   @Override
   public void initialize() {
     climbed = false;
+    climbedL = false;
+    climbedR = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
 
-    if(!m_climberSubsystem.limitSwitch_R.get()){
-      m_climberSubsystem.climberMotorR.set(.75);
-    } else if(m_climberSubsystem.limitSwitch_R.get()) {
-      m_climberSubsystem.climberMotorR.set(0);
-    }
-    
-    if(!m_climberSubsystem.limitSwitch_L.get()){
-      m_climberSubsystem.climberMotorL.set(.75);
-    } else if(m_climberSubsystem.limitSwitch_L.get()){
-      m_climberSubsystem.climberMotorL.set(0);
-    }
 
-    if (m_climberSubsystem.limitSwitch_R.get() &&  m_climberSubsystem.limitSwitch_L.get()){
-      climbed = true;
-    }
-  
+  // if climber position is GRT THAN 1 && limit switch isn't made        
+  // then set climber speed to .75
+
+      //else if climber position is GRT THAN 0 && limit switch isn't made
+      //then set climber speed to .25
+          
+         // else set climber speed to 0
+
+
+if (Math.abs(m_climberSubsystem.climberEncoderR.getPosition()) > 3 && !m_climberSubsystem.limitSwitch_R.get())
+   {m_climberSubsystem.climberMotorR.set(.75);} 
+
+   else if (Math.abs(m_climberSubsystem.climberEncoderR.getPosition()) > 0 && !m_climberSubsystem.limitSwitch_R.get())
+           {m_climberSubsystem.climberMotorR.set(.25);}
+   
+     else {m_climberSubsystem.climberMotorR.set(0);
+           climbedR  = true;}
+   
+
+if (Math.abs(m_climberSubsystem.climberEncoderL.getPosition()) > 3 && !m_climberSubsystem.limitSwitch_L.get())
+   {m_climberSubsystem.climberMotorL.set(.75);} 
+
+      else if (Math.abs(m_climberSubsystem.climberEncoderL.getPosition()) > 0 && !m_climberSubsystem.limitSwitch_L.get())
+              {m_climberSubsystem.climberMotorL.set(.25);}
+
+          else {m_climberSubsystem.climberMotorL.set(0);
+               climbedL = true;}
+
+        // if both climber arms are climbed
+        // then set climbed to true
+
+               if ((climbedR == true) && (climbedL == true))
+               {climbed = true;}
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_climberSubsystem.climberMotorL.set(0);
-    m_climberSubsystem.climberMotorR.set(0);
+     m_climberSubsystem.climberMotorL.set(0);
+     m_climberSubsystem.climberMotorR.set(0);
+     if(interrupted){
+      m_climberSubsystem.climberMotorL.set(0);
+      m_climberSubsystem.climberMotorR.set(0);
+    }
   }
 
   // Returns true when the command should end.
