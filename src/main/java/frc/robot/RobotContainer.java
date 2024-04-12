@@ -207,7 +207,7 @@ public class RobotContainer
 
   public void initClimber()
   {
-    new ClimberInitCmd(climberSubsystem);
+    new ClimberInitCmd(climberSubsystem).schedule();
   }
 
   public void spencerButtons(){
