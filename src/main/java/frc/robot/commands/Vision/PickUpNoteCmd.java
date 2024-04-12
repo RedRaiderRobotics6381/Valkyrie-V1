@@ -8,6 +8,8 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.IntakeConstants;
@@ -111,7 +113,12 @@ public class PickUpNoteCmd extends Command
 
                 m_intakeSubsystem.indexerMotor.set(IntakeConstants.indexerIntakeSpeed);
                 m_intakeSubsystem.launcherIndexerMotor.set(IntakeConstants.launcherIndexerIntakeSpeed);
-                swerveSubsystem.drive(new Translation2d(0.5, 0.0), 0.0, false);
+                //swerveSubsystem.drive(new Translation2d(0.5, 0.0), 0.0, false);
+                swerveSubsystem.driveToPose(
+                              new Pose2d(new Translation2d(
+                                swerveSubsystem.getPose().getX() + 0.25 * Math.cos(swerveSubsystem.getPose().getRotation().getRadians()),
+                                swerveSubsystem.getPose().getY() + 0.25 * Math.sin(swerveSubsystem.getPose().getRotation().getRadians())),
+                                Rotation2d.fromDegrees(swerveSubsystem.getPose().getRotation().getDegrees())));
               }             // swerveSubsystem.drive(new Translation2d(0.5, 0.0), 0.0, false);
               else if (intakeHasNote){
                 swerveSubsystem.drive(new Translation2d(0.0, 0.0), 0.0, false);

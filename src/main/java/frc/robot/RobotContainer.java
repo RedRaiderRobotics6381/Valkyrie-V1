@@ -178,8 +178,11 @@ public class RobotContainer
     new POVButton(engineerXbox, 270).whileTrue(new RVEIntakeCmd(intakeSubsystem, launcherRotateSubsystem));
     new JoystickButton(driverXbox, 7).whileTrue(
         Commands.deferredProxy(() -> drivebase.driveToPose(
-                                new Pose2d(new Translation2d(2, 0), Rotation2d.fromDegrees(0)))
-                          ));
+                              new Pose2d(new Translation2d(
+                                  drivebase.getPose().getX() + 0.5 * Math.cos(drivebase.getPose().getRotation().getRadians()),
+                                  drivebase.getPose().getY() + 0.5 * Math.sin(drivebase.getPose().getRotation().getRadians())),
+                                  Rotation2d.fromDegrees(drivebase.getPose().getRotation().getDegrees())))));
+                          
 //    new JoystickButton(driverXbox, 3).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
   }
 
