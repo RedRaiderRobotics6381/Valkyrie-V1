@@ -39,6 +39,7 @@ import frc.robot.commands.Vision.DriveToStageCmd;
 import frc.robot.commands.Vision.LauncherAimAutonCMD;
 //import frc.robot.commands.Vision.LauncherAimCMD;
 import frc.robot.commands.Vision.PickUpNoteCmd;
+import frc.robot.commands.swervedrive.AbsoluteDriveAdv;
 import frc.robot.subsystems.Secondary.ClimberSubsystem;
 import frc.robot.subsystems.Secondary.IntakeSubsystem;
 import frc.robot.subsystems.Secondary.LauncherRotateSubsystem;
@@ -63,6 +64,7 @@ public class RobotContainer
   // Replace with CommandPS4Controller or CommandJoystick if needed
   
   public static XboxController driverXbox = new XboxController(0);
+  //final CommandXboxController driverXbox = new CommandXboxController(0);
   public static XboxController engineerXbox = new XboxController(1);
   private final SendableChooser<Command> autoChooser;
   static double lastTime = -1;
@@ -99,12 +101,23 @@ public class RobotContainer
     
     SmartDashboard.putData("Auto Chooser", autoChooser);
 
+
+    AbsoluteDriveAdv closedAbsoluteDriveAdv = new AbsoluteDriveAdv(drivebase,
+                                                                () -> -MathUtil.applyDeadband(driverXbox.getLeftY(),
+                                                                                            OperatorConstants.LEFT_Y_DEADBAND),
+                                                                () -> -MathUtil.applyDeadband(driverXbox.getLeftX(),
+                                                                                            OperatorConstants.LEFT_X_DEADBAND),
+                                                                () -> -MathUtil.applyDeadband(driverXbox.getRightX(),
+                                                                                            OperatorConstants.RIGHT_X_DEADBAND),
+                                                                () -> driverXbox.getYButtonPressed(),
+                                                                () -> driverXbox.getAButtonPressed(),
+                                                                () -> driverXbox.getXButtonPressed(),
+                                                                () -> driverXbox.getBButtonPressed());
     // Applies deadbands and inverts controls because joysticks
     // are back-right positive while robot
     // controls are front-left positive
     // left stick controls translation
     // right stick controls the angular velocity of the robot
-
     Command driveFieldOrientedAnglularVelocity = drivebase.driveCommand(
         () -> MathUtil.applyDeadband(-driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND) *
                                                             Constants.Drivebase.Max_Speed_Multiplier,
@@ -121,7 +134,7 @@ public class RobotContainer
                                                                        Constants.Drivebase.Max_Speed_Multiplier);
 
     drivebase.setDefaultCommand(
-        !RobotBase.isSimulation() ? driveFieldOrientedAnglularVelocity : driveFieldOrientedDirectAngleSim);
+        !RobotBase.isSimulation() ? closedAbsoluteDriveAdv : driveFieldOrientedDirectAngleSim);
   }
 
   /**
@@ -157,10 +170,10 @@ public class RobotContainer
 
     //==========================================================================
     new JoystickButton(driverXbox, 8).onTrue((new InstantCommand(drivebase::zeroGyro)));  //Button "Start"
-    new JoystickButton(driverXbox, 1).whileTrue(new DriveToAmpCmd(drivebase)); 
-    new JoystickButton(driverXbox, 2).whileTrue(new PickUpNoteCmd(drivebase, intakeSubsystem, launcherRotateSubsystem));  //Button "B"
-    new JoystickButton(driverXbox, 3).whileTrue(new DriveToSpeakerCmd(drivebase)); //Button "X"
-    new JoystickButton(driverXbox, 4).whileTrue(new DriveToStageCmd(drivebase)); //Button "Y"
+    // new JoystickButton(driverXbox, 1).whileTrue(new DriveToAmpCmd(drivebase)); 
+    // new JoystickButton(driverXbox, 2).whileTrue(new PickUpNoteCmd(drivebase, intakeSubsystem, launcherRotateSubsystem));  //Button "B"
+    // new JoystickButton(driverXbox, 3).whileTrue(new DriveToSpeakerCmd(drivebase)); //Button "X"
+    // new JoystickButton(driverXbox, 4).whileTrue(new DriveToStageCmd(drivebase)); //Button "Y"
     //Button 5 is used below in the spencerButtons method
     //Button 6 is used below in the spencerButtons method
 
