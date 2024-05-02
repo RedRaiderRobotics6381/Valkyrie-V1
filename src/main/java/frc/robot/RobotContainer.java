@@ -33,13 +33,12 @@ import frc.robot.commands.Secondary.ScoreAmpCmd;
 import frc.robot.commands.Secondary.ScoreAutoCmd;
 import frc.robot.commands.Secondary.ScoreSpeakerCmd;
 //import frc.robot.commands.Secondary.ScoreTrapCmd;
-//import frc.robot.commands.Vision.DriveToAmpCmd;
+import frc.robot.commands.Vision.DriveToAmpCmd;
 import frc.robot.commands.Vision.DriveToSpeakerCmd;
 import frc.robot.commands.Vision.DriveToStageCmd;
 import frc.robot.commands.Vision.LauncherAimAutonCMD;
-//import frc.robot.commands.Vision.LauncherAimCMD;
+import frc.robot.commands.Vision.LauncherAimCMD;
 import frc.robot.commands.Vision.PickUpNoteCmd;
-import frc.robot.commands.swervedrive.AbsoluteDriveAdv;
 import frc.robot.subsystems.Secondary.ClimberSubsystem;
 import frc.robot.subsystems.Secondary.IntakeSubsystem;
 import frc.robot.subsystems.Secondary.LauncherRotateSubsystem;
@@ -64,7 +63,6 @@ public class RobotContainer
   // Replace with CommandPS4Controller or CommandJoystick if needed
   
   public static XboxController driverXbox = new XboxController(0);
-  //final CommandXboxController driverXbox = new CommandXboxController(0);
   public static XboxController engineerXbox = new XboxController(1);
   private final SendableChooser<Command> autoChooser;
   static double lastTime = -1;
@@ -101,23 +99,12 @@ public class RobotContainer
     
     SmartDashboard.putData("Auto Chooser", autoChooser);
 
-
-    AbsoluteDriveAdv closedAbsoluteDriveAdv = new AbsoluteDriveAdv(drivebase,
-                                                                () -> -MathUtil.applyDeadband(driverXbox.getLeftY(),
-                                                                                            OperatorConstants.LEFT_Y_DEADBAND),
-                                                                () -> -MathUtil.applyDeadband(driverXbox.getLeftX(),
-                                                                                            OperatorConstants.LEFT_X_DEADBAND),
-                                                                () -> -MathUtil.applyDeadband(driverXbox.getRightX(),
-                                                                                            OperatorConstants.RIGHT_X_DEADBAND),
-                                                                () -> driverXbox.getYButtonPressed(),
-                                                                () -> driverXbox.getAButtonPressed(),
-                                                                () -> driverXbox.getXButtonPressed(),
-                                                                () -> driverXbox.getBButtonPressed());
     // Applies deadbands and inverts controls because joysticks
     // are back-right positive while robot
     // controls are front-left positive
     // left stick controls translation
     // right stick controls the angular velocity of the robot
+
     Command driveFieldOrientedAnglularVelocity = drivebase.driveCommand(
         () -> MathUtil.applyDeadband(-driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND) *
                                                             Constants.Drivebase.Max_Speed_Multiplier,
@@ -134,7 +121,7 @@ public class RobotContainer
                                                                        Constants.Drivebase.Max_Speed_Multiplier);
 
     drivebase.setDefaultCommand(
-        !RobotBase.isSimulation() ? closedAbsoluteDriveAdv : driveFieldOrientedDirectAngleSim);
+        !RobotBase.isSimulation() ? driveFieldOrientedAnglularVelocity : driveFieldOrientedDirectAngleSim);
   }
 
   /**
@@ -163,17 +150,17 @@ public class RobotContainer
     //Axis 2 is left trigger 
     //Axis 3 is right trigger
     //Axis 4 is right joystick x side to side
-    //Axis 5 is right joystick y forward and back
+    //Axis 5 is right joystick y forward and back[\]
 
     // Buttons used in other parts of code! ====================================
     // Driver control button 2 is used in the pick up note command PickUpNoteCmd
 
     //==========================================================================
     new JoystickButton(driverXbox, 8).onTrue((new InstantCommand(drivebase::zeroGyro)));  //Button "Start"
-    // new JoystickButton(driverXbox, 1).whileTrue(new DriveToAmpCmd(drivebase)); 
-    // new JoystickButton(driverXbox, 2).whileTrue(new PickUpNoteCmd(drivebase, intakeSubsystem, launcherRotateSubsystem));  //Button "B"
-    // new JoystickButton(driverXbox, 3).whileTrue(new DriveToSpeakerCmd(drivebase)); //Button "X"
-    // new JoystickButton(driverXbox, 4).whileTrue(new DriveToStageCmd(drivebase)); //Button "Y"
+    new JoystickButton(driverXbox, 1).whileTrue(new DriveToAmpCmd(drivebase)); 
+    new JoystickButton(driverXbox, 2).whileTrue(new PickUpNoteCmd(drivebase, intakeSubsystem, launcherRotateSubsystem));  //Button "B"
+    new JoystickButton(driverXbox, 3).whileTrue(new DriveToSpeakerCmd(drivebase)); //Button "X"
+    new JoystickButton(driverXbox, 4).whileTrue(new DriveToStageCmd(drivebase)); //Button "Y"
     //Button 5 is used below in the spencerButtons method
     //Button 6 is used below in the spencerButtons method
 
@@ -187,15 +174,12 @@ public class RobotContainer
     
     new POVButton(engineerXbox, 0).onTrue(new ClimbCmd(climberSubsystem));
     new POVButton(engineerXbox, 180).onTrue(new LowerCmd(climberSubsystem));
-    new POVButton(engineerXbox, 90).whileTrue(new ClimberInitCmd(climberSubsystem));
+    // new POVButton(engineerXbox, 90).whileTrue(new ClimberInitCmd(climberSubsystem));
     new POVButton(engineerXbox, 270).whileTrue(new RVEIntakeCmd(intakeSubsystem, launcherRotateSubsystem));
     new JoystickButton(driverXbox, 7).whileTrue(
         Commands.deferredProxy(() -> drivebase.driveToPose(
-                              new Pose2d(new Translation2d(
-                                  drivebase.getPose().getX() + 0.5 * Math.cos(drivebase.getPose().getRotation().getRadians()),
-                                  drivebase.getPose().getY() + 0.5 * Math.sin(drivebase.getPose().getRotation().getRadians())),
-                                  Rotation2d.fromDegrees(drivebase.getPose().getRotation().getDegrees())))));
-                          
+                                new Pose2d(new Translation2d(10, 7), Rotation2d.fromDegrees(0)))
+                          ));
 //    new JoystickButton(driverXbox, 3).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
   }
 
@@ -215,17 +199,13 @@ public class RobotContainer
   {
     //drivebase.setDefaultCommand();
   }
-
+  public void initClimber(){
+    new ClimberInitCmd(climberSubsystem).schedule();
+  }
   public void setMotorBrake(boolean brake)
   {
     drivebase.setMotorBrake(brake);
   }
-
-  public void initClimber()
-  {
-    new ClimberInitCmd(climberSubsystem).schedule();
-  }
-
   public void spencerButtons(){
     if (driverXbox.getRawButton(5) == true && driverXbox.getRawButton(6) == true){
       System.out.println("HighSpd");
