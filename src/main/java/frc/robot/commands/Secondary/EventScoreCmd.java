@@ -1,0 +1,70 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
+package frc.robot.commands.Secondary;
+
+import com.revrobotics.CANSparkFlex;
+
+import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Robot;
+import frc.robot.Constants.IntakeConstants;
+import frc.robot.Constants.LauncherConstants;
+import frc.robot.subsystems.Secondary.IntakeSubsystem;
+import frc.robot.subsystems.Secondary.LauncherSubsystem;
+
+public class EventScoreCmd extends Command {
+  /** Creates a new Outtake. */
+  
+    
+    private final LauncherSubsystem m_launcherSubsystem;
+    private final IntakeSubsystem m_intakeSubsystem;
+    private boolean hasNote = true;
+  
+  
+    public EventScoreCmd(LauncherSubsystem launcherSubsystem, IntakeSubsystem intakeSubsystem) {
+      this.m_launcherSubsystem = launcherSubsystem;
+      this.m_intakeSubsystem = intakeSubsystem;
+      
+      // Use addRequirements() here to declare subsystem dependencies.
+      addRequirements(launcherSubsystem, intakeSubsystem);
+    }
+  
+    // Called when the command is initially scheduled.
+    @Override
+    public void initialize() {
+      hasNote = true;
+    }
+
+
+    // // Called every time the scheduler runs while the command is scheduled.
+    @Override
+    public void execute() {
+      if(Robot.sensorOuttake.get() == true || Robot.sensorIntake.get() == true){
+        m_launcherSubsystem.launcherPIDControllerTop.setReference(LauncherConstants.AmpScoreSpeed, CANSparkFlex.ControlType.kVelocity);
+              if((Math.abs(m_launcherSubsystem.launcherMotorTop.getEncoder().getVelocity() -
+                  2000)) <= LauncherConstants.LauncherSpeedTol + 25){
+                    m_intakeSubsystem.launcherIndexerMotor.set(IntakeConstants.launcherIndexerOuttakeSpeed);
+                    m_intakeSubsystem.indexerMotor.set(IntakeConstants.indexerOuttakeSpeed);
+                }
+          
+        } else {
+          hasNote = false;
+        }
+    }
+  
+    // Called once the command ends or is interrupted.
+    @Override
+    public void end(boolean interrupted) {
+      m_intakeSubsystem.indexerMotor.set(0);
+      m_intakeSubsystem.launcherIndexerMotor.set(0);
+      m_launcherSubsystem.launcherMotorTop.set(0);
+    }
+  
+    // Returns true when the command should end.
+    @Override
+    public boolean isFinished() {
+      return !hasNote;
+    }
+  }
+

@@ -7,20 +7,16 @@ package frc.robot;
 import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
-
 import org.photonvision.PhotonCamera;
-
-import com.revrobotics.ColorSensorV3;
-
 // import com.revrobotics.ColorSensorV3;
-
+// import com.revrobotics.ColorSensorV3;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Filesystem;
 // import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
-import edu.wpi.first.wpilibj.I2C;
+// import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 //import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;

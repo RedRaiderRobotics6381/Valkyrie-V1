@@ -25,10 +25,11 @@ import frc.robot.Constants.AprilTagConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Secondary.ClimbCmd;
 import frc.robot.commands.Secondary.ClimberInitCmd;
+import frc.robot.commands.Secondary.EventScoreCmd;
 import frc.robot.commands.Secondary.IntakeCmd;
 import frc.robot.commands.Secondary.LowerCmd;
 import frc.robot.commands.Secondary.RVEIntakeCmd;
-import frc.robot.commands.Secondary.SafeScoreCmd;
+// import frc.robot.commands.Secondary.SafeScoreCmd;
 import frc.robot.commands.Secondary.ScoreAmpCmd;
 import frc.robot.commands.Secondary.ScoreAutoCmd;
 import frc.robot.commands.Secondary.ScoreSpeakerCmd;
@@ -37,7 +38,7 @@ import frc.robot.commands.Vision.DriveToAmpCmd;
 import frc.robot.commands.Vision.DriveToSpeakerCmd;
 import frc.robot.commands.Vision.DriveToStageCmd;
 import frc.robot.commands.Vision.LauncherAimAutonCMD;
-import frc.robot.commands.Vision.LauncherAimCMD;
+// import frc.robot.commands.Vision.LauncherAimCMD;
 import frc.robot.commands.Vision.PickUpNoteCmd;
 import frc.robot.subsystems.Secondary.ClimberSubsystem;
 import frc.robot.subsystems.Secondary.IntakeSubsystem;
@@ -168,7 +169,7 @@ public class RobotContainer
     //new JoystickButton(engineerXbox, 1).whileTrue(new LauncherAimCMD(launcherRotateSubsystem)); //Button "A"
     new JoystickButton(engineerXbox, 2).onTrue(new ScoreAmpCmd(launcherSubsystem, launcherRotateSubsystem, intakeSubsystem));
     new JoystickButton(engineerXbox, 3).onTrue(new ScoreSpeakerCmd(launcherSubsystem, launcherRotateSubsystem, intakeSubsystem));
-    new JoystickButton(engineerXbox, 4).onTrue(new SafeScoreCmd(launcherSubsystem, launcherRotateSubsystem, intakeSubsystem));
+    new JoystickButton(engineerXbox, 4).onTrue(new EventScoreCmd(launcherSubsystem, intakeSubsystem));
     new JoystickButton(engineerXbox, 5).onTrue(new IntakeCmd(intakeSubsystem, launcherRotateSubsystem));
     new JoystickButton(engineerXbox, 6).onTrue(new ScoreAutoCmd(launcherSubsystem, launcherRotateSubsystem, intakeSubsystem));
     
