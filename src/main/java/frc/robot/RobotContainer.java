@@ -40,6 +40,7 @@ import frc.robot.commands.Vision.DriveToStageCmd;
 import frc.robot.commands.Vision.LauncherAimAutonCMD;
 // import frc.robot.commands.Vision.LauncherAimCMD;
 import frc.robot.commands.Vision.PickUpNoteCmd;
+import frc.robot.commands.swervedrive.DriveDistance;
 import frc.robot.subsystems.Secondary.ClimberSubsystem;
 import frc.robot.subsystems.Secondary.IntakeSubsystem;
 import frc.robot.subsystems.Secondary.LauncherRotateSubsystem;
@@ -177,10 +178,11 @@ public class RobotContainer
     new POVButton(engineerXbox, 180).onTrue(new LowerCmd(climberSubsystem));
     // new POVButton(engineerXbox, 90).whileTrue(new ClimberInitCmd(climberSubsystem));
     new POVButton(engineerXbox, 270).whileTrue(new RVEIntakeCmd(intakeSubsystem, launcherRotateSubsystem));
-    new JoystickButton(driverXbox, 7).whileTrue(
-        Commands.deferredProxy(() -> drivebase.driveToPose(
-                                new Pose2d(new Translation2d(10, 7), Rotation2d.fromDegrees(0)))
-                          ));
+    // new JoystickButton(driverXbox, 7).whileTrue(
+    //     Commands.deferredProxy(() -> drivebase.driveToPose(
+    //                             new Pose2d(new Translation2d(10, 7), Rotation2d.fromDegrees(0)))
+    //                       ));
+    new JoystickButton(driverXbox, 7).onTrue(new DriveDistance(drivebase));
 //    new JoystickButton(driverXbox, 3).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
   }
 

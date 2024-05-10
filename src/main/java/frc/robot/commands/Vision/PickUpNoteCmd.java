@@ -121,7 +121,7 @@ public class PickUpNoteCmd extends Command
                                 swerveSubsystem.getPose().getY() + 0.25 * Math.sin(swerveSubsystem.getPose().getRotation().getRadians())),
                                 Rotation2d.fromDegrees(swerveSubsystem.getPose().getRotation().getDegrees())));
               }             // swerveSubsystem.drive(new Translation2d(0.5, 0.0), 0.0, false);
-              else if (intakeHasNote){
+              if (IntakeSubsystem.colorSensor.getProximity() > 50){
                 swerveSubsystem.drive(new Translation2d(0.0, 0.0), 0.0, false);
                 //swerveSubsystem.lock();
                 droveToNote = true;                

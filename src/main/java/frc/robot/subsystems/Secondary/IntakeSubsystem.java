@@ -28,7 +28,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public CANSparkMax indexerMotor;
     public CANSparkFlex launcherIndexerMotor;
     public static SparkPIDController intakePIDController;
-    public ColorSensorV3 colorSensor;
+    public static ColorSensorV3 colorSensor;
     public Color detectedColor;
 
     public IntakeSubsystem() {
@@ -67,8 +67,6 @@ public class IntakeSubsystem extends SubsystemBase {
         //colorSensor.getProximity();
         //colorSensor.isConnected();
         SmartDashboard.putNumber("Note Sensor", colorSensor.getProximity());
-        SmartDashboard.putBoolean("ColorSensor", colorSensor.isConnected());
-        SmartDashboard.putNumber("'Orange' Sensor", colorSensor.getGreen());
         // SmartDashboard.putNumber("IntakeSpeed",intakeMotor.getEncoder().getVelocity());
     }
 }

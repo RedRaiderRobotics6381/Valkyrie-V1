@@ -28,9 +28,11 @@ public class DriveDistance extends Command
   {
     startPose = swerveSubsystem.getPose();
     // Calculate the new pose
-    double newX = startPose.getTranslation().getX() + 1 * Math.cos(startPose.getRotation().getRadians());
-    double newY = startPose.getTranslation().getY() + 1 * Math.sin(startPose.getRotation().getRadians());
+    double newX = startPose.getTranslation().getX() + 0.25 * Math.cos(startPose.getRotation().getRadians());
+    double newY = startPose.getTranslation().getY() + 0.25 * Math.sin(startPose.getRotation().getRadians());
     endPose = new Pose2d(newX, newY, startPose.getRotation());
+    System.out.println(newX);
+    System.out.println(newY);
   }
 
   /**
@@ -42,9 +44,12 @@ public class DriveDistance extends Command
   {
     currentPose = swerveSubsystem.getPose();
     // Create a command to drive to the new pose
-    swerveSubsystem.drive(new Translation2d(endPose.getX() - currentPose.getX(), endPose.getY() - currentPose.getY()),
+    // swerveSubsystem.drive(new Translation2d(endPose.getX() - currentPose.getX(), endPose.getY() - currentPose.getY()),
+    //                                       0,
+    //                                       true);
+    swerveSubsystem.drive(new Translation2d((endPose.getX() - startPose.getX())*1.5, (endPose.getY() - startPose.getY())*1.5),
                                           0,
-                                          false);
+                                          true);
   }
 
   @Override
