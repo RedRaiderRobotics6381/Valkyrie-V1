@@ -15,7 +15,7 @@ import frc.robot.subsystems.Secondary.IntakeSubsystem;
 import frc.robot.subsystems.Secondary.LauncherRotateSubsystem;
 import frc.robot.subsystems.Secondary.LauncherSubsystem;
 
-public class ScoreAmpCmd extends Command {
+public class ParadeShotCmd extends Command {
   /** Creates a new Outtake. */
   
     
@@ -25,7 +25,7 @@ public class ScoreAmpCmd extends Command {
     private boolean hasNote = true;
   
   
-    public ScoreAmpCmd(LauncherSubsystem launcherSubsystem, LauncherRotateSubsystem launcherRotateSubsystem, IntakeSubsystem intakeSubsystem) {
+    public ParadeShotCmd(LauncherSubsystem launcherSubsystem, LauncherRotateSubsystem launcherRotateSubsystem, IntakeSubsystem intakeSubsystem) {
       this.m_launcherSubsystem = launcherSubsystem;
       this.m_launcherRotateSubsystem = launcherRotateSubsystem;
       this.m_intakeSubsystem = intakeSubsystem;
@@ -45,12 +45,12 @@ public class ScoreAmpCmd extends Command {
     @Override
     public void execute() {
       if(Robot.sensorOuttake.get() == true || Robot.sensorIntake.get() == true){
-        m_launcherRotateSubsystem.launcherRotatePIDController.setReference(LauncherConstants.AmpScoreAngle,CANSparkMax.ControlType.kSmartMotion);
-        m_launcherSubsystem.launcherPIDControllerTop.setReference(LauncherConstants.AmpScoreSpeed, CANSparkFlex.ControlType.kVelocity);
+        m_launcherRotateSubsystem.launcherRotatePIDController.setReference(LauncherConstants.ParadeScoreAngle,CANSparkMax.ControlType.kSmartMotion);
+        m_launcherSubsystem.launcherPIDControllerTop.setReference(LauncherConstants.ParadeScoreSpeed, CANSparkFlex.ControlType.kVelocity);
         if ((Math.abs(m_launcherRotateSubsystem.launcherRotateEncoder.getPosition() -
-             LauncherConstants.AmpScoreAngle) <= LauncherConstants.LauncherAngleTol)){
+             LauncherConstants.ParadeScoreAngle) <= LauncherConstants.LauncherAngleTol)){
               if((Math.abs(m_launcherSubsystem.launcherMotorTop.getEncoder().getVelocity() -
-                  LauncherConstants.AmpScoreSpeed)) <= LauncherConstants.LauncherSpeedTol + 25){
+                  LauncherConstants.ParadeScoreSpeed)) <= LauncherConstants.LauncherSpeedTol + 25){
                     m_intakeSubsystem.launcherIndexerMotor.set(IntakeConstants.launcherIndexerOuttakeSpeed);
                     m_intakeSubsystem.indexerMotor.set(IntakeConstants.indexerOuttakeSpeed);
                 }

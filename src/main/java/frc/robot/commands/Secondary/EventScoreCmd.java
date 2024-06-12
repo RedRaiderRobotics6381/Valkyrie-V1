@@ -43,7 +43,7 @@ public class EventScoreCmd extends Command {
       if(Robot.sensorOuttake.get() == true || Robot.sensorIntake.get() == true){
         m_launcherSubsystem.launcherPIDControllerTop.setReference(LauncherConstants.AmpScoreSpeed, CANSparkFlex.ControlType.kVelocity);
               if((Math.abs(m_launcherSubsystem.launcherMotorTop.getEncoder().getVelocity() -
-                  2000)) <= LauncherConstants.LauncherSpeedTol + 25){
+                  1000)) <= LauncherConstants.LauncherSpeedTol + 25){
                     m_intakeSubsystem.launcherIndexerMotor.set(IntakeConstants.launcherIndexerOuttakeSpeed);
                     m_intakeSubsystem.indexerMotor.set(IntakeConstants.indexerOuttakeSpeed);
                 }
