@@ -121,7 +121,7 @@ public final class Constants {
     //public static final double launcherIndexerSpeed = 0.12;
     public static final double indexerOuttakeSpeed = 1.0;
     public static final double launcherIndexerOuttakeSpeed = 1.0;
-    public static final double indexerIntakeSpeed = 0.1;
+    public static final double indexerIntakeSpeed = 0.4;
     public static final double launcherIndexerIntakeSpeed = 0.1;
   }
 
