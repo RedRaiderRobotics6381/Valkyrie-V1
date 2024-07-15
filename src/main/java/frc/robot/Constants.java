@@ -75,7 +75,7 @@ public final class Constants {
     public static double AmpScoreSpeed = 1000; //from 800
     public static double SafeScoreAngle = 127.0;
     public static double SafeScoreSpeed = 4000;
-    public static double ParadeScoreAngle = 100.0;
+    public static double ParadeScoreAngle = 125.0;
     public static double ParadeScoreSpeed = 2000.0;
     public static final double LauncherSpeedTol = 75; //50
     public static final double LauncherAngleTol = 0.75; //.50

@@ -50,7 +50,7 @@ public class ParadeShotCmd extends Command {
         if ((Math.abs(m_launcherRotateSubsystem.launcherRotateEncoder.getPosition() -
              LauncherConstants.ParadeScoreAngle) <= LauncherConstants.LauncherAngleTol)){
               if((Math.abs(m_launcherSubsystem.launcherMotorTop.getEncoder().getVelocity() -
-                  LauncherConstants.ParadeScoreSpeed)) <= LauncherConstants.LauncherSpeedTol + 25){
+                  LauncherConstants.ParadeScoreSpeed)) <= LauncherConstants.LauncherSpeedTol + 50){
                     m_intakeSubsystem.launcherIndexerMotor.set(IntakeConstants.launcherIndexerOuttakeSpeed);
                     m_intakeSubsystem.indexerMotor.set(IntakeConstants.indexerOuttakeSpeed);
                 }
