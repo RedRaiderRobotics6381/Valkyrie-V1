@@ -1,0 +1,62 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.4234789096358818,
+      "y": 2.8416795295129056
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "MROC_MIDLINE_SHOOT1_FROM_WALL"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PVAim"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "MROC_MIDLINE_PICKUP_FROM_WALL"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "MROC_MIDLINE_SHOOT2_FROM_WALL"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PVAim"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

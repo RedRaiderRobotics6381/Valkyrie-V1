@@ -1,0 +1,52 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.0021897593652738,
+        "y": 3.718741112695901
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.949416269202909,
+        "y": 1.9880062552147901
+      },
+      "isLocked": false,
+      "linkedName": "MROC_MIDLINE_SHOOT_FROM_WALL1"
+    },
+    {
+      "anchor": {
+        "x": 8.036373451664282,
+        "y": 0.8887557376254367
+      },
+      "prevControl": {
+        "x": 3.499041527997587,
+        "y": 0.9823089731649567
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "MROC_MIDLINE_PICKUP_FROM_WALL"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 2.5,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": null,
+  "previewStartingState": {
+    "rotation": -30.465544919459898,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}
