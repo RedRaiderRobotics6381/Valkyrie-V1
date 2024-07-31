@@ -15,7 +15,7 @@ import frc.robot.subsystems.Secondary.IntakeSubsystem;
 import frc.robot.subsystems.Secondary.LauncherRotateSubsystem;
 import frc.robot.subsystems.Secondary.LauncherSubsystem;
 
-public class ScoreSpeakerCmd extends Command {
+public class LaunchFerryCmd extends Command {
   /** Creates a new Outtake. */
   
     
@@ -26,7 +26,7 @@ public class ScoreSpeakerCmd extends Command {
     private boolean hasNote = true;
   
   
-    public ScoreSpeakerCmd(LauncherSubsystem launcherSubsystem, LauncherRotateSubsystem launcherRotateSubsystem, IntakeSubsystem intakeSubsystem) {
+    public LaunchFerryCmd(LauncherSubsystem launcherSubsystem, LauncherRotateSubsystem launcherRotateSubsystem, IntakeSubsystem intakeSubsystem) {
       this.m_launcherSubsystem = launcherSubsystem;
       this.m_launcherRotateSubsystem = launcherRotateSubsystem;
       this.m_intakeSubsystem = intakeSubsystem;
@@ -45,12 +45,12 @@ public class ScoreSpeakerCmd extends Command {
         @Override
         public void execute() {
           if(Robot.sensorOuttake.get() == true || Robot.sensorIntake.get() == true){
-            m_launcherRotateSubsystem.launcherRotatePIDController.setReference(LauncherConstants.SpeakerScoreAngle,CANSparkMax.ControlType.kSmartMotion);
-            m_launcherSubsystem.launcherPIDControllerTop.setReference(LauncherConstants.SpeakerScoreSpeed, CANSparkFlex.ControlType.kVelocity);
+            m_launcherRotateSubsystem.launcherRotatePIDController.setReference(LauncherConstants.FerryMidlineAngle,CANSparkMax.ControlType.kSmartMotion);
+            m_launcherSubsystem.launcherPIDControllerTop.setReference(LauncherConstants.FerryMidlineSpeed, CANSparkFlex.ControlType.kVelocity);
             if ((Math.abs(m_launcherRotateSubsystem.launcherRotateEncoder.getPosition() -
-                 LauncherConstants.SpeakerScoreAngle) <= LauncherConstants.LauncherAngleTol+2)){
+                 LauncherConstants.FerryMidlineAngle) <= LauncherConstants.LauncherAngleTol+2)){
                   if((Math.abs(m_launcherSubsystem.launcherMotorTop.getEncoder().getVelocity() -
-                      LauncherConstants.SpeakerScoreSpeed)) <= LauncherConstants.LauncherSpeedTol+25){
+                      LauncherConstants.FerryMidlineSpeed)) <= LauncherConstants.LauncherSpeedTol+25){
                         m_intakeSubsystem.launcherIndexerMotor.set(IntakeConstants.launcherIndexerOuttakeSpeed);
                         m_intakeSubsystem.indexerMotor.set(IntakeConstants.indexerOuttakeSpeed);
                     }
@@ -65,8 +65,7 @@ public class ScoreSpeakerCmd extends Command {
     public void end(boolean interrupted) {
       m_intakeSubsystem.indexerMotor.set(0);
       m_intakeSubsystem.launcherIndexerMotor.set(0);
-      //m_launcherSubsystem.launcherMotorTop.set(2000);
-      m_launcherSubsystem.launcherPIDControllerTop.setReference(2000, CANSparkFlex.ControlType.kVelocity);
+      m_launcherSubsystem.launcherMotorTop.set(0);
       m_launcherRotateSubsystem.launcherRotateMotor.disable();
     }
   

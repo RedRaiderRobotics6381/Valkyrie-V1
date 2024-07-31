@@ -28,10 +28,12 @@ import frc.robot.commands.Secondary.ClimbCmd;
 import frc.robot.commands.Secondary.ClimberInitCmd;
 //import frc.robot.commands.Secondary.EventScoreCmd;
 import frc.robot.commands.Secondary.IntakeCmd;
+import frc.robot.commands.Secondary.LaunchFerryCmd;
 import frc.robot.commands.Secondary.LowerCmd;
 // import frc.robot.commands.Secondary.LowerCmd;
 //import frc.robot.commands.Secondary.ParadeShotCmd;
 import frc.robot.commands.Secondary.RVEIntakeCmd;
+//import frc.robot.commands.Secondary.SafeScoreCmd;
 //import frc.robot.commands.Secondary.SafeScoreCmd;
 import frc.robot.commands.Secondary.ScoreAmpCmd;
 import frc.robot.commands.Secondary.ScoreAutoCmd;
@@ -173,10 +175,9 @@ public class RobotContainer
     //new JoystickButton(engineerXbox, 1).whileTrue(new LauncherAimCMD(launcherRotateSubsystem)); //Button "A"
     new JoystickButton(engineerXbox, 2).onTrue(new ScoreAmpCmd(launcherSubsystem, launcherRotateSubsystem, intakeSubsystem));
     new JoystickButton(engineerXbox, 3).onTrue(new ScoreSpeakerCmd(launcherSubsystem, launcherRotateSubsystem, intakeSubsystem));
-    //new JoystickButton(engineerXbox, 4).onTrue(new EventScoreCmd(launcherSubsystem, intakeSubsystem));
+    new JoystickButton(engineerXbox, 4).onTrue(new LaunchFerryCmd(launcherSubsystem, launcherRotateSubsystem, intakeSubsystem));
     new JoystickButton(engineerXbox, 5).onTrue(new IntakeCmd(intakeSubsystem, launcherRotateSubsystem));
     //new JoystickButton(engineerXbox, 6).onTrue(new ParadeShotCmd(launcherSubsystem, launcherRotateSubsystem, intakeSubsystem));
-    
     new POVButton(engineerXbox, 0).onTrue(new ClimbCmd(climberSubsystem));
     new POVButton(engineerXbox, 180).onTrue(new LowerCmd(climberSubsystem));
     // new POVButton(engineerXbox, 90).whileTrue(new ClimberInitCmd(climberSubsystem));

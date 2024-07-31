@@ -69,7 +69,7 @@ public final class Constants {
     //public static final double posTrap = 150.5; //need to change
     public static double TrapScoreAngle = 145.0; //from 147.5
     public static double TrapScoreSpeed = 2000; //from 712.5
-    public static double SpeakerScoreAngle = 151.0; //152.0
+    public static double SpeakerScoreAngle = 152.0; //152.0
     public static double SpeakerScoreSpeed = 3500; //from 2200
     public static double AmpScoreAngle = 152; //153.5
     public static double AmpScoreSpeed = 1000; //from 800
@@ -79,6 +79,8 @@ public final class Constants {
     public static double ParadeScoreSpeed = 2000.0;
     public static final double LauncherSpeedTol = 75; //50
     public static final double LauncherAngleTol = 0.75; //.50
+    public static double FerryMidlineSpeed = 3250.0;
+    public static double FerryMidlineAngle = 140.0;
 
     public static double kAutoScoreSpeed = 1750; //from 800
     public static double kAutoScoreSpeedMin = 1750; //from 800
