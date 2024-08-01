@@ -66,7 +66,7 @@ public class ScoreSpeakerCmd extends Command {
       m_intakeSubsystem.indexerMotor.set(0);
       m_intakeSubsystem.launcherIndexerMotor.set(0);
       //m_launcherSubsystem.launcherMotorTop.set(2000);
-      m_launcherSubsystem.launcherPIDControllerTop.setReference(2000, CANSparkFlex.ControlType.kVelocity);
+      m_launcherSubsystem.launcherPIDControllerTop.setReference(0, CANSparkFlex.ControlType.kVelocity);
       m_launcherRotateSubsystem.launcherRotateMotor.disable();
     }
   

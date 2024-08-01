@@ -97,7 +97,7 @@ public class RobotContainer
     NamedCommands.registerCommand("Aim", new ScoreSpeakerCmd(launcherSubsystem, launcherRotateSubsystem, intakeSubsystem));
     // NamedCommands.registerCommand("PVAim", new LauncherAimCMD(launcherRotateSubsystem));
     NamedCommands.registerCommand("PVAim", new LauncherAimAutonCMD(launcherRotateSubsystem, launcherSubsystem, intakeSubsystem));
-    NamedCommands.registerCommand("Intake", new IntakeCmd(intakeSubsystem, launcherRotateSubsystem));
+    NamedCommands.registerCommand("Intake", new IntakeCmd(intakeSubsystem, launcherRotateSubsystem, launcherSubsystem));
     NamedCommands.registerCommand("DriveToNote", new PickUpNoteCmd(drivebase, intakeSubsystem, launcherRotateSubsystem));
     NamedCommands.registerCommand("DriveToSpeaker", new DriveToSpeakerCmd(drivebase));
 
@@ -176,7 +176,7 @@ public class RobotContainer
     new JoystickButton(engineerXbox, 2).onTrue(new ScoreAmpCmd(launcherSubsystem, launcherRotateSubsystem, intakeSubsystem));
     new JoystickButton(engineerXbox, 3).onTrue(new ScoreSpeakerCmd(launcherSubsystem, launcherRotateSubsystem, intakeSubsystem));
     new JoystickButton(engineerXbox, 4).onTrue(new LaunchFerryCmd(launcherSubsystem, launcherRotateSubsystem, intakeSubsystem));
-    new JoystickButton(engineerXbox, 5).onTrue(new IntakeCmd(intakeSubsystem, launcherRotateSubsystem));
+    new JoystickButton(engineerXbox, 5).onTrue(new IntakeCmd(intakeSubsystem, launcherRotateSubsystem, launcherSubsystem));
     //new JoystickButton(engineerXbox, 6).onTrue(new ParadeShotCmd(launcherSubsystem, launcherRotateSubsystem, intakeSubsystem));
     new POVButton(engineerXbox, 0).onTrue(new ClimbCmd(climberSubsystem));
     new POVButton(engineerXbox, 180).onTrue(new LowerCmd(climberSubsystem));

@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.148516485067158,
-        "y": 5.145427954673573
+        "x": 0.973104168430559,
+        "y": 4.853074093612575
       },
       "isLocked": false,
       "linkedName": "MROC_LEFT_SHOOT_PVAIM"
@@ -20,8 +20,8 @@
         "y": 5.589805823486292
       },
       "prevControl": {
-        "x": 1.5928943538798759,
-        "y": 5.671664904583371
+        "x": 1.6396709716496354,
+        "y": 6.034183692299009
       },
       "nextControl": null,
       "isLocked": false,
@@ -45,7 +45,7 @@
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": -22.109448343751808,
     "velocity": 0
   },
   "useDefaultConstraints": false

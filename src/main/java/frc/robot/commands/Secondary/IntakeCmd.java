@@ -4,6 +4,7 @@
 
 package frc.robot.commands.Secondary;
 
+import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -13,6 +14,7 @@ import frc.robot.Constants.LauncherConstants;
 import frc.robot.subsystems.Secondary.IntakeSubsystem;
 import frc.robot.subsystems.Secondary.LEDsSubSystem;
 import frc.robot.subsystems.Secondary.LauncherRotateSubsystem;
+import frc.robot.subsystems.Secondary.LauncherSubsystem;
 
 public class IntakeCmd extends Command {
 
@@ -20,10 +22,12 @@ public class IntakeCmd extends Command {
   private boolean hasNote = false;
   private final IntakeSubsystem m_intakeSubsystem;
   private final LauncherRotateSubsystem m_launcherRotateSubsystem;
+  private final LauncherSubsystem m_LauncherSubsystem;
 
-  public IntakeCmd(IntakeSubsystem intakeSubsystem, LauncherRotateSubsystem launcherRotateSubsystem) {
+  public IntakeCmd(IntakeSubsystem intakeSubsystem, LauncherRotateSubsystem launcherRotateSubsystem, LauncherSubsystem launcherSubsystem) {
     this.m_intakeSubsystem = intakeSubsystem;
     this.m_launcherRotateSubsystem = launcherRotateSubsystem;
+    this.m_LauncherSubsystem = launcherSubsystem;
     
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(intakeSubsystem, launcherRotateSubsystem);
@@ -38,14 +42,14 @@ public class IntakeCmd extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(Robot.sensorOuttake.get() == true){
+    if(Robot.sensorOuttake.get() == true){      
       hasNote = true;
     } else {
       m_launcherRotateSubsystem.launcherRotatePIDController.setReference(LauncherConstants.posIntake,CANSparkMax.ControlType.kSmartMotion);
       m_intakeSubsystem.indexerMotor.set(IntakeConstants.indexerIntakeSpeed);
       m_intakeSubsystem.intakeMotor.set(IntakeConstants.intakeSpeed);
       m_intakeSubsystem.launcherIndexerMotor.set(IntakeConstants.launcherIndexerIntakeSpeed);
-      //System.out.println(Robot.sensorIntake.get());
+      //System.out.println(Robot.sensorIntake.get());     
 
     }
   }
@@ -57,6 +61,7 @@ public class IntakeCmd extends Command {
     m_intakeSubsystem.indexerMotor.set(IntakeConstants.zeroSpeed);
     m_intakeSubsystem.intakeMotor.set(IntakeConstants.zeroSpeed);
     m_intakeSubsystem.launcherIndexerMotor.set(IntakeConstants.zeroSpeed);
+    m_LauncherSubsystem.launcherPIDControllerTop.setReference(2000, CANSparkFlex.ControlType.kVelocity);
   }
 
   // Returns true when the command should end.
