@@ -77,8 +77,8 @@ public final class Constants {
     public static double SafeScoreSpeed = 4000;
     public static double ParadeScoreAngle = 125.0;
     public static double ParadeScoreSpeed = 2000.0;
-    public static final double LauncherSpeedTol = 75; //50
-    public static final double LauncherAngleTol = 0.75; //.50
+    public static double LauncherSpeedTol = 75; //50
+    public static double LauncherAngleTol = 0.75; //.50
     public static double FerryMidlineSpeed = 3000.0;
     public static double FerryMidlineAngle = 135.0;
 
