@@ -25,8 +25,8 @@ public final class Constants {
 
   public static final class AutonConstants
   {
-    public static final PIDConstants TRANSLATION_PID = new PIDConstants(0.000001, 0.0, 0.0);//FROM0.7
-    public static final PIDConstants ANGLE_PID   = new PIDConstants(0.002, 0.0, 1.0);
+    public static final PIDConstants TRANSLATION_PID = new PIDConstants(2.9, 0.0002, 0.025);//FROM0.7
+    public static final PIDConstants ANGLE_PID   = new PIDConstants(0.035, 0.0, 0.0);
   }
 
   public static final class Drivebase
@@ -69,14 +69,18 @@ public final class Constants {
     //public static final double posTrap = 150.5; //need to change
     public static double TrapScoreAngle = 145.0; //from 147.5
     public static double TrapScoreSpeed = 2000; //from 712.5
-    public static double SpeakerScoreAngle = 151.0; //152.0
+    public static double SpeakerScoreAngle = 152.0; //152.0
     public static double SpeakerScoreSpeed = 3500; //from 2200
     public static double AmpScoreAngle = 152; //153.5
     public static double AmpScoreSpeed = 1000; //from 800
     public static double SafeScoreAngle = 127.0;
     public static double SafeScoreSpeed = 4000;
+    public static double ParadeScoreAngle = 125.0;
+    public static double ParadeScoreSpeed = 2000.0;
     public static final double LauncherSpeedTol = 75; //50
     public static final double LauncherAngleTol = 0.75; //.50
+    public static double FerryMidlineSpeed = 3000.0;
+    public static double FerryMidlineAngle = 135.0;
 
     public static double kAutoScoreSpeed = 1750; //from 800
     public static double kAutoScoreSpeedMin = 1750; //from 800
@@ -119,7 +123,7 @@ public final class Constants {
     //public static final double launcherIndexerSpeed = 0.12;
     public static final double indexerOuttakeSpeed = 1.0;
     public static final double launcherIndexerOuttakeSpeed = 1.0;
-    public static final double indexerIntakeSpeed = 0.1;
+    public static final double indexerIntakeSpeed = 0.4;
     public static final double launcherIndexerIntakeSpeed = 0.1;
   }
 

@@ -58,9 +58,9 @@ public class LauncherRotateSubsystem extends SubsystemBase {
         launcherRotateMotor.burnFlash();  //Remove this after everything is up and running to save flash wear
     
         // set PID coefficients
-        launcherRotatePIDController.setP(0.000069);
-        launcherRotatePIDController.setI(0.0);
-        launcherRotatePIDController.setD(0.0);
+        launcherRotatePIDController.setP(0.000115);
+        launcherRotatePIDController.setI(0.00000000001);
+        launcherRotatePIDController.setD(0.0000001);
         launcherRotatePIDController.setIZone(0.0);
         
         // This is an arbitrary feedforward value that is multiplied by the positon of the arm to account

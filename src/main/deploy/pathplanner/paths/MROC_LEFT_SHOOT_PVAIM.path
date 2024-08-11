@@ -1,0 +1,52 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.5635091726023904,
+        "y": 4.174813135951059
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.5752033270448305,
+        "y": 4.151424827066179
+      },
+      "isLocked": false,
+      "linkedName": "MROC_LEFT_PICKUP"
+    },
+    {
+      "anchor": {
+        "x": 2.142519612674553,
+        "y": 4.771215012515496
+      },
+      "prevControl": {
+        "x": 2.154213767116993,
+        "y": 4.771215012515496
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "MROC_LEFT_SHOOT_PVAIM"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 2.75,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -23.962488974578363,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": null,
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": false
+}

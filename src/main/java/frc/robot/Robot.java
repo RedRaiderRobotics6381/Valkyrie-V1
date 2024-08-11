@@ -7,17 +7,16 @@ package frc.robot;
 import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
-
 import org.photonvision.PhotonCamera;
-
 // import com.revrobotics.ColorSensorV3;
-
+// import com.revrobotics.ColorSensorV3;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Filesystem;
 // import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+// import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 //import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -52,12 +51,13 @@ public class Robot extends TimedRobot {
 
   public static PhotonCamera camObj = new PhotonCamera("camObj");
   public static PhotonCamera camAprTgLow = new PhotonCamera("camAprTgLow");
-  //public static PhotonCamera camAprTgHigh = new PhotonCamera("camAprTgHigh");
+  public static PhotonCamera camAprTgHigh = new PhotonCamera("camAprTgHigh");
 
    
 
   public static DigitalInput sensorIntake = new DigitalInput(1); //This is the lower sensor, it will be true when a note is first intaked
   public static DigitalInput sensorOuttake = new DigitalInput(0); //This is the upper sensor, it will be true when a note is ready for outtake
+ // public static ColorSensorV3 colorSensorIntake = new ColorSensorV3(I2C.Port.kOnboard);
   
 
   /**
@@ -69,6 +69,7 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+    //colorSensorIntake.configureProximitySensor(null, null);
     //m_climberInitCmd = new ClimberInitCmd(m_climberSubsystem);
     
     // Create a timer to disable motor brake a few seconds after disable.  This will let the robot stop

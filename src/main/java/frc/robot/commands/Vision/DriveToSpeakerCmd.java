@@ -126,7 +126,7 @@ public class DriveToSpeakerCmd extends Command
       double translationValy = MathUtil.clamp(yController.calculate(TY, yOffset), -2.0 , 2.0);
       double translationValz = MathUtil.clamp(omegaController.calculate(TZ, omegaOffset), -2.0 , 2.0);
       //|| omegaController.atSetpoint() != true
-      if ( xController.atSetpoint() != true || yController.atSetpoint() != true || omegaController.atSetpoint() != true){
+      if ( xController.atSetpoint() != true && yController.atSetpoint() != true && omegaController.atSetpoint() != true){
         swerveSubsystem.drive(new Translation2d(translationValx, translationValy),
         translationValz,
         false);

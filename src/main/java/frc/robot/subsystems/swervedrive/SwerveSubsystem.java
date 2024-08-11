@@ -62,14 +62,14 @@ public class SwerveSubsystem extends SubsystemBase
     //  In this case the wheel diameter is 4 inches, which must be converted to meters to get meters/second.
     //  The gear ratio is 6.75 motor revolutions per wheel rotation.
     //  The encoder resolution per motor revolution is 1 per motor revolution.
-    double driveConversionFactor = SwerveMath.calculateMetersPerRotation(Units.inchesToMeters(4.08838805458979), 5.9027777780);
+    double driveConversionFactor = SwerveMath.calculateMetersPerRotation(Units.inchesToMeters(3.716), 5.9027777780); //4.08838805458979
     System.out.println("\"conversionFactor\": {");
     System.out.println("\t\"angle\": " + angleConversionFactor + ",");
     System.out.println("\t\"drive\": " + driveConversionFactor);
     System.out.println("}");
 
     // Configure the Telemetry before creating the SwerveDrive to avoid unnecessary objects being created.
-    SwerveDriveTelemetry.verbosity = TelemetryVerbosity.LOW;
+    SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
     try
     {
       //swerveDrive = new SwerveParser(directory).createSwerveDrive(maximumSpeed);
@@ -167,7 +167,7 @@ public class SwerveSubsystem extends SubsystemBase
    * @param pose Target {@link Pose2d} to go to.
    * @return PathFinding command
    */
-  public Command driveToPose(Pose2d pose)
+  public Command  driveToPose(Pose2d pose)
   {
 // Create the constraints to use while pathfinding
     PathConstraints constraints = new PathConstraints(

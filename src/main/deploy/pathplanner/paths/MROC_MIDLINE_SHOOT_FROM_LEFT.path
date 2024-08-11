@@ -1,0 +1,52 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 8.270256540513081,
+        "y": 7.472564688719121
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.446567628177991,
+        "y": 7.367317298737161
+      },
+      "isLocked": false,
+      "linkedName": "MROC_MIDLINE_PICKU_FROM_LEFT"
+    },
+    {
+      "anchor": {
+        "x": 2.2009903848867527,
+        "y": 6.373314171129768
+      },
+      "prevControl": {
+        "x": 3.113134431397068,
+        "y": 6.677362186633205
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 2.5,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 31.607502246248888,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": null,
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

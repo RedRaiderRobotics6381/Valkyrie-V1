@@ -1,0 +1,52 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 8.036373451664282,
+        "y": 0.8887557376254367
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.1716052036092677,
+        "y": 0.9589206642800752
+      },
+      "isLocked": false,
+      "linkedName": "MROC_MIDLINE_PICKUP_FROM_WALL"
+    },
+    {
+      "anchor": {
+        "x": 1.6396709716496354,
+        "y": 3.730435267138341
+      },
+      "prevControl": {
+        "x": 2.8792513425482693,
+        "y": 2.15172441740895
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 2.5,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -53.130102354155945,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": null,
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}
