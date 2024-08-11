@@ -33,7 +33,7 @@ import frc.robot.commands.Secondary.IntakeCmd;
 import frc.robot.commands.Secondary.LowerCmd;
 // import frc.robot.commands.Secondary.LowerCmd;
 //import frc.robot.commands.Secondary.ParadeShotCmd;
-import frc.robot.commands.Secondary.RVEIntakeCmd;
+import frc.robot.commands.Secondary.RevIntakeCmd;
 //import frc.robot.commands.Secondary.SafeScoreCmd;
 //import frc.robot.commands.Secondary.SafeScoreCmd;
 // import frc.robot.commands.Secondary.ScoreAmpCmd;
@@ -99,12 +99,12 @@ public class RobotContainer
     NamedCommands.registerCommand("Shoot", new ScoreAutoCmd(launcherSubsystem, launcherRotateSubsystem, intakeSubsystem));
     //NamedCommands.registerCommand("Aim", new ScoreSpeakerCmd(launcherSubsystem, launcherRotateSubsystem, intakeSubsystem));
     NamedCommands.registerCommand("Aim", new ScoreCmd(LauncherConstants.SpeakerScoreAngle,
-                                                                         LauncherConstants.LauncherAngleTol + 2,
-                                                                         LauncherConstants.SpeakerScoreSpeed,
-                                                                         LauncherConstants.LauncherSpeedTol + 25,
-                                                                         launcherSubsystem,
-                                                                         launcherRotateSubsystem,
-                                                                         intakeSubsystem));
+                                                           LauncherConstants.LauncherAngleTol + 2,
+                                                           LauncherConstants.SpeakerScoreSpeed,
+                                                           LauncherConstants.LauncherSpeedTol + 25,
+                                                           launcherSubsystem,
+                                                           launcherRotateSubsystem,
+                                                           intakeSubsystem));
     // NamedCommands.registerCommand("PVAim", new LauncherAimCMD(launcherRotateSubsystem));
     NamedCommands.registerCommand("PVAim", new LauncherAimAutonCMD(launcherRotateSubsystem, launcherSubsystem, intakeSubsystem));
     NamedCommands.registerCommand("Intake", new IntakeCmd(intakeSubsystem, launcherRotateSubsystem, launcherSubsystem));
@@ -236,7 +236,7 @@ public class RobotContainer
     new POVButton(engineerXbox, 0).onTrue(new ClimbCmd(climberSubsystem));
     new POVButton(engineerXbox, 180).onTrue(new LowerCmd(climberSubsystem));
     // new POVButton(engineerXbox, 90).whileTrue(new ClimberInitCmd(climberSubsystem));
-    new POVButton(engineerXbox, 270).whileTrue(new RVEIntakeCmd(intakeSubsystem, launcherRotateSubsystem));
+    new POVButton(engineerXbox, 270).whileTrue(new RevIntakeCmd(intakeSubsystem, launcherRotateSubsystem));
     // new JoystickButton(driverXbox, 7).whileTrue(
     //     Commands.deferredProxy(() -> drivebase.driveToPose(
     //                             new Pose2d(new Translation2d(10, 7), Rotation2d.fromDegrees(0)))
