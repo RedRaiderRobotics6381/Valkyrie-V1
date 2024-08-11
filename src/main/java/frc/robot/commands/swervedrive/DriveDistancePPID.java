@@ -53,33 +53,9 @@ public class DriveDistancePPID extends Command
     yController.setTolerance(xyTol); //meters
     omegaController.setTolerance(Units.degreesToRadians(3.0)); //3 degrees
     omegaController.enableContinuousInput(-Math.PI, Math.PI); // -180 to 180 degrees
-    //var startPose = poseProvider.get().; // Get the current pose
-    //startpose = swerveSubsystem.getPose();
-    //omegaController.reset(startPose.getRotation().getRadians());
     omegaController.reset(swerveSubsystem.getPose().getRotation().getRadians()); // Reset the omega controller
     xController.reset(swerveSubsystem.getPose().getTranslation().getX()); // Reset the x controller
     yController.reset(swerveSubsystem.getPose().getTranslation().getY()); // Reset the y controller
-    // xController.reset(startPose.getX()); // Reset the x controller
-    // yController.reset(startPose.getY()); // Reset the y controller
-    // Calculate the new pose
-    // double newX = startPose.getTranslation().getX() + xDist; // Calculate the new x position
-    // double newY = startPose.getTranslation().getY() + yDist;
-    // double newX = startPose.getTranslation().getX() + distance * Math.cos(startPose.getRotation().getRadians());
-    // double newY = startPose.getTranslation().getY() + distance * Math.sin(startPose.getRotation().getRadians());
-    // double newX = startPose.getTranslation().getX() + (xDist * Math.cos(startPose.getRotation().getRadians())); // Calculate the new x position
-    // double newY = startPose.getTranslation().getY() + (yDist * Math.sin(startPose.getRotation().getRadians())); // Calculate the new y position
-    // double newRot = startPose.getRotation().getRadians() + Math.toRadians(rotation); // Calculate the new y position
-    // endPose = new Pose2d(newX, newY, new Rotation2d(newRot));
-    // double newX = startPose.getTranslation().getX() + 
-    //               (xDist * Math.cos(startPose.getRotation().getRadians()) +
-    //               (yDist * Math.cos(startPose.getRotation().getRadians()) +
-    //               (xDist * Math.sin(startPose.getRotation().getRadians()) + 
-    //               (yDist * Math.sin(startPose.getRotation().getRadians()))))); // Calculate the new x position
-    // double newY = startPose.getTranslation().getY() + 
-    //               (xDist * Math.cos(startPose.getRotation().getRadians()) +
-    //               (yDist * Math.cos(startPose.getRotation().getRadians()) +
-    //               (xDist * Math.sin(startPose.getRotation().getRadians()) + 
-    //               (yDist * Math.sin(startPose.getRotation().getRadians()))))); // Calculate the new y position
     double newX = swerveSubsystem.getPose().getTranslation().getX() + 
                   (xDist * Math.cos(swerveSubsystem.getPose().getRotation().getRadians()) + 
                   (yDist * Math.sin(swerveSubsystem.getPose().getRotation().getRadians()))); // Calculate the new x position
@@ -118,19 +94,13 @@ public class DriveDistancePPID extends Command
     omegaController.setGoal(endPose.getRotation().getRadians());
     
     var xSpeed = xController.calculate(robotPose.getX());
-    if (xController.atGoal()) {
-      xSpeed = 0;
-    }
+    if (xController.atGoal()) {xSpeed = 0;}
 
     var ySpeed = yController.calculate(robotPose.getY());
-    if (yController.atGoal()) {
-      ySpeed = 0;
-    }
+    if (yController.atGoal()) {ySpeed = 0;}
 
     var omegaSpeed = omegaController.calculate(robotPose2d.getRotation().getRadians());
-    if (omegaController.atGoal()) {
-      omegaSpeed = 0;
-    }
+    if (omegaController.atGoal()) {omegaSpeed = 0;}
 
     if (xSpeed ==0 && ySpeed == 0 && omegaSpeed == 0) {
       drvDstCmp = true;

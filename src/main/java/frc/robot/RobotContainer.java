@@ -6,16 +6,12 @@ package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
-// import edu.wpi.first.math.geometry.Pose2d;
-// import edu.wpi.first.math.geometry.Rotation2d;
-// import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-// import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -24,31 +20,17 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.AprilTagConstants;
 import frc.robot.Constants.LauncherConstants;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.Secondary.ClimbCmd;
-// import frc.robot.commands.Secondary.ClimbCmd;
-import frc.robot.commands.Secondary.ClimberInitCmd;
-//import frc.robot.commands.Secondary.EventScoreCmd;
 import frc.robot.commands.Secondary.IntakeCmd;
-// import frc.robot.commands.Secondary.LaunchFerryCmd;
-import frc.robot.commands.Secondary.LowerCmd;
-// import frc.robot.commands.Secondary.LowerCmd;
-//import frc.robot.commands.Secondary.ParadeShotCmd;
 import frc.robot.commands.Secondary.RevIntakeCmd;
-//import frc.robot.commands.Secondary.SafeScoreCmd;
-//import frc.robot.commands.Secondary.SafeScoreCmd;
-// import frc.robot.commands.Secondary.ScoreAmpCmd;
 import frc.robot.commands.Secondary.ScoreAutoCmd;
 import frc.robot.commands.Secondary.ScoreCmd;
-// import frc.robot.commands.Secondary.ScoreSpeakerCmd;
-//import frc.robot.commands.Secondary.ScoreTrapCmd;
-// import frc.robot.commands.Vision.DriveToAmpCmd;
+import frc.robot.commands.Secondary.Climber.ClimbCmd;
+import frc.robot.commands.Secondary.Climber.InitCmd;
+import frc.robot.commands.Secondary.Climber.LowerCmd;
 import frc.robot.commands.Vision.DriveToAprilTagPosCmd;
-// import frc.robot.commands.Vision.DriveToSpeakerCmd;
-// import frc.robot.commands.Vision.DriveToStageCmd;
 import frc.robot.commands.Vision.LauncherAimAutonCMD;
-// import frc.robot.commands.Vision.LauncherAimCMD;
 import frc.robot.commands.Vision.PickUpNoteCmd;
-import frc.robot.commands.swervedrive.DriveDistance;
+import frc.robot.commands.swervedrive.DriveDistancePPID;
 import frc.robot.subsystems.Secondary.ClimberSubsystem;
 import frc.robot.subsystems.Secondary.IntakeSubsystem;
 import frc.robot.subsystems.Secondary.LauncherRotateSubsystem;
@@ -77,7 +59,6 @@ public class RobotContainer
   private final SendableChooser<Command> autoChooser;
   static double lastTime = -1;
 
-  //LauncherSubsystem launcherSubsystem = new LauncherSubsystem();
   LauncherSubsystem launcherSubsystem = new LauncherSubsystem();
   LauncherRotateSubsystem launcherRotateSubsystem = new LauncherRotateSubsystem();
   IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
@@ -241,7 +222,7 @@ public class RobotContainer
     //     Commands.deferredProxy(() -> drivebase.driveToPose(
     //                             new Pose2d(new Translation2d(10, 7), Rotation2d.fromDegrees(0)))
     //                       ));
-    new JoystickButton(driverXbox, 7).onTrue(new DriveDistance(drivebase));
+    new JoystickButton(driverXbox, 7).onTrue(new DriveDistancePPID(0.25,0.0,0,0.05,drivebase));
 //    new JoystickButton(driverXbox, 3).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
   }
 
@@ -262,7 +243,7 @@ public class RobotContainer
     //drivebase.setDefaultCommand();
   }
   public void initClimber(){
-    new ClimberInitCmd(climberSubsystem).schedule();
+    new InitCmd(climberSubsystem).schedule();
   }
   public void setMotorBrake(boolean brake)
   {

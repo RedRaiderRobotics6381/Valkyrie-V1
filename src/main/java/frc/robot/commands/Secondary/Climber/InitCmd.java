@@ -2,13 +2,13 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.Secondary;
+package frc.robot.commands.Secondary.Climber;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Secondary.ClimberSubsystem;
 
 
-public class ClimberInitCmd extends Command {
+public class InitCmd extends Command {
 
   private final ClimberSubsystem m_climberSubsystem;
   //private boolean climberInitialized = false;
@@ -17,7 +17,7 @@ public class ClimberInitCmd extends Command {
   // private boolean climbedR;
   private boolean climberInitialized;
   
-  public ClimberInitCmd(ClimberSubsystem climberSubsystem) {
+  public InitCmd(ClimberSubsystem climberSubsystem) {
     this.m_climberSubsystem = climberSubsystem;
     addRequirements(climberSubsystem);
 
