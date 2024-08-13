@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import frc.robot.Constants.AprilTagConstants;
@@ -26,8 +27,8 @@ public class DriveToAprilTagPosCmd extends Command
   String alliance;
   private boolean atSetPoint;
   private final SwerveSubsystem swerveSubsystem;
-  private static final TrapezoidProfile.Constraints X_CONSTRAINTS = new TrapezoidProfile.Constraints(6.0, 6.0);
-  private static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(6.0, 6.0);
+  private static final TrapezoidProfile.Constraints X_CONSTRAINTS = new TrapezoidProfile.Constraints(6, 6);
+  private static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(6, 6);
   private static final TrapezoidProfile.Constraints OMEGA_CONSTRAINTS = new TrapezoidProfile.Constraints(8, 8);
   private Transform3d TAG_TO_GOAL = new Transform3d(new Translation3d(0, 0, 0),
   new Rotation3d(0.0,0.0,Math.PI));
@@ -100,8 +101,8 @@ public DriveToAprilTagPosCmd(String aprilTag, double xOffset, double yOffset, do
   {
     var robotPose2d = poseProvider.get();
     var robotPose = new Pose3d(
-        robotPose2d.getX(),
-        robotPose2d.getY(),
+        -robotPose2d.getX(),
+        -robotPose2d.getY(),
         0.0,
         new Rotation3d(0.0, 0.0, robotPose2d.getRotation().getRadians()));
     
@@ -161,8 +162,11 @@ public DriveToAprilTagPosCmd(String aprilTag, double xOffset, double yOffset, do
       if (omegaController.atGoal()) {
         omegaSpeed = 0;
       }
-      if (xSpeed != 0 && ySpeed != 0 && omegaSpeed != 0){
-        swerveSubsystem.drive(ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, omegaSpeed, robotPose2d.getRotation()));
+      if (Math.abs(xSpeed) >= 0.05 || Math.abs(ySpeed) >= 0.05 || Math.abs(omegaSpeed) >= 1){
+        swerveSubsystem.drive(ChassisSpeeds.fromFieldRelativeSpeeds(-xSpeed, -ySpeed, omegaSpeed, robotPose2d.getRotation()));
+        SmartDashboard.putNumber("xspeed", xSpeed);
+        SmartDashboard.putNumber("yspeed", ySpeed);
+        SmartDashboard.putNumber("omegaspeed", omegaSpeed);
       }
       else{ atSetPoint = true;}
       
@@ -176,7 +180,7 @@ public DriveToAprilTagPosCmd(String aprilTag, double xOffset, double yOffset, do
 
   @Override
   public void end(boolean interrupted) {
-    //swerveSubsystem.lock();
+    swerveSubsystem.lock();
   }
 
 }
