@@ -6,46 +6,31 @@ package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
-// import edu.wpi.first.math.geometry.Pose2d;
-// import edu.wpi.first.math.geometry.Rotation2d;
-// import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-// import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.AprilTagConstants;
+import frc.robot.Constants.LauncherConstants;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.Secondary.ClimbCmd;
-// import frc.robot.commands.Secondary.ClimbCmd;
-import frc.robot.commands.Secondary.ClimberInitCmd;
-//import frc.robot.commands.Secondary.EventScoreCmd;
 import frc.robot.commands.Secondary.IntakeCmd;
-import frc.robot.commands.Secondary.LaunchFerryCmd;
-import frc.robot.commands.Secondary.LowerCmd;
-// import frc.robot.commands.Secondary.LowerCmd;
-//import frc.robot.commands.Secondary.ParadeShotCmd;
-import frc.robot.commands.Secondary.RVEIntakeCmd;
-//import frc.robot.commands.Secondary.SafeScoreCmd;
-//import frc.robot.commands.Secondary.SafeScoreCmd;
-import frc.robot.commands.Secondary.ScoreAmpCmd;
+import frc.robot.commands.Secondary.RevIntakeCmd;
 import frc.robot.commands.Secondary.ScoreAutoCmd;
-import frc.robot.commands.Secondary.ScoreSpeakerCmd;
-//import frc.robot.commands.Secondary.ScoreTrapCmd;
-import frc.robot.commands.Vision.DriveToAmpCmd;
-import frc.robot.commands.Vision.DriveToSpeakerCmd;
-import frc.robot.commands.Vision.DriveToStageCmd;
+import frc.robot.commands.Secondary.ScoreCmd;
+import frc.robot.commands.Secondary.Climber.ClimbCmd;
+import frc.robot.commands.Secondary.Climber.InitCmd;
+import frc.robot.commands.Secondary.Climber.LowerCmd;
+import frc.robot.commands.Vision.DriveToAprilTagPosCmd;
 import frc.robot.commands.Vision.LauncherAimAutonCMD;
-// import frc.robot.commands.Vision.LauncherAimCMD;
 import frc.robot.commands.Vision.PickUpNoteCmd;
-import frc.robot.commands.swervedrive.DriveDistance;
+import frc.robot.commands.swervedrive.DriveDistancePPID;
 import frc.robot.subsystems.Secondary.ClimberSubsystem;
 import frc.robot.subsystems.Secondary.IntakeSubsystem;
 import frc.robot.subsystems.Secondary.LauncherRotateSubsystem;
@@ -74,7 +59,6 @@ public class RobotContainer
   private final SendableChooser<Command> autoChooser;
   static double lastTime = -1;
 
-  //LauncherSubsystem launcherSubsystem = new LauncherSubsystem();
   LauncherSubsystem launcherSubsystem = new LauncherSubsystem();
   LauncherRotateSubsystem launcherRotateSubsystem = new LauncherRotateSubsystem();
   IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
@@ -94,12 +78,25 @@ public class RobotContainer
     // NamedCommands.registerCommand("Shoot", new ScoreAutoCmd(launcherSubsystem));
     //drivebase.setupPathPlanner();
     NamedCommands.registerCommand("Shoot", new ScoreAutoCmd(launcherSubsystem, launcherRotateSubsystem, intakeSubsystem));
-    NamedCommands.registerCommand("Aim", new ScoreSpeakerCmd(launcherSubsystem, launcherRotateSubsystem, intakeSubsystem));
+    //NamedCommands.registerCommand("Aim", new ScoreSpeakerCmd(launcherSubsystem, launcherRotateSubsystem, intakeSubsystem));
+    NamedCommands.registerCommand("Aim", new ScoreCmd(LauncherConstants.SpeakerScoreAngle,
+                                                           LauncherConstants.LauncherAngleTol + 2,
+                                                           LauncherConstants.SpeakerScoreSpeed,
+                                                           LauncherConstants.LauncherSpeedTol + 25,
+                                                           launcherSubsystem,
+                                                           launcherRotateSubsystem,
+                                                           intakeSubsystem));
     // NamedCommands.registerCommand("PVAim", new LauncherAimCMD(launcherRotateSubsystem));
     NamedCommands.registerCommand("PVAim", new LauncherAimAutonCMD(launcherRotateSubsystem, launcherSubsystem, intakeSubsystem));
     NamedCommands.registerCommand("Intake", new IntakeCmd(intakeSubsystem, launcherRotateSubsystem, launcherSubsystem));
     NamedCommands.registerCommand("DriveToNote", new PickUpNoteCmd(drivebase, intakeSubsystem, launcherRotateSubsystem));
-    NamedCommands.registerCommand("DriveToSpeaker", new DriveToSpeakerCmd(drivebase));
+    
+    NamedCommands.registerCommand("DriveToSpeaker",new DriveToAprilTagPosCmd("Speaker",
+                                                        1.7,
+                                                        0.0,
+                                                        0.1,
+                                                        drivebase));
+    //NamedCommands.registerCommand("DriveToSpeaker", new DriveToSpeakerCmd(drivebase));
 
     // Build an auto chooser. This will use Commands.none() as the default option.
     autoChooser = AutoBuilder.buildAutoChooser();
@@ -164,29 +161,68 @@ public class RobotContainer
 
     //==========================================================================
     new JoystickButton(driverXbox, 8).onTrue((new InstantCommand(drivebase::zeroGyro)));  //Button "Start"
-    new JoystickButton(driverXbox, 1).whileTrue(new DriveToAmpCmd(drivebase)); 
+    new JoystickButton(driverXbox, 1).whileTrue(new DriveToAprilTagPosCmd("Amp",
+                                                             0.9,
+                                                             0.0,
+                                                             0.1,
+                                                             drivebase));
+    //new JoystickButton(driverXbox, 1).whileTrue(new DriveToAmpCmd(drivebase)); 
     new JoystickButton(driverXbox, 2).whileTrue(new PickUpNoteCmd(drivebase, intakeSubsystem, launcherRotateSubsystem));  //Button "B"
-    new JoystickButton(driverXbox, 3).whileTrue(new DriveToSpeakerCmd(drivebase)); //Button "X"
-    new JoystickButton(driverXbox, 4).whileTrue(new DriveToStageCmd(drivebase)); //Button "Y"
+    new JoystickButton(driverXbox, 3).whileTrue(new DriveToAprilTagPosCmd("Speaker",
+                                                             1.7,                                                             0.0,
+                                                             0.1,
+                                                             drivebase));    
+    //new JoystickButton(driverXbox, 3).whileTrue(new DriveToSpeakerCmd(drivebase)); //Button "X"
+    new JoystickButton(driverXbox, 4).whileTrue(new DriveToAprilTagPosCmd("StageA",
+                                                             1.3,
+                                                             0.0,
+                                                             0.1,
+                                                             drivebase));
+    //new JoystickButton(driverXbox, 4).whileTrue(new DriveToStageCmd(drivebase)); //Button "Y"
     //Button 5 is used below in the spencerButtons method
     //Button 6 is used below in the spencerButtons method
 
     new JoystickButton(engineerXbox, 1).whileTrue(new LauncherAimAutonCMD(launcherRotateSubsystem, launcherSubsystem, intakeSubsystem)); //Button "A"
     //new JoystickButton(engineerXbox, 1).whileTrue(new LauncherAimCMD(launcherRotateSubsystem)); //Button "A"
-    new JoystickButton(engineerXbox, 2).onTrue(new ScoreAmpCmd(launcherSubsystem, launcherRotateSubsystem, intakeSubsystem));
-    new JoystickButton(engineerXbox, 3).onTrue(new ScoreSpeakerCmd(launcherSubsystem, launcherRotateSubsystem, intakeSubsystem));
-    new JoystickButton(engineerXbox, 4).onTrue(new LaunchFerryCmd(launcherSubsystem, launcherRotateSubsystem, intakeSubsystem));
+    //Score amp command
+    new JoystickButton(engineerXbox, 2).onTrue(new ScoreCmd(LauncherConstants.AmpScoreAngle,
+                                                                         LauncherConstants.LauncherAngleTol,
+                                                                         LauncherConstants.AmpScoreSpeed,
+                                                                         LauncherConstants.LauncherSpeedTol + 25,
+                                                                         launcherSubsystem,
+                                                                         launcherRotateSubsystem,
+                                                                         intakeSubsystem));
+    //new JoystickButton(engineerXbox, 2).onTrue(new ScoreAmpCmd(launcherSubsystem, launcherRotateSubsystem, intakeSubsystem));
+    //Score speaker command.
+    new JoystickButton(engineerXbox, 3).onTrue(new ScoreCmd(LauncherConstants.SpeakerScoreAngle,
+                                                                         LauncherConstants.LauncherAngleTol + 2,
+                                                                         LauncherConstants.SpeakerScoreSpeed,
+                                                                         LauncherConstants.LauncherSpeedTol + 25,
+                                                                         launcherSubsystem,
+                                                                         launcherRotateSubsystem,
+                                                                         intakeSubsystem));
+    //new JoystickButton(engineerXbox, 3).onTrue(new ScoreSpeakerCmd(launcherSubsystem, launcherRotateSubsystem, intakeSubsystem));
+    //Ferry note from midfield command.
+    new JoystickButton(engineerXbox, 4).onTrue(new ScoreCmd(LauncherConstants.FerryMidlineAngle,
+                                                                         LauncherConstants.LauncherAngleTol + 2,
+                                                                         LauncherConstants.FerryMidlineSpeed,
+                                                                         LauncherConstants.LauncherSpeedTol + 25,
+                                                                         launcherSubsystem,
+                                                                         launcherRotateSubsystem,
+                                                                         intakeSubsystem));
+    //new JoystickButton(engineerXbox, 4).onTrue(new LaunchFerryCmd(launcherSubsystem, launcherRotateSubsystem, intakeSubsystem));
+
     new JoystickButton(engineerXbox, 5).onTrue(new IntakeCmd(intakeSubsystem, launcherRotateSubsystem, launcherSubsystem));
     //new JoystickButton(engineerXbox, 6).onTrue(new ParadeShotCmd(launcherSubsystem, launcherRotateSubsystem, intakeSubsystem));
     new POVButton(engineerXbox, 0).onTrue(new ClimbCmd(climberSubsystem));
     new POVButton(engineerXbox, 180).onTrue(new LowerCmd(climberSubsystem));
     // new POVButton(engineerXbox, 90).whileTrue(new ClimberInitCmd(climberSubsystem));
-    new POVButton(engineerXbox, 270).whileTrue(new RVEIntakeCmd(intakeSubsystem, launcherRotateSubsystem));
+    new POVButton(engineerXbox, 270).whileTrue(new RevIntakeCmd(intakeSubsystem, launcherRotateSubsystem));
     // new JoystickButton(driverXbox, 7).whileTrue(
     //     Commands.deferredProxy(() -> drivebase.driveToPose(
     //                             new Pose2d(new Translation2d(10, 7), Rotation2d.fromDegrees(0)))
     //                       ));
-    new JoystickButton(driverXbox, 7).onTrue(new DriveDistance(drivebase));
+    new JoystickButton(driverXbox, 7).onTrue(new DriveDistancePPID(0.25,0.0,0,0.05,drivebase));
 //    new JoystickButton(driverXbox, 3).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
   }
 
@@ -207,7 +243,7 @@ public class RobotContainer
     //drivebase.setDefaultCommand();
   }
   public void initClimber(){
-    new ClimberInitCmd(climberSubsystem).schedule();
+    new InitCmd(climberSubsystem).schedule();
   }
   public void setMotorBrake(boolean brake)
   {

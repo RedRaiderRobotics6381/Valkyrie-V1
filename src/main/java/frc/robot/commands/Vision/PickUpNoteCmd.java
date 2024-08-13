@@ -45,7 +45,7 @@ public class PickUpNoteCmd extends Command
     this.m_intakeSubsystem = intakeSubsystem;
     this.m_launcherRotateSubsystem = launcherRotateSubsystem;
     
-    xController = new PIDController(0.055, 0.00, 0.0);
+    xController = new PIDController(0.15, 0.00, 0.0);
     //yController = new PIDController(0.0625, 0.00375, 0.0001);
     zController = new PIDController(0.015,0.0, 0.000);
     xController.setTolerance(3);
@@ -87,7 +87,7 @@ public class PickUpNoteCmd extends Command
         double TZ = target.getYaw();
         double TX = target.getPitch();
 
-        double translationValx = MathUtil.clamp(-xController.calculate(TX, -19), -4.0 , 4.0); //Tune the setpoint to be where the note is just barely found.
+        double translationValx = MathUtil.clamp(-xController.calculate(TX, -14), -4.0 , 4.0); //Tune the setpoint to be where the note is just barely found.
         double translationValz = MathUtil.clamp(zController.calculate(TZ, 0.0), -2.0 , 2.0); //* throttle, 2.5 * throttle);
 
         if (xController.atSetpoint() != true) {
@@ -117,8 +117,8 @@ public class PickUpNoteCmd extends Command
                 //swerveSubsystem.drive(new Translation2d(0.5, 0.0), 0.0, false);
                 swerveSubsystem.driveToPose(
                               new Pose2d(new Translation2d(
-                                swerveSubsystem.getPose().getX() + 0.25 * Math.cos(swerveSubsystem.getPose().getRotation().getRadians()),
-                                swerveSubsystem.getPose().getY() + 0.25 * Math.sin(swerveSubsystem.getPose().getRotation().getRadians())),
+                                (swerveSubsystem.getPose().getX() + 0.5) * Math.cos(swerveSubsystem.getPose().getRotation().getRadians()),
+                                (swerveSubsystem.getPose().getY() + 0.5) * Math.sin(swerveSubsystem.getPose().getRotation().getRadians())),
                                 Rotation2d.fromDegrees(swerveSubsystem.getPose().getRotation().getDegrees())));
               }             // swerveSubsystem.drive(new Translation2d(0.5, 0.0), 0.0, false);
               if (IntakeSubsystem.colorSensor.getProximity() > 50){

@@ -10,15 +10,18 @@ import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import frc.robot.Constants.IntakeConstants;
-import frc.robot.Constants.LauncherConstants;
 import frc.robot.subsystems.Secondary.IntakeSubsystem;
 import frc.robot.subsystems.Secondary.LauncherRotateSubsystem;
 import frc.robot.subsystems.Secondary.LauncherSubsystem;
 
-public class LaunchFerryCmd extends Command {
+public class ScoreCmd extends Command {
   /** Creates a new Outtake. */
   
-    
+    double shotAng;
+    double shotAngTol;
+    double shotSpd;
+    double shotSpdTol;
+   
     private final LauncherSubsystem m_launcherSubsystem;
     private final LauncherRotateSubsystem m_launcherRotateSubsystem;
     private final IntakeSubsystem m_intakeSubsystem;
@@ -26,7 +29,12 @@ public class LaunchFerryCmd extends Command {
     private boolean hasNote = true;
   
   
-    public LaunchFerryCmd(LauncherSubsystem launcherSubsystem, LauncherRotateSubsystem launcherRotateSubsystem, IntakeSubsystem intakeSubsystem) {
+    public ScoreCmd(double shotAng, double shotAngTol, double shotSpd, double shotSpdTol, LauncherSubsystem launcherSubsystem, LauncherRotateSubsystem launcherRotateSubsystem, IntakeSubsystem intakeSubsystem) {
+      
+      this.shotAng = shotAng;
+      this.shotAngTol = shotAngTol;
+      this.shotSpd = shotSpd;
+      this.shotSpdTol = shotSpdTol;
       this.m_launcherSubsystem = launcherSubsystem;
       this.m_launcherRotateSubsystem = launcherRotateSubsystem;
       this.m_intakeSubsystem = intakeSubsystem;
@@ -45,12 +53,12 @@ public class LaunchFerryCmd extends Command {
         @Override
         public void execute() {
           if(Robot.sensorOuttake.get() == true || Robot.sensorIntake.get() == true){
-            m_launcherRotateSubsystem.launcherRotatePIDController.setReference(LauncherConstants.FerryMidlineAngle,CANSparkMax.ControlType.kSmartMotion);
-            m_launcherSubsystem.launcherPIDControllerTop.setReference(LauncherConstants.FerryMidlineSpeed, CANSparkFlex.ControlType.kVelocity);
+            m_launcherRotateSubsystem.launcherRotatePIDController.setReference(shotAng,CANSparkMax.ControlType.kSmartMotion);
+            m_launcherSubsystem.launcherPIDControllerTop.setReference(shotSpd, CANSparkFlex.ControlType.kVelocity);
             if ((Math.abs(m_launcherRotateSubsystem.launcherRotateEncoder.getPosition() -
-                 LauncherConstants.FerryMidlineAngle) <= LauncherConstants.LauncherAngleTol+2)){
+                 shotAng) <= shotAngTol)){
                   if((Math.abs(m_launcherSubsystem.launcherMotorTop.getEncoder().getVelocity() -
-                      LauncherConstants.FerryMidlineSpeed)) <= LauncherConstants.LauncherSpeedTol+25){
+                      shotSpd)) <= shotSpdTol){
                         m_intakeSubsystem.launcherIndexerMotor.set(IntakeConstants.launcherIndexerOuttakeSpeed);
                         m_intakeSubsystem.indexerMotor.set(IntakeConstants.indexerOuttakeSpeed);
                     }
@@ -65,7 +73,8 @@ public class LaunchFerryCmd extends Command {
     public void end(boolean interrupted) {
       m_intakeSubsystem.indexerMotor.set(0);
       m_intakeSubsystem.launcherIndexerMotor.set(0);
-      m_launcherSubsystem.launcherMotorTop.set(0);
+      //m_launcherSubsystem.launcherMotorTop.set(2000);
+      m_launcherSubsystem.launcherPIDControllerTop.setReference(0, CANSparkFlex.ControlType.kVelocity);
       m_launcherRotateSubsystem.launcherRotateMotor.disable();
     }
   
