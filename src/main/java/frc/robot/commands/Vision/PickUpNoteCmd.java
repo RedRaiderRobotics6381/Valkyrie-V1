@@ -30,6 +30,8 @@ public class PickUpNoteCmd extends Command
   private final PIDController   zController;
   private boolean hasTargets;
   private boolean droveToNote;
+  private double TX = 0;
+  private double TZ = 0;
   
   int peakVelocity;
   int currentVelocity;
@@ -84,12 +86,18 @@ public class PickUpNoteCmd extends Command
     PhotonTrackedTarget target = result.getBestTarget();
     if (!outtakeHasNote){
       if (hasTargets == true) { // && RobotContainer.driverXbox.getRawButton(2) == true
-        double TZ = target.getYaw();
-        double TX = target.getPitch();
+        TZ = target.getYaw();
+        
+        //The code below is to track a single note instead of sometimes driving towards a note further ahead that it might see.
+        if (TX == 0) { //If the target pitch is 0 (the first time the code runs), set the target pitch to the current pitch
+          TX = target.getPitch();
+        } else if (target.getPitch() < TX) {
+          TX = target.getPitch(); //If the target pitch is less than the current pitch, set the target pitch to the current pitch
+        }
+
 
         double translationValx = MathUtil.clamp(-xController.calculate(TX, -14), -4.0 , 4.0); //Tune the setpoint to be where the note is just barely found.
         double translationValz = MathUtil.clamp(zController.calculate(TZ, 0.0), -2.0 , 2.0); //* throttle, 2.5 * throttle);
-
         if (xController.atSetpoint() != true) {
             swerveSubsystem.drive(new Translation2d(translationValx, 0.0), translationValz, false);
           } else {
