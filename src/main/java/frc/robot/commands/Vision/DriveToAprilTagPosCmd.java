@@ -10,7 +10,6 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import frc.robot.Constants.AprilTagConstants;
@@ -162,14 +161,10 @@ public DriveToAprilTagPosCmd(String aprilTag, double xOffset, double yOffset, do
       if (omegaController.atGoal()) {
         omegaSpeed = 0;
       }
-      if (Math.abs(xSpeed) >= 0.05 || Math.abs(ySpeed) >= 0.05 || Math.abs(omegaSpeed) >= 1){
+      if (Math.abs(xSpeed) >= xyTol / 2 || Math.abs(ySpeed) >= xyTol / 2 || Math.abs(omegaSpeed) >= 1){
         swerveSubsystem.drive(ChassisSpeeds.fromFieldRelativeSpeeds(-xSpeed, -ySpeed, omegaSpeed, robotPose2d.getRotation()));
-        SmartDashboard.putNumber("xspeed", xSpeed);
-        SmartDashboard.putNumber("yspeed", ySpeed);
-        SmartDashboard.putNumber("omegaspeed", omegaSpeed);
       }
-      else{ atSetPoint = true;}
-      
+      else{ atSetPoint = true;} 
     }
   }
   @Override
