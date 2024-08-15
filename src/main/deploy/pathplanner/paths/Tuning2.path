@@ -3,24 +3,24 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.0,
-        "y": 5.0
+        "x": 6.0,
+        "y": 7.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9912142933334587,
-        "y": 5.011710543142664
+        "x": 5.991214293333458,
+        "y": 7.011710543142664
       },
       "isLocked": false,
       "linkedName": "Tuning1End"
     },
     {
       "anchor": {
-        "x": 2.0,
+        "x": 3.0,
         "y": 7.0
       },
       "prevControl": {
-        "x": 2.0,
+        "x": 3.0,
         "y": 7.011710543142664
       },
       "nextControl": null,

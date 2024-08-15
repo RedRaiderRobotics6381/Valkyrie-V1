@@ -110,8 +110,12 @@ public DriveToAprilTagPosCmd(String aprilTag, double xOffset, double yOffset, do
     var photonRes = photonResLow; // Default to low resolution result
     //var photonRes = Robot.camAprTgLow.getLatestResult();
     
-    if (photonResLow.hasTargets()) {photonRes = Robot.camAprTgLow.getLatestResult();}
-    if (photonResHigh.hasTargets()) {photonRes = Robot.camAprTgHigh.getLatestResult();}
+    if (photonResLow.hasTargets()) {
+      photonRes = Robot.camAprTgLow.getLatestResult();
+    }
+    else if (photonResHigh.hasTargets()) {
+      photonRes = Robot.camAprTgHigh.getLatestResult();
+    }
     
     if (photonRes.hasTargets()) {
       //Find the tag we want to chase
@@ -163,6 +167,7 @@ public DriveToAprilTagPosCmd(String aprilTag, double xOffset, double yOffset, do
       }
       if (Math.abs(xSpeed) >= xyTol / 2 || Math.abs(ySpeed) >= xyTol / 2 || Math.abs(omegaSpeed) >= 1){
         swerveSubsystem.drive(ChassisSpeeds.fromFieldRelativeSpeeds(-xSpeed, -ySpeed, omegaSpeed, robotPose2d.getRotation()));
+        //System.out.println("xSpeed:" + xSpeed +", yspeed:" + ySpeed + ", omegaspeed:" + omegaSpeed);
       }
       else{ atSetPoint = true;} 
     }

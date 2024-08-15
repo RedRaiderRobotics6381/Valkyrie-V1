@@ -67,6 +67,7 @@ public class PickUpNoteCmd extends Command
   {
     droveToNote = false;
     hasNote = false;
+    TX = 0;
   }
 
     /**
@@ -96,7 +97,7 @@ public class PickUpNoteCmd extends Command
         }
 
 
-        double translationValx = MathUtil.clamp(-xController.calculate(TX, -14), -4.0 , 4.0); //Tune the setpoint to be where the note is just barely found.
+        double translationValx = MathUtil.clamp(-xController.calculate(TX, -14), -2.0 , 2.0); //Tune the setpoint to be where the note is just barely found.
         double translationValz = MathUtil.clamp(zController.calculate(TZ, 0.0), -2.0 , 2.0); //* throttle, 2.5 * throttle);
         if (xController.atSetpoint() != true) {
             swerveSubsystem.drive(new Translation2d(translationValx, 0.0), translationValz, false);
@@ -106,19 +107,6 @@ public class PickUpNoteCmd extends Command
         if (!intakeHasNote && !droveToNote){ //If the note is not in the intake, run the intake command
                 m_launcherRotateSubsystem.launcherRotatePIDController.setReference(LauncherConstants.posIntake,CANSparkMax.ControlType.kSmartMotion);
                 m_intakeSubsystem.intakeMotor.set(IntakeConstants.intakeSpeed);
-
-                // // Get the current velocity of the intake motor and round it to the nearest 10
-                // currentVelocity = ((int)m_intakeSubsystem.intakeMotor.getEncoder().getVelocity()/10) * 10;
-
-                // // If the current velocity is higher than the peak, update the peak
-                // if (currentVelocity > peakVelocity) {
-                //   peakVelocity = currentVelocity;
-                // }
-
-                // // If the current velocity has dropped 200 units below the peak, set the boolean to true
-                // if (peakVelocity - currentVelocity >= 100) {
-                //   lowerIntakeHasNote = true;
-                // }
 
                 m_intakeSubsystem.indexerMotor.set(IntakeConstants.indexerIntakeSpeed);
                 m_intakeSubsystem.launcherIndexerMotor.set(IntakeConstants.launcherIndexerIntakeSpeed);
@@ -183,6 +171,8 @@ public class PickUpNoteCmd extends Command
     m_intakeSubsystem.intakeMotor.set(IntakeConstants.zeroSpeed);
     m_intakeSubsystem.launcherIndexerMotor.set(IntakeConstants.zeroSpeed);
     swerveSubsystem.lock();
+    TX = 0; TZ = 0;
+    droveToNote = false;
   }
 }
 
