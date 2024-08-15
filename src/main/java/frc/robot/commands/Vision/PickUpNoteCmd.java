@@ -97,7 +97,7 @@ public class PickUpNoteCmd extends Command
         }
 
 
-        double translationValx = MathUtil.clamp(-xController.calculate(TX, -14), -2.0 , 2.0); //Tune the setpoint to be where the note is just barely found.
+        double translationValx = MathUtil.clamp(-xController.calculate(TX, -14), -4.0 , 4.0); //Tune the setpoint to be where the note is just barely found.
         double translationValz = MathUtil.clamp(zController.calculate(TZ, 0.0), -2.0 , 2.0); //* throttle, 2.5 * throttle);
         if (xController.atSetpoint() != true) {
             swerveSubsystem.drive(new Translation2d(translationValx, 0.0), translationValz, false);
