@@ -5,6 +5,8 @@ package frc.robot.commands.Vision;
 // import org.photonvision.PhotonVersion;
 // import org.photonvision.proto.Photon;
 import org.photonvision.targeting.PhotonTrackedTarget;
+
+import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
@@ -18,6 +20,7 @@ import frc.robot.Robot;
 import frc.robot.subsystems.Secondary.IntakeSubsystem;
 import frc.robot.subsystems.Secondary.LEDsSubSystem;
 import frc.robot.subsystems.Secondary.LauncherRotateSubsystem;
+import frc.robot.subsystems.Secondary.LauncherSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 
 public class PickUpNoteCmd extends Command
@@ -25,6 +28,7 @@ public class PickUpNoteCmd extends Command
   private final SwerveSubsystem swerveSubsystem;
   private final IntakeSubsystem m_intakeSubsystem;
   private final LauncherRotateSubsystem m_launcherRotateSubsystem;
+  private final LauncherSubsystem m_LauncherSubsystem;
   private final PIDController   xController;
   //private final PIDController   yController;
   private final PIDController   zController;
@@ -41,22 +45,23 @@ public class PickUpNoteCmd extends Command
   boolean outtakeHasNote;
   boolean intakeHasNote;
 
-  public PickUpNoteCmd(SwerveSubsystem swerveSubsystem, IntakeSubsystem intakeSubsystem, LauncherRotateSubsystem launcherRotateSubsystem)
+  public PickUpNoteCmd(SwerveSubsystem swerveSubsystem, IntakeSubsystem intakeSubsystem, LauncherRotateSubsystem launcherRotateSubsystem, LauncherSubsystem launcherSubsystem)
   {
     this.swerveSubsystem = swerveSubsystem;
     this.m_intakeSubsystem = intakeSubsystem;
     this.m_launcherRotateSubsystem = launcherRotateSubsystem;
+    this.m_LauncherSubsystem = launcherSubsystem;
     
-    xController = new PIDController(0.15, 0.00, 0.0);
+    xController = new PIDController(0.16, 0.00, 0.0);
     //yController = new PIDController(0.0625, 0.00375, 0.0001);
-    zController = new PIDController(0.015,0.0, 0.000);
+    zController = new PIDController(0.02,0.0, 0.000);
     xController.setTolerance(3);
     //yController.setTolerance(3);
     zController.setTolerance(.5);
 
     // each subsystem used by the command must be passed into the
     // addRequirements() method (which takes a vararg of Subsystem)
-    addRequirements(swerveSubsystem, intakeSubsystem, launcherRotateSubsystem);
+    addRequirements(swerveSubsystem, intakeSubsystem, launcherRotateSubsystem, launcherSubsystem);
   }
 
   /**
@@ -170,6 +175,7 @@ public class PickUpNoteCmd extends Command
     m_intakeSubsystem.indexerMotor.set(IntakeConstants.zeroSpeed);
     m_intakeSubsystem.intakeMotor.set(IntakeConstants.zeroSpeed);
     m_intakeSubsystem.launcherIndexerMotor.set(IntakeConstants.zeroSpeed);
+    //m_LauncherSubsystem.launcherPIDControllerTop.setReference(1000, CANSparkFlex.ControlType.kVelocity);
     swerveSubsystem.lock();
     TX = 0; TZ = 0;
     droveToNote = false;

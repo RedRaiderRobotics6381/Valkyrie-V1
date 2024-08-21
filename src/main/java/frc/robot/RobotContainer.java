@@ -89,7 +89,7 @@ public class RobotContainer
     // NamedCommands.registerCommand("PVAim", new LauncherAimCMD(launcherRotateSubsystem));
     NamedCommands.registerCommand("PVAim", new LauncherAimAutonCMD(launcherRotateSubsystem, launcherSubsystem, intakeSubsystem));
     NamedCommands.registerCommand("Intake", new IntakeCmd(intakeSubsystem, launcherRotateSubsystem, launcherSubsystem));
-    NamedCommands.registerCommand("DriveToNote", new PickUpNoteCmd(drivebase, intakeSubsystem, launcherRotateSubsystem));
+    NamedCommands.registerCommand("DriveToNote", new PickUpNoteCmd(drivebase, intakeSubsystem, launcherRotateSubsystem, launcherSubsystem));
     
     NamedCommands.registerCommand("DriveToSpeaker",new DriveToAprilTagPosCmd("Speaker",
                                                         1.7,
@@ -167,10 +167,10 @@ public class RobotContainer
                                                              0.1,
                                                              drivebase));
     //new JoystickButton(driverXbox, 1).whileTrue(new DriveToAmpCmd(drivebase)); 
-    new JoystickButton(driverXbox, 2).whileTrue(new PickUpNoteCmd(drivebase, intakeSubsystem, launcherRotateSubsystem));  //Button "B"
+    new JoystickButton(driverXbox, 2).whileTrue(new PickUpNoteCmd(drivebase, intakeSubsystem, launcherRotateSubsystem, launcherSubsystem));  //Button "B"
     new JoystickButton(driverXbox, 3).whileTrue(new DriveToAprilTagPosCmd("Speaker",
-                                                             1.7,                                                             0.0,
-                                                             0.1,
+                                                             1.9,                                                             0.0,
+                                                             0.5,
                                                              drivebase));    
     //new JoystickButton(driverXbox, 3).whileTrue(new DriveToSpeakerCmd(drivebase)); //Button "X"
     new JoystickButton(driverXbox, 4).whileTrue(new DriveToAprilTagPosCmd("StageA",
@@ -214,10 +214,10 @@ public class RobotContainer
 
     new JoystickButton(engineerXbox, 5).onTrue(new IntakeCmd(intakeSubsystem, launcherRotateSubsystem, launcherSubsystem));
     //new JoystickButton(engineerXbox, 6).onTrue(new ParadeShotCmd(launcherSubsystem, launcherRotateSubsystem, intakeSubsystem));
-    new POVButton(engineerXbox, 0).onTrue(new ClimbCmd(climberSubsystem));
-    new POVButton(engineerXbox, 180).onTrue(new LowerCmd(climberSubsystem));
+    new POVButton(engineerXbox, 180).onTrue(new ClimbCmd(climberSubsystem));
+    new POVButton(engineerXbox, 0).onTrue(new LowerCmd(climberSubsystem));
     // new POVButton(engineerXbox, 90).whileTrue(new ClimberInitCmd(climberSubsystem));
-    new POVButton(engineerXbox, 270).whileTrue(new RevIntakeCmd(intakeSubsystem, launcherRotateSubsystem));
+    new POVButton(engineerXbox, 270).whileTrue(new RevIntakeCmd(intakeSubsystem, launcherRotateSubsystem,launcherSubsystem));
     // new JoystickButton(driverXbox, 7).whileTrue(
     //     Commands.deferredProxy(() -> drivebase.driveToPose(
     //                             new Pose2d(new Translation2d(10, 7), Rotation2d.fromDegrees(0)))

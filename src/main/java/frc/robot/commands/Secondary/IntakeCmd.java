@@ -61,7 +61,7 @@ public class IntakeCmd extends Command {
     m_intakeSubsystem.indexerMotor.set(IntakeConstants.zeroSpeed);
     m_intakeSubsystem.intakeMotor.set(IntakeConstants.zeroSpeed);
     m_intakeSubsystem.launcherIndexerMotor.set(IntakeConstants.zeroSpeed);
-    m_LauncherSubsystem.launcherPIDControllerTop.setReference(2000, CANSparkFlex.ControlType.kVelocity);
+    //m_LauncherSubsystem.launcherPIDControllerTop.setReference(1000, CANSparkFlex.ControlType.kVelocity);
   }
 
   // Returns true when the command should end.

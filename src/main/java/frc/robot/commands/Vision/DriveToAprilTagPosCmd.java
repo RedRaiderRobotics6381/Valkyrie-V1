@@ -26,8 +26,8 @@ public class DriveToAprilTagPosCmd extends Command
   String alliance;
   private boolean atSetPoint;
   private final SwerveSubsystem swerveSubsystem;
-  private static final TrapezoidProfile.Constraints X_CONSTRAINTS = new TrapezoidProfile.Constraints(6, 6);
-  private static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(6, 6);
+  private static final TrapezoidProfile.Constraints X_CONSTRAINTS = new TrapezoidProfile.Constraints(4, 4);
+  private static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(4, 4);
   private static final TrapezoidProfile.Constraints OMEGA_CONSTRAINTS = new TrapezoidProfile.Constraints(8, 8);
   private Transform3d TAG_TO_GOAL = new Transform3d(new Translation3d(0, 0, 0),
   new Rotation3d(0.0,0.0,Math.PI));
@@ -35,8 +35,8 @@ public class DriveToAprilTagPosCmd extends Command
   //private final PhotonCamera photonCamera;
   private final Supplier<Pose2d> poseProvider;
   
-  private final ProfiledPIDController xController = new ProfiledPIDController(2.25, 0, 0, X_CONSTRAINTS);
-  private final ProfiledPIDController yController = new ProfiledPIDController(2.25, 0, 0, Y_CONSTRAINTS);
+  private final ProfiledPIDController xController = new ProfiledPIDController(1.00, 0, 0.25, X_CONSTRAINTS);
+  private final ProfiledPIDController yController = new ProfiledPIDController(1.00, 0, 0.25, Y_CONSTRAINTS);
   private final ProfiledPIDController omegaController = new ProfiledPIDController(2, 0, 0, OMEGA_CONSTRAINTS);
 
   private PhotonTrackedTarget lastTarget;
@@ -55,8 +55,7 @@ public DriveToAprilTagPosCmd(String aprilTag, double xOffset, double yOffset, do
     TAG_TO_GOAL = new Transform3d(new Translation3d(xOffset, yOffset, 0),
                                   new Rotation3d(0.0,0.0,Math.PI));
 
-                                  xController.setTolerance(xyTol); //meters
-    yController.setTolerance(xyTol); //meters
+
     
     addRequirements(swerveSubsystem);
   }
@@ -79,8 +78,10 @@ public DriveToAprilTagPosCmd(String aprilTag, double xOffset, double yOffset, do
     if(aprilTag == "StageA"){aprilTagNum = AprilTagConstants.stageIDA;}
     if(aprilTag == "StageB"){aprilTagNum = AprilTagConstants.stageIDB;}
     if(aprilTag == "StageC"){aprilTagNum = AprilTagConstants.stageIDC;}
-
-    omegaController.setTolerance(Units.degreesToRadians(3.0)); //3 degrees
+    
+    xController.setTolerance(xyTol); //meters
+    yController.setTolerance(xyTol); //meters
+    omegaController.setTolerance(Units.degreesToRadians(6.0)); //3 degrees
     omegaController.enableContinuousInput(-Math.PI, Math.PI);
     var robotPose = poseProvider.get();
     omegaController.reset(robotPose.getRotation().getRadians());
@@ -100,8 +101,8 @@ public DriveToAprilTagPosCmd(String aprilTag, double xOffset, double yOffset, do
   {
     var robotPose2d = poseProvider.get();
     var robotPose = new Pose3d(
-        -robotPose2d.getX(),
-        -robotPose2d.getY(),
+        robotPose2d.getX(),
+        robotPose2d.getY(),
         0.0,
         new Rotation3d(0.0, 0.0, robotPose2d.getRotation().getRadians()));
     
@@ -144,11 +145,16 @@ public DriveToAprilTagPosCmd(String aprilTag, double xOffset, double yOffset, do
         yController.setGoal(goalPose.getY());
         omegaController.setGoal(goalPose.getRotation().getRadians());
       }
+      // else{
+      //   xController.setGoal(robotPose2d.getX());
+      //   yController.setGoal(robotPose2d.getY());
+      //   omegaController.setGoal(robotPose2d.getRotation().getRadians());
+      // }
     }
 
     if (lastTarget == null) {
       // No target has been visible
-      swerveSubsystem.lock();
+      //swerveSubsystem.lock();
     } else {
       // Drive to the target
       var xSpeed = xController.calculate(robotPose.getX());
@@ -165,11 +171,14 @@ public DriveToAprilTagPosCmd(String aprilTag, double xOffset, double yOffset, do
       if (omegaController.atGoal()) {
         omegaSpeed = 0;
       }
-      if (Math.abs(xSpeed) >= xyTol / 2 || Math.abs(ySpeed) >= xyTol / 2 || Math.abs(omegaSpeed) >= 1){
+      //if (Math.abs(xSpeed) <= xyTol / 2 || Math.abs(ySpeed) <= xyTol / 2 || Math.abs(omegaSpeed) <= 1){
         swerveSubsystem.drive(ChassisSpeeds.fromFieldRelativeSpeeds(-xSpeed, -ySpeed, omegaSpeed, robotPose2d.getRotation()));
         //System.out.println("xSpeed:" + xSpeed +", yspeed:" + ySpeed + ", omegaspeed:" + omegaSpeed);
-      }
-      else{ atSetPoint = true;} 
+      //}
+      //else{ atSetPoint = true;}
+      if(xController.atGoal() == true && yController.atGoal() == true && omegaController.atGoal() == true){
+        atSetPoint = true;
+      } 
     }
   }
   @Override

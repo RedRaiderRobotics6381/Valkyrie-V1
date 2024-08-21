@@ -4,6 +4,7 @@
 
 package frc.robot.commands.Secondary;
 
+import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -13,6 +14,7 @@ import frc.robot.Constants.LauncherConstants;
 import frc.robot.subsystems.Secondary.IntakeSubsystem;
 import frc.robot.subsystems.Secondary.LEDsSubSystem;
 import frc.robot.subsystems.Secondary.LauncherRotateSubsystem;
+import frc.robot.subsystems.Secondary.LauncherSubsystem;
 
 public class RevIntakeCmd extends Command {
 
@@ -20,10 +22,12 @@ public class RevIntakeCmd extends Command {
   private boolean hasNote = false;
   private final IntakeSubsystem m_intakeSubsystem;
   private final LauncherRotateSubsystem m_launcherRotateSubsystem;
+  private final LauncherSubsystem m_launcherSubsystem;
 
-  public RevIntakeCmd(IntakeSubsystem intakeSubsystem, LauncherRotateSubsystem launcherRotateSubsystem) {
+  public RevIntakeCmd(IntakeSubsystem intakeSubsystem, LauncherRotateSubsystem launcherRotateSubsystem, LauncherSubsystem launcherSubsystem) {
     this.m_intakeSubsystem = intakeSubsystem;
     this.m_launcherRotateSubsystem = launcherRotateSubsystem;
+    this.m_launcherSubsystem = launcherSubsystem;
     
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(intakeSubsystem, launcherRotateSubsystem);
@@ -38,17 +42,18 @@ public class RevIntakeCmd extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(Robot.sensorOuttake.get() == true || Robot.sensorIntake.get() == true){
-      hasNote = true;
-    } else {
+    // if(Robot.sensorOuttake.get() == true || Robot.sensorIntake.get() == true){
+    //   hasNote = true;
+    // } else {
       m_launcherRotateSubsystem.launcherRotatePIDController.setReference(LauncherConstants.posIntake,CANSparkMax.ControlType.kSmartMotion);
       m_intakeSubsystem.indexerMotor.set(-IntakeConstants.indexerIntakeSpeed);
       m_intakeSubsystem.intakeMotor.set(-IntakeConstants.intakeSpeed);
+      m_launcherSubsystem.launcherPIDControllerTop.setReference(1000, CANSparkFlex.ControlType.kVelocity);
       //m_intakeSubsystem.launcherIndexerMotor.set(-IntakeConstants.launcherIndexerIntakeSpeed);
       //System.out.println(Robot.sensorIntake.get());
 
     }
-  }
+
 
   // Called once the command ends or is interrupted.
   @Override
