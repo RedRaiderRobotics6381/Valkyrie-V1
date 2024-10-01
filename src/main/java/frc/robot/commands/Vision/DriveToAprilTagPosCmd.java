@@ -1,5 +1,6 @@
 package frc.robot.commands.Vision;
 import java.util.function.Supplier;
+import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -18,41 +19,58 @@ import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 
 public class DriveToAprilTagPosCmd extends Command
 {
-  String aprilTag;
-  int aprilTagNum;
-  double xOffset;
-  double yOffset;
-  double xyTol;
-  String alliance;
-  private boolean atSetPoint;
-  private final SwerveSubsystem swerveSubsystem;
-  private static final TrapezoidProfile.Constraints X_CONSTRAINTS = new TrapezoidProfile.Constraints(4, 4);
-  private static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(4, 4);
+  private String m_aprilTag;
+  private int m_aprilTagNum;
+  private double m_xOffset;
+  private double m_yOffset;
+  private double m_xyTol;
+  // private String alliance;
+  private boolean m_atSetPoint;
+  private final SwerveSubsystem m_swerveSubsystem;
+  private static final TrapezoidProfile.Constraints X_CONSTRAINTS = new TrapezoidProfile.Constraints(6, 6);
+  private static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(6, 6);
   private static final TrapezoidProfile.Constraints OMEGA_CONSTRAINTS = new TrapezoidProfile.Constraints(8, 8);
-  private Transform3d TAG_TO_GOAL = new Transform3d(new Translation3d(0, 0, 0),
-  new Rotation3d(0.0,0.0,Math.PI));
+  private Transform3d tagToGoalTrans3d = new Transform3d(new Translation3d(0, 0, 0),
+  new Rotation3d(0.0,0.0,Math.toRadians(180)));
   
   //private final PhotonCamera photonCamera;
-  private final Supplier<Pose2d> poseProvider;
+  private final Supplier<Pose2d> m_poseProvider;
   
-  private final ProfiledPIDController xController = new ProfiledPIDController(1.00, 0, 0.25, X_CONSTRAINTS);
-  private final ProfiledPIDController yController = new ProfiledPIDController(1.00, 0, 0.25, Y_CONSTRAINTS);
-  private final ProfiledPIDController omegaController = new ProfiledPIDController(2, 0, 0, OMEGA_CONSTRAINTS);
+  private final ProfiledPIDController m_xController = new ProfiledPIDController(2.25, 0, 0, X_CONSTRAINTS);
+  private final ProfiledPIDController m_yController = new ProfiledPIDController(2.25, 0, 0, Y_CONSTRAINTS);
+  private final ProfiledPIDController m_omegaController = new ProfiledPIDController(2, 0, 0, OMEGA_CONSTRAINTS);
 
   private PhotonTrackedTarget lastTarget;
+  private PhotonTrackedTarget target;
+
+  private Pose2d robotPose2d;
+  private Pose2d goalPose2d;
+  private Pose3d robotPose3d;
+  private Pose3d cameraPose3d;
+  private Pose3d targetPose3d;
+
+  private Transform3d camToTarget3d;
+  
+  private double xSpeed;
+  private double ySpeed;
+  private double omegaSpeed;
+
+  private PhotonPipelineResult photonResLow;
+  private PhotonPipelineResult photonResHigh;
+  private PhotonPipelineResult photonRes;
 
 public DriveToAprilTagPosCmd(String aprilTag, double xOffset, double yOffset, double xyTol, SwerveSubsystem swerveSubsystem)
   {  
     // each subsystem used by the command must be passed into the
     // addRequirements() method (which takes a vararg of Subsystem)
-    this.aprilTag = aprilTag;
-    this.xOffset = xOffset;
-    this.yOffset = yOffset;
-    this.xyTol = xyTol;
-    this.swerveSubsystem = swerveSubsystem;
-    this.poseProvider = swerveSubsystem::getPose;
+    this.m_aprilTag = aprilTag;
+    this.m_xOffset = xOffset;
+    this.m_yOffset = yOffset;
+    this.m_xyTol = xyTol;
+    this.m_swerveSubsystem = swerveSubsystem;
+    this.m_poseProvider = swerveSubsystem::getPose;
     
-    TAG_TO_GOAL = new Transform3d(new Translation3d(xOffset, yOffset, 0),
+    tagToGoalTrans3d = new Transform3d(new Translation3d(m_xOffset, m_yOffset, 0),
                                   new Rotation3d(0.0,0.0,Math.PI));
 
 
@@ -67,26 +85,25 @@ public DriveToAprilTagPosCmd(String aprilTag, double xOffset, double yOffset, do
   public void initialize()
   {
     lastTarget = null;
-    atSetPoint = false;
-    //Robot.aprilTagAlliance();
+    m_atSetPoint = false;
+    Robot.aprilTagAlliance();
     /*
     * This is being used because for some reason the alliance is not being passed to
     * the command from Robot.aprilTagAlliance() as an integer, so we are using a string instead.
     */
-    if(aprilTag == "Amp"){aprilTagNum = AprilTagConstants.ampID;}
-    if(aprilTag == "Speaker"){aprilTagNum = AprilTagConstants.speakerID;}
-    if(aprilTag == "StageA"){aprilTagNum = AprilTagConstants.stageIDA;}
-    if(aprilTag == "StageB"){aprilTagNum = AprilTagConstants.stageIDB;}
-    if(aprilTag == "StageC"){aprilTagNum = AprilTagConstants.stageIDC;}
-    
-    xController.setTolerance(xyTol); //meters
-    yController.setTolerance(xyTol); //meters
-    omegaController.setTolerance(Units.degreesToRadians(6.0)); //3 degrees
-    omegaController.enableContinuousInput(-Math.PI, Math.PI);
-    var robotPose = poseProvider.get();
-    omegaController.reset(robotPose.getRotation().getRadians());
-    xController.reset(robotPose.getX());
-    yController.reset(robotPose.getY());
+    if(m_aprilTag == "Amp"){m_aprilTagNum = AprilTagConstants.ampID;}
+    if(m_aprilTag == "Speaker"){m_aprilTagNum = AprilTagConstants.speakerID;}
+    if(m_aprilTag == "StageA"){m_aprilTagNum = AprilTagConstants.stageIDA;}
+    if(m_aprilTag == "StageB"){m_aprilTagNum = AprilTagConstants.stageIDB;}
+    if(m_aprilTag == "StageC"){m_aprilTagNum = AprilTagConstants.stageIDC;}
+    m_xController.setTolerance(m_xyTol); //meters
+    m_yController.setTolerance(m_xyTol); //meters
+    m_omegaController.setTolerance(Units.degreesToRadians(3.0)); //3 degrees
+    m_omegaController.enableContinuousInput(-Math.PI, Math.PI);
+    var robotPose = m_poseProvider.get();
+    m_omegaController.reset(robotPose.getRotation().getRadians());
+    m_xController.reset(robotPose.getX());
+    m_yController.reset(robotPose.getY());
     //int allianceAprilTag = DriverStation.getAlliance().get() == Alliance.Blue ? 7 : 4;
     //System.out.println(" April Tag: " + aprilTag + " April Tag Number: " + aprilTagNum + " X Offset: " + xOffset + " Y Offset: " + yOffset + " XY Tolerance: " + xyTol);
   
@@ -99,16 +116,16 @@ public DriveToAprilTagPosCmd(String aprilTag, double xOffset, double yOffset, do
   @Override
   public void execute()
   {
-    var robotPose2d = poseProvider.get();
-    var robotPose = new Pose3d(
+    robotPose2d = m_poseProvider.get();
+    robotPose3d = new Pose3d(
         robotPose2d.getX(),
         robotPose2d.getY(),
         0.0,
         new Rotation3d(0.0, 0.0, robotPose2d.getRotation().getRadians()));
     
-    var photonResLow = Robot.camAprTgLow.getLatestResult();
-    var photonResHigh = Robot.camAprTgHigh.getLatestResult();
-    var photonRes = photonResLow; // Default to low resolution result
+    photonResLow = Robot.camAprTgLow.getLatestResult();
+    photonResHigh = Robot.camAprTgHigh.getLatestResult();
+    photonRes = photonResLow; // Default to low resolution result
     //var photonRes = Robot.camAprTgLow.getLatestResult();
     
     if (photonResLow.hasTargets()) {
@@ -121,75 +138,68 @@ public DriveToAprilTagPosCmd(String aprilTag, double xOffset, double yOffset, do
     if (photonRes.hasTargets()) {
       //Find the tag we want to chase
       var targetOpt = photonRes.getTargets().stream()
-      .filter(t -> t.getFiducialId() == aprilTagNum)
+      .filter(t -> t.getFiducialId() == m_aprilTagNum)
       .filter(t -> !t.equals(lastTarget) && t.getPoseAmbiguity() != -1)
       .findFirst();
       if (targetOpt.isPresent()) {
-        var target = targetOpt.get();
+        target = targetOpt.get();
         // This is new target data, so recalculate the goal
         lastTarget = target;
 
         // Transform the robot's pose to find the camera's pose
-        var cameraPose = robotPose
+        cameraPose3d = robotPose3d
             .transformBy(new Transform3d(new Translation3d(0, 0, 0), new Rotation3d()));
 
         // Trasnform the camera's pose to the target's pose
-        var camToTarget = target.getBestCameraToTarget();
-        var targetPose = cameraPose.transformBy(camToTarget);
+        camToTarget3d = target.getBestCameraToTarget();
+        targetPose3d = cameraPose3d.transformBy(camToTarget3d);
 
         // Transform the tag's pose to set our goal
-        var goalPose = targetPose.transformBy(TAG_TO_GOAL).toPose2d();
+        goalPose2d = targetPose3d.transformBy(tagToGoalTrans3d).toPose2d();
 
         // Drive
-        xController.setGoal(goalPose.getX());
-        yController.setGoal(goalPose.getY());
-        omegaController.setGoal(goalPose.getRotation().getRadians());
+        m_xController.setGoal(goalPose2d.getX());
+        m_yController.setGoal(goalPose2d.getY());
+        m_omegaController.setGoal(goalPose2d.getRotation().getRadians());
       }
-      // else{
-      //   xController.setGoal(robotPose2d.getX());
-      //   yController.setGoal(robotPose2d.getY());
-      //   omegaController.setGoal(robotPose2d.getRotation().getRadians());
-      // }
+      else{
+        m_xController.setGoal(robotPose2d.getX());
+        m_yController.setGoal(robotPose2d.getY());
+        m_omegaController.setGoal(robotPose2d.getRotation().getRadians());
+
+      }
     }
 
-    if (lastTarget == null) {
-      // No target has been visible
-      //swerveSubsystem.lock();
-    } else {
-      // Drive to the target
-      var xSpeed = xController.calculate(robotPose.getX());
-      if (xController.atGoal()) {
-        xSpeed = 0;
-      }
+    if (lastTarget != null) {
+  
+      if (!m_xController.atSetpoint()) {xSpeed = m_xController.calculate(robotPose3d.getX());}
+      else{xSpeed = 0;}
+      
+      if (!m_yController.atSetpoint()) {ySpeed = m_yController.calculate(robotPose3d.getY());}
+      else{ySpeed = 0;}
 
-      var ySpeed = yController.calculate(robotPose.getY());
-      if (yController.atGoal()) {
-        ySpeed = 0;
-      }
-
-      var omegaSpeed = omegaController.calculate(robotPose2d.getRotation().getRadians());
-      if (omegaController.atGoal()) {
-        omegaSpeed = 0;
-      }
-      //if (Math.abs(xSpeed) <= xyTol / 2 || Math.abs(ySpeed) <= xyTol / 2 || Math.abs(omegaSpeed) <= 1){
-        swerveSubsystem.drive(ChassisSpeeds.fromFieldRelativeSpeeds(-xSpeed, -ySpeed, omegaSpeed, robotPose2d.getRotation()));
+      if (!m_omegaController.atSetpoint()) {omegaSpeed = m_omegaController.calculate(robotPose2d.getRotation().getRadians());}
+      else{omegaSpeed = 0;}
+      
+      m_swerveSubsystem.drive(ChassisSpeeds.fromFieldRelativeSpeeds(-xSpeed, -ySpeed, omegaSpeed, robotPose2d.getRotation()));
         //System.out.println("xSpeed:" + xSpeed +", yspeed:" + ySpeed + ", omegaspeed:" + omegaSpeed);
-      //}
-      //else{ atSetPoint = true;}
-      if(xController.atGoal() == true && yController.atGoal() == true && omegaController.atGoal() == true){
-        atSetPoint = true;
-      } 
+      if (m_xController.atGoal() == true && m_yController.atGoal() == true && m_omegaController.atGoal() == true){
+        m_atSetPoint = true;
+      }
+
+    } else {
+      m_swerveSubsystem.lock();
     }
   }
   @Override
   public boolean isFinished()
   {
-    return atSetPoint;
+    return m_atSetPoint;
   }
 
   @Override
   public void end(boolean interrupted) {
-    swerveSubsystem.lock();
+    m_swerveSubsystem.lock();
   }
 
 }

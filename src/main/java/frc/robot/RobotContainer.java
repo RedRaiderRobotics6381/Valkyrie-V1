@@ -170,6 +170,8 @@ public class RobotContainer
     new JoystickButton(driverXbox, 2).whileTrue(new PickUpNoteCmd(drivebase, intakeSubsystem, launcherRotateSubsystem, launcherSubsystem));  //Button "B"
     new JoystickButton(driverXbox, 3).whileTrue(new DriveToAprilTagPosCmd("Speaker",
                                                              1.9,                                                             0.0,
+                                                             0.25,
+                                                             1.9,                                                             0.0,
                                                              0.5,
                                                              drivebase));    
     //new JoystickButton(driverXbox, 3).whileTrue(new DriveToSpeakerCmd(drivebase)); //Button "X"
