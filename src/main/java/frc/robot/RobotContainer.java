@@ -6,12 +6,15 @@ package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -35,6 +38,7 @@ import frc.robot.subsystems.Secondary.ClimberSubsystem;
 import frc.robot.subsystems.Secondary.IntakeSubsystem;
 import frc.robot.subsystems.Secondary.LauncherRotateSubsystem;
 import frc.robot.subsystems.Secondary.LauncherSubsystem;
+import frc.robot.subsystems.Vision.FiducialVision;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -125,7 +129,7 @@ public class RobotContainer
                                                                        Constants.Drivebase.Max_Speed_Multiplier);
 
     drivebase.setDefaultCommand(
-        !RobotBase.isSimulation() ? driveFieldOrientedAnglularVelocity : driveFieldOrientedDirectAngleSim);
+        !RobotBase.isSimulation() ? driveFieldOrientedAnglularVelocity : driveFieldOrientedAnglularVelocity); // if not simulation, use angular velocity, else use direct angle
   }
 
   /**
@@ -161,25 +165,30 @@ public class RobotContainer
 
     //==========================================================================
     new JoystickButton(driverXbox, 8).onTrue((new InstantCommand(drivebase::zeroGyro)));  //Button "Start"
-    new JoystickButton(driverXbox, 1).whileTrue(new DriveToAprilTagPosCmd("Amp",
-                                                             0.9,
-                                                             0.0,
-                                                             0.1,
-                                                             drivebase));
-    //new JoystickButton(driverXbox, 1).whileTrue(new DriveToAmpCmd(drivebase)); 
+    // new JoystickButton(driverXbox, 1).whileTrue(new DriveToAprilTagPosCmd("Amp",
+    //                                                          0.9,
+    //                                                          0.0,
+    //                                                          0.1,
+    //                                                          drivebase));
+    new JoystickButton(driverXbox, 1).whileTrue(Commands.deferredProxy(() -> drivebase.driveToPose(
+                              FiducialVision.getAprilTagPose(AprilTagConstants.ampID,
+                                                            new Transform2d(0.9, 0,
+                                                            Rotation2d.fromDegrees(0))))));      //new JoystickButton(driverXbox, 1).whileTrue(new DriveToAmpCmd(drivebase)); 
     new JoystickButton(driverXbox, 2).whileTrue(new PickUpNoteCmd(drivebase, intakeSubsystem, launcherRotateSubsystem, launcherSubsystem));  //Button "B"
-    new JoystickButton(driverXbox, 3).whileTrue(new DriveToAprilTagPosCmd("Speaker",
-                                                             1.9,                                                             0.0,
-                                                             0.25,
-                                                             1.9,                                                             0.0,
-                                                             0.5,
-                                                             drivebase));    
+    // new JoystickButton(driverXbox, 3).whileTrue(new DriveToAprilTagPosCmd("Speaker",
+    //                                                          1.9,                                                             0.0,
+    //                                                          0.25,
+    //                                                          drivebase));
+    new JoystickButton(driverXbox, 3).whileTrue(Commands.deferredProxy(() -> drivebase.driveToPose(
+                              FiducialVision.getAprilTagPose(AprilTagConstants.speakerID,
+                                                            new Transform2d(1.9, 0,
+                                                            Rotation2d.fromDegrees(0))))));    
     //new JoystickButton(driverXbox, 3).whileTrue(new DriveToSpeakerCmd(drivebase)); //Button "X"
-    new JoystickButton(driverXbox, 4).whileTrue(new DriveToAprilTagPosCmd("StageA",
-                                                             1.3,
-                                                             0.0,
-                                                             0.1,
-                                                             drivebase));
+    // new JoystickButton(driverXbox, 4).whileTrue(new DriveToAprilTagPosCmd("StageA",
+    //                                                          1.3,
+    //                                                          0.0,
+    //                                                          0.1,
+    //                                                          drivebase));
     //new JoystickButton(driverXbox, 4).whileTrue(new DriveToStageCmd(drivebase)); //Button "Y"
     //Button 5 is used below in the spencerButtons method
     //Button 6 is used below in the spencerButtons method
@@ -280,11 +289,13 @@ public class RobotContainer
         if (driverXbox.getRawButton(10) == false){  
           yawToSpeakerValue = MathUtil.applyDeadband(-driverXbox.getRawAxis(4), OperatorConstants.RIGHT_X_DEADBAND);
         } else{
-          if (Robot.camAprTgLow.getLatestResult().hasTargets() == true){
-            if (Robot.camAprTgLow.getLatestResult().getBestTarget().getFiducialId() == AprilTagConstants.speakerID){
-              yawToSpeakerValue = MathUtil.clamp(zController.calculate(Robot.camAprTgLow.getLatestResult().getBestTarget().getYaw(),0), -1.0 , 1.0);
-            }
-          }
+          yawToSpeakerValue = MathUtil.clamp(zController.calculate(drivebase.getSpeakerYaw().getDegrees(),0), -1.0 , 1.0);
+      
+          // if (Robot.camAprTgLow.getLatestResult().hasTargets() == true){
+          //   if (Robot.camAprTgLow.getLatestResult().getBestTarget().getFiducialId() == AprilTagConstants.speakerID){
+          //     yawToSpeakerValue = MathUtil.clamp(zController.calculate(Robot.camAprTgLow.getLatestResult().getBestTarget().getYaw(),0), -1.0 , 1.0);
+          //   }
+          // }
         }
       } finally {
         if (zController != null) {
